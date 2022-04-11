@@ -1,0 +1,27 @@
+{
+  "name": "vue3-ts-kbweb-h5",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "element-plus": "^2.1.9",
+    "less": "^4.1.2",
+    "normalize.css": "^8.0.1",
+    "path": "^0.12.7",
+    "vue": "^3.2.25",
+    "vue-router": "^4.0.14"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "@vitejs/plugin-vue": "^2.3.0",
+    "typescript": "^4.6.3",
+    "unplugin-auto-import": "^0.7.0",
+    "vite": "^2.9.0",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
+    "vue-tsc": "^0.29.8"
+  }
+}
