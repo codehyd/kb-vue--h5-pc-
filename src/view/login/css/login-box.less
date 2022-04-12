@@ -1,18 +1,35 @@
 .login-box {
+  overflow: hidden;
   width: 100%;
-  // .title {
-  //   text-align: center;
-  //   margin: 0 0 10px 0;
+  height: 100%;
+  padding: 20px;
 
-  //   h2 {
-  //     margin: 0;
-  //   }
-  // }
+  .beian {
+    font-size: 12px;
+  }
+  .useAccount {
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 
   .third-icons {
     margin-bottom: 10px;
   }
   .loginBtn {
     width: 100%;
+    margin: 10px 0 0 0;
+  }
+
+  .select {
+    width: 100%;
+  }
+}
+
+// 媒体查询高度小于500
+@media all and (max-height: 500px) {
+  .login-box {
+    overflow-y: auto;
   }
 }

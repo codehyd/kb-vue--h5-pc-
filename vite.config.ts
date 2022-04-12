@@ -24,4 +24,38 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+
+  // 解决打包后 @charset的问题
+  css: {
+    postcss: {
+      plugins: [
+        {
+          postcssPlugin: "internal:charset-removal",
+          AtRule: {
+            charset: (atRule) => {
+              if (atRule.name === "charset") {
+                atRule.remove();
+              }
+            },
+          },
+        },
+      ],
+    },
+  },
+
+  // 配置代理 (跨域)
+  server: {
+    proxy: {
+      "^/api": {
+        target: "https://kbapi.dianlan8.com:7804",
+        rewrite: (path) => path.replace(/^\/api/, "/kbapi/rest"),
+        changeOrigin: true,
+      },
+      // "^/wxapi": {
+      //   target: "https://api.weixin.qq.com",
+      //   rewrite: (path) => path.replace(/^\/wxapi/, ""),
+      //   changeOrigin: true,
+      // },
+    },
+  },
 });

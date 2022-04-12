@@ -1,8 +1,10 @@
 import { App } from "vue";
 
 import icon from "@/base-ui/icon";
+import WxScanLogin from "@/base-ui/wx-scan-login";
+import Dialog from "../../base-ui/dialog";
 
-const components: any[] = [icon];
+const components: any[] = [icon, WxScanLogin, Dialog];
 
 export default function (app: App): void {
   components.forEach((component) => {
@@ -16,6 +18,7 @@ export default function (app: App): void {
         .toUpperCase() +
       component.__file.split("/").slice(-1)[0].split(".")[0].slice(1);
     const name = component?.name ?? `Kb${componentName}`;
+    console.log(name);
     app.component(name, component);
   });
 }

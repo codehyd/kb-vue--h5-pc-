@@ -1,10 +1,10 @@
 <template>
   <div class="login">
     <div class="login-wrap">
-      <div>
+      <div class="login-wrap-image">
         <img src="https://v.dianlan8.com/img/login.c0627fcb.webp" alt="" />
       </div>
-      <div>
+      <div class="login-wrap-content">
         <login-box></login-box>
       </div>
     </div>

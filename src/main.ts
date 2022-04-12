@@ -14,7 +14,13 @@ import globalComponent from "./global";
 
 // 路由
 import router from "./router";
+
+// 状态管理
+import store, { refreshWindowSetup } from "./store";
+
 const app = createApp(App);
 app.use(globalComponent);
+app.use(store);
+refreshWindowSetup();
 app.use(router);
 app.mount("#app");
