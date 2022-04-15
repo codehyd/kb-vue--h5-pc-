@@ -2,6 +2,9 @@ import baseRequest from "./request";
 import { baseUrl, getTaskBaseData } from "./request/config";
 
 import store from "@/store";
+
+import qs from "qs";
+
 const KbBaseRequest = new baseRequest({
   baseURL: baseUrl,
   interceptors: {
@@ -24,11 +27,12 @@ const KbBaseRequest = new baseRequest({
           ...getTaskBaseData(),
         };
       } else if (config.method === "post") {
-        config.data = {
+        config.data = qs.stringify({
           ...tokenData,
           ...config.data,
           ...getTaskBaseData(),
-        };
+        });
+        // config.headers = { "content-type": "multipart/form-data" };
       }
 
       return config;

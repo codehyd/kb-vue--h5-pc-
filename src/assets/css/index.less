@@ -1,1 +1,52 @@
 @import "./base.css";
+
+:root {
+  --selectBg: #000;
+  --badgeText: "1";
+  --badgeBgColor: #0094ff;
+}
+
+// select
+.select {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 30px;
+  padding-left: 13px;
+
+  &::before {
+    content: "";
+    background-color: var(--selectBg);
+    width: 4px;
+    height: 14px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -8px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+  }
+}
+
+// 角标
+.badge {
+  position: absolute;
+  right: 0;
+  top: 0;
+  &::before {
+    position: absolute;
+    right: 0;
+    top: 0;
+    content: var(--badgeText);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+    background-color: var(--badgeBgColor);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 12px;
+  }
+}

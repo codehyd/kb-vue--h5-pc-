@@ -26,3 +26,14 @@ export const httpGetCustormList = () => {
     },
   });
 };
+
+export const httpSetCustormList = (content: string) => {
+  return kbBaseRequest.request<ICustormType>({
+    url: "/gosetwebselffun",
+    method: "POST",
+    data: {
+      flag: "web",
+      content,
+    },
+  });
+};

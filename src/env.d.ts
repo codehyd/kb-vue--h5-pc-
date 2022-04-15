@@ -9,3 +9,5 @@ declare module "*.vue" {
 
 declare module "@/base-ui/icon";
 declare module "@/base-ui/wx-scan-login";
+
+declare module "qs";

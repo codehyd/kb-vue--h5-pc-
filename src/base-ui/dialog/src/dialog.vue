@@ -1,23 +1,111 @@
 <template>
   <div>
-    <el-dialog v-model="isShowPanel"> </el-dialog>
+    <el-dialog
+      @close="handleClose"
+      :before-close="handleBeforeClose"
+      custom-class="elDialog"
+      :append-to-body="appendToBody"
+      :draggable="draggable"
+      v-model="isShowPanel"
+      :destroy-on-close="destroyOnClose"
+      :width="width + 'vw'"
+      :top="top + 'vh'"
+      :fullscreen="fullscreen"
+      :show-close="false"
+    >
+      <template #title>
+        <div class="title">
+          <slot name="title">
+            <span>{{ title }}</span>
+          </slot>
+          <span class="icons">
+            <kb-icon
+              @click="handleFullscreenClick"
+              style="margin-right: 5px"
+              :name="fullscreen ? 'icon-tuichuquanping' : 'icon-quanping'"
+              :size="14"
+            ></kb-icon>
+            <kb-icon
+              @click="handleCloseClick"
+              name="close"
+              flag="elIcon"
+            ></kb-icon>
+          </span>
+        </div>
+      </template>
+      <slot></slot>
+      <template #footer>
+        <slot name="footer"></slot>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script name="KbDialog" setup lang="ts">
+import KbIcon from "@/base-ui/icon";
 const props = withDefaults(
   defineProps<{
     show: boolean;
+    title?: string;
+    width?: number;
+    top?: number;
+    appendToBody?: boolean;
+    draggable?: boolean;
+    destroyOnClose?: boolean;
+    isBeforeClose?: boolean;
   }>(),
-  {}
+  {
+    title: "",
+    width: 80,
+    top: 15,
+    appendToBody: false,
+    draggable: false,
+    destroyOnClose: true,
+    isBeforeClose: false,
+  }
 );
 
-const emit = defineEmits(["update:show"]);
+const emit = defineEmits(["update:show", "close", "beforeClose"]);
 
 const isShowPanel = computed({
   get: () => props.show,
   set: (val) => emit("update:show", val),
 });
+
+const handleClose = () => {
+  emit("close");
+};
+
+const handleBeforeClose = (done: any) => {
+  if (props.isBeforeClose) {
+    return emit("beforeClose", done);
+  }
+  done && done();
+};
+
+const fullscreen = ref(false);
+// 全屏
+const handleFullscreenClick = () => {
+  fullscreen.value = !fullscreen.value;
+};
+const handleCloseClick = () => {
+  emit("update:show", false);
+};
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.elDialog {
+  &:deep(.el-dialog__body) {
+    padding: 0;
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .icons {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+</style>

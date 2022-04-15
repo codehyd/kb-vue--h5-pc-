@@ -28,7 +28,7 @@
       <el-form-item required prop="sns" label="软件系统">
         <el-select
           v-model="accountData.sns"
-          class="select"
+          class="elSelect"
           placeholder="请选择软件系统"
           size="large"
         >
@@ -127,6 +127,7 @@ const handleLoginClick = async () => {
       if (authCode !== accountData.value.authCode) {
         message.error("验证码错误");
         authCodeRef.value?.refreshCode();
+        accountData.value.authCode = "";
         return;
       }
       // 发送登录请求
@@ -135,6 +136,7 @@ const handleLoginClick = async () => {
         store.dispatch("login/account", res);
       } else {
         authCodeRef.value?.refreshCode();
+        accountData.value.authCode = "";
         message.error(res.msg);
       }
     } else {
