@@ -4,7 +4,7 @@ import { IRootStore } from "../type";
 
 import local from "@/utils/local";
 import base64 from "@/utils/base64";
-import { getMenuByParent } from "@/utils/mapMenus";
+import { getMenuByParent, addDynamicRoutes } from "@/utils/mapMenus";
 
 import router from "@/router";
 
@@ -25,6 +25,11 @@ const loginModule: Module<ILoginStore, IRootStore> = {
       state.menus = menus;
       state.classMenus = getMenuByParent(menus);
 
+      // 动态注册路由
+      const routes = addDynamicRoutes(menus);
+      routes.forEach((route) => {
+        router.addRoute("main", route);
+      });
       // console.log(classMenus);
     },
   },

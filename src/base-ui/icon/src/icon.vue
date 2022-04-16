@@ -52,7 +52,7 @@ const handleIconClick = () => {
 <style lang="less" scoped>
 .icon {
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
   align-items: center;
 }
 </style>

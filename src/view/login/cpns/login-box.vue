@@ -118,16 +118,15 @@ const handleThirdWxClick = () => {
 };
 
 // 账号登录
-const handleLoginClick = async () => {
-  // 校验表单
-  elFormRef.value?.validate(async (valid) => {
+const handleLoginClick = () => {
+  elFormRef.value?.validate().then(async (valid) => {
     if (valid) {
       // 先判断验证码是否正确
       const authCode = store.state.authCode;
       if (authCode !== accountData.value.authCode) {
         message.error("验证码错误");
-        authCodeRef.value?.refreshCode();
         accountData.value.authCode = "";
+        authCodeRef.value?.refreshCode();
         return;
       }
       // 发送登录请求
@@ -144,6 +143,8 @@ const handleLoginClick = async () => {
     }
   });
 };
+
+accountData.value.authCode = "";
 </script>
 
 <style lang="less" scoped>

@@ -6,9 +6,11 @@ import {
   httpGetBilltypeList,
   httpGetSalesData,
   httpGetTodoListData,
-  httpSetTodoListData,
+  httpGetKanbanData,
+  httpGetNoticeList,
 } from "@/service/http/home";
-import message from "@/utils/message";
+
+import { firstDay, lastDay } from "@/utils/timer";
 
 const loginModule: Module<IHomeStore, IRootStore> = {
   namespaced: true,
@@ -16,6 +18,8 @@ const loginModule: Module<IHomeStore, IRootStore> = {
     billList: [],
     salesData: {},
     todoList: [],
+    kanbanData: [],
+    noticeList: [],
   },
 
   mutations: {
@@ -27,6 +31,12 @@ const loginModule: Module<IHomeStore, IRootStore> = {
     },
     changeTodoList(state, todoList: any) {
       state.todoList = todoList;
+    },
+    changeKanbanData(state, kanbanData: any) {
+      state.kanbanData = kanbanData;
+    },
+    changeNoticeList(state, noticeList: any) {
+      state.noticeList = noticeList;
     },
   },
   actions: {
@@ -44,6 +54,20 @@ const loginModule: Module<IHomeStore, IRootStore> = {
     async getTodoList({ commit }, payload) {
       const res = await httpGetTodoListData({ flag: payload });
       commit("changeTodoList", res?.data?.[0]?.data ?? []);
+    },
+    // 获取看板数据
+    async getKanbanData({ commit }, payload) {
+      const requestData = {
+        begdate: payload?.begdate ?? firstDay(),
+        enddate: payload?.enddate ?? lastDay(),
+      };
+      const res = await httpGetKanbanData(requestData);
+      commit("changeKanbanData", res);
+    },
+    // 公告
+    async getNoticeList({ commit }) {
+      const res = await httpGetNoticeList();
+      commit("changeNoticeList", res?.data?.[0]?.data ?? []);
     },
   },
 };

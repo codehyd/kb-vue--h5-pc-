@@ -7,6 +7,7 @@ import {
   ISetTodoDataType,
   ITodoOptionsType,
   ITodoConfirmDataType,
+  IKanbanOptoinType,
 } from "./type";
 
 // 获取账单类型列表
@@ -63,5 +64,20 @@ export const httpConfirmTodoListData = (params: ITodoOptionsType) => {
   return kbBaseRequest.request<ITodoConfirmDataType>({
     url: "/goconfirmannevents",
     params,
+  });
+};
+
+// 获取看板数据
+export const httpGetKanbanData = (params: IKanbanOptoinType) => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/gorptjingyingkanban",
+    params,
+  });
+};
+
+// 获取公告列表
+export const httpGetNoticeList = () => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/kbwxgetannouncement",
   });
 };

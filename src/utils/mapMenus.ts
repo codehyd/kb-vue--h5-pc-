@@ -1,3 +1,5 @@
+import { RouteRecordRaw } from "vue-router";
+
 // 获取路由数组的前n个 如果不够的话则获取全部
 export const getMenu = (menu: any[], n: number) => {
   const menuList = menu.slice(0, n);
@@ -23,4 +25,20 @@ export const getMenuByParent = (menus: any[]) => {
   console.log(menuList);
 
   return menuList;
+};
+
+// 添加动态路由
+export const addDynamicRoutes = (menus: any[]): RouteRecordRaw[] => {
+  const allRoutes: RouteRecordRaw[] = [];
+  //vite
+  const routeFiles = import.meta.globEager("../router/allRoutes/*.ts");
+  for (const fileModule in routeFiles) {
+    const route = routeFiles[fileModule].default;
+    const isRoutePath = menus.find(
+      (item: any) => `/main${item.path}` == route.path
+    );
+    if (isRoutePath) allRoutes.push(route);
+  }
+
+  return allRoutes;
 };

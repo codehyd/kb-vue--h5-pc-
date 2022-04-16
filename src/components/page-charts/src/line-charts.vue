@@ -1,0 +1,62 @@
+<template>
+  <div class="line-charts">
+    <kb-echarts :options="options"></kb-echarts>
+  </div>
+</template>
+
+<script setup lang="ts">
+import KbEcharts from "@/base-ui/echarts";
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    xLabels: string[] | any[];
+    values: any[];
+  }>(),
+  {
+    title: "",
+  }
+);
+const options = computed(() => {
+  return {
+    title: {
+      text: props.title,
+    },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        label: {
+          backgroundColor: "#6a7985",
+        },
+      },
+    },
+    legend: {},
+    toolbox: {
+      feature: {
+        saveAsImage: {},
+      },
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: "category",
+        boundaryGap: false,
+        data: props.xLabels,
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+      },
+    ],
+    series: props.values,
+  };
+});
+</script>
+
+<style scoped></style>

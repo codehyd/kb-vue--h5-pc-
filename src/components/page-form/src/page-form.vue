@@ -56,7 +56,7 @@ watchEffect(() => {
 });
 
 defineExpose({
-  getFormData,
+  getFormData, // 获取表单数据
 });
 </script>
 

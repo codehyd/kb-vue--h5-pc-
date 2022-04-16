@@ -7,6 +7,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/login", component: login },
   {
     path: "/main",
+    name: "main",
     component: () => import("@/view/main/index.vue"),
     children: [
       {
@@ -18,6 +19,19 @@ const routes: RouteRecordRaw[] = [
         component: () => import("@/view/main/page/home/index.vue"),
       },
     ],
+  },
+  { path: "/setup", component: () => import("@/view/setup/index.vue") },
+
+  // not found  (404)
+  {
+    path: "/:pathMatch(.*)",
+    component: () =>
+      import(
+        /* webpackChunkName: "notFound-chunk" */ "../view/notfount/not-fount.vue"
+      ),
+    meta: {
+      title: "404",
+    },
   },
 ];
 

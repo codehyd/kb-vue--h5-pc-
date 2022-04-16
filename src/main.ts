@@ -19,8 +19,8 @@ import router from "./router";
 import store, { refreshWindowSetup } from "./store";
 
 const app = createApp(App);
-app.use(globalComponent);
 app.use(store);
+app.use(globalComponent);
 refreshWindowSetup();
 app.use(router);
 app.mount("#app");

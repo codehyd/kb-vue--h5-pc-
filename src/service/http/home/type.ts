@@ -26,3 +26,8 @@ export interface ITodoOptionsType {
 export interface ITodoConfirmDataType extends IDataType {
   confirm: string;
 }
+
+export interface IKanbanOptoinType {
+  begdate: string;
+  enddate: string;
+}

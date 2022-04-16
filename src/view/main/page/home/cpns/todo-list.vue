@@ -1,5 +1,5 @@
 <template>
-  <div class="todo-list">
+  <div class="todo-list card">
     <div class="options">
       <template v-for="item in selectOptions" :key="item.flag">
         <el-check-tag
@@ -86,7 +86,7 @@
               >
                 {{ item.flag == 0 ? "未完成" : "已完成" }}
               </el-tag>
-              <div>
+              <div class="options">
                 <!-- 编辑  -->
                 <kb-icon
                   @click="handleEditClick(item)"
@@ -351,20 +351,13 @@ const handleDeleteClick = (item: any) => {
 <style lang="less" scoped>
 .todo-list {
   height: 350px;
-  width: 100%;
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid #ede7ed;
-  transition: 0.3s;
-  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-  z-index: 999;
+
   padding: 10px;
 
   .options {
     position: sticky;
     top: 0;
-    z-index: 999;
+    z-index: 99;
     background-color: white;
     .header {
       display: flex;
@@ -432,8 +425,14 @@ const handleDeleteClick = (item: any) => {
         .footer {
           padding: 10px 0;
           display: flex;
+          flex-wrap: wrap;
           justify-content: space-between;
           align-items: center;
+
+          .options {
+            display: flex;
+            align-items: center;
+          }
         }
       }
     }

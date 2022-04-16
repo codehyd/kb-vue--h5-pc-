@@ -89,13 +89,15 @@ export const getLastMonth = (value: any = null, separate = "-") => {
 
   const startDateTime = year + separate + month + separate + "01"; //上个月第一天
   const endDateTime = year + separate + month + separate + yDate.getDate(); //上个月最后一天
-  return {
-    startDateTime: startDateTime,
-    endDateTime: endDateTime,
-  };
+  return [startDateTime, endDateTime];
+  // return {
+  //   startDateTime: startDateTime,
+  //   endDateTime: endDateTime,
+  // };
 };
 
-export function getDay(day: number) {
+// 通过天数获取年月日 0 =>今天
+export function getDay(day: number = 0) {
   var today = new Date();
   var targetday_milliseconds = today.getTime() + 1000 * 60 * 60 * 24 * day;
   today.setTime(targetday_milliseconds); //注意，这行是关键代码

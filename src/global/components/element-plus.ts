@@ -4,6 +4,9 @@ import "element-plus/dist/index.css";
 
 import {
   ElAside,
+  ElAvatar,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
   ElButton,
   ElCard,
   ElCheckbox,
@@ -14,6 +17,7 @@ import {
   ElDatePicker,
   ElDialog,
   ElDivider,
+  ElDrawer,
   ElDropdown,
   ElDropdownItem,
   ElDropdownMenu,
@@ -28,6 +32,7 @@ import {
   ElMenuItem,
   ElMenuItemGroup,
   ElOption,
+  ElPopover,
   ElRadio,
   ElRadioGroup,
   ElRow,
@@ -78,6 +83,11 @@ const components = [
   ElTimePicker,
   ElSwitch,
   ElRadioGroup,
+  ElAvatar,
+  ElPopover,
+  ElBreadcrumb,
+  ElBreadcrumbItem,
+  ElDrawer,
 ];
 
 export default function (app: App): void {

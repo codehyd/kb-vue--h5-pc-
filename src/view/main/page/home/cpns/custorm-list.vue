@@ -70,7 +70,7 @@
       </div>
       <template #footer>
         <el-button type="primary" @click="handleSettingCustormList">
-          {{ isEditFlag ? "编辑" : "完成" }}
+          {{ !isEditFlag ? "编辑" : "完成" }}
         </el-button>
         <el-button type="primary" @click="handleClone">关闭</el-button>
       </template>
