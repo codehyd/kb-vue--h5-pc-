@@ -1,6 +1,6 @@
 import kbBaseRequest from "@/service";
 import { IDataType } from "../../type";
-import { ICustormType } from "./type";
+import { ICustormType, ICustormSetup } from "./type";
 
 export const httpAccount = (accountData: any) => {
   const newAccountData = { ...accountData };
@@ -36,4 +36,18 @@ export const httpSetCustormList = (content: string) => {
       content,
     },
   });
+};
+
+export const httpSetupState = (
+  data: ICustormSetup,
+  method: "GET" | "POST" = "GET"
+) => {
+  const config = {
+    url: "gocustomizedata",
+    method,
+    data: {},
+    params: {},
+  };
+  method == "GET" ? (config.params = data) : (config.data = data);
+  return kbBaseRequest.request<IDataType>(config);
 };

@@ -7,7 +7,11 @@
       <el-container class="content">
         <div class="aside" :style="{ width: currentFold ? '200px' : '0px' }">
           <page-menus></page-menus>
-          <div class="flodIcon" :style="{ left: foldIcon ? '200px' : '0px' }">
+          <div
+            v-drag
+            class="flodIcon"
+            :style="{ left: foldIcon ? '200px' : '0px' }"
+          >
             <kb-icon
               @click="handleFoldIconClick"
               :name="foldIcon ? 'Fold' : 'Expand'"

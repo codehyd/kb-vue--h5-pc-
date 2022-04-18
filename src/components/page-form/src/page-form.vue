@@ -11,6 +11,7 @@ const props = withDefaults(
   defineProps<{
     formConfig: IFormType;
     defaultData?: any;
+    isHasConfirm?: boolean;
   }>(),
   {
     defaultData: () => {},
@@ -28,6 +29,14 @@ for (const item of formItems) {
   } else {
     formOriginData[item.field] = "";
   }
+}
+if (props.isHasConfirm) {
+  formItems.push({
+    field: "confirm",
+    type: "button",
+    label: "确认",
+    otherButtonText: "查询",
+  });
 }
 const formData = ref(formOriginData);
 

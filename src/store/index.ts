@@ -3,6 +3,7 @@ import type { IRootStore, IStoreType } from "./type";
 
 import login from "./login";
 import home from "./home";
+import setup from "./setup";
 
 import {
   httpGetSelectOptions,
@@ -72,6 +73,7 @@ const store = createStore<IRootStore>({
   modules: {
     login,
     home,
+    setup,
   },
 });
 

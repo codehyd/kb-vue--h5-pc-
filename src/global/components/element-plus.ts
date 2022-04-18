@@ -41,6 +41,8 @@ import {
   ElSteps,
   ElSubMenu,
   ElSwitch,
+  ElTabPane,
+  ElTabs,
   ElTag,
   ElTimePicker,
   ElTooltip,
@@ -88,6 +90,8 @@ const components = [
   ElBreadcrumb,
   ElBreadcrumbItem,
   ElDrawer,
+  ElTabs,
+  ElTabPane,
 ];
 
 export default function (app: App): void {

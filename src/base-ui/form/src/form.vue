@@ -9,6 +9,7 @@
     <!-- 行内模式 -->
     <template v-if="inline">
       <kb-form-item
+        @query-click="handleQueryClick"
         v-for="item in formItems"
         :key="item.field"
         v-model="modelValue[item.field]"
@@ -21,6 +22,7 @@
         <template v-for="item in formItems" :key="item.field">
           <el-col v-bind="colLayout">
             <kb-form-item
+              @query-click="handleQueryClick"
               v-model="modelValue[item.field]"
               :itemConfig="item"
             ></kb-form-item>
@@ -71,6 +73,10 @@ const validateForm = () => {
     return;
   }
   return elForm.validate();
+};
+
+const handleQueryClick = () => {
+  console.log(props.modelValue);
 };
 
 defineExpose({

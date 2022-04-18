@@ -44,6 +44,7 @@ const loginModule: Module<ILoginStore, IRootStore> = {
 
       dispatch("getSelectOptions", null, { root: true });
       dispatch("getCustormList", null, { root: true });
+      dispatch("setup/getCustormSetup", null, { root: true });
 
       router.push("/main");
     },
@@ -59,6 +60,7 @@ const loginModule: Module<ILoginStore, IRootStore> = {
 
         dispatch("getSelectOptions", null, { root: true });
         dispatch("getCustormList", null, { root: true });
+        dispatch("setup/getCustormSetup", null, { root: true });
       }
     },
   },
