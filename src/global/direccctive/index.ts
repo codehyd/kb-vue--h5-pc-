@@ -55,6 +55,23 @@ const drag = {
   },
 };
 
+const tabScroll = {
+  mounted(el: HTMLElement, bind: any) {
+    // 获取子元素的所有高度并且存放到数组里
+    const children = el.children;
+    const childrenHeight: number[] = [];
+    for (let i = 0; i < children.length; i++) {
+      childrenHeight.push((children[i] as HTMLElement).offsetHeight);
+    }
+
+    // 监听滚动事件
+    el.addEventListener("scroll", () => {
+      console.log(bind);
+    });
+  },
+};
+
 export default function (app: App): void {
   app.directive("drag", drag);
+  app.directive("tabScroll", tabScroll);
 }

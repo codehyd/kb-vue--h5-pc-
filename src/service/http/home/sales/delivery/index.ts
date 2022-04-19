@@ -17,6 +17,7 @@ export const httpGetSalesDeliveryTableList = (params: ITableType) => {
   return kbBaseRequest.request<IDataType>({
     url: "/gogetstockbilltotallist_page",
     params,
+    data: {},
   });
 };
 

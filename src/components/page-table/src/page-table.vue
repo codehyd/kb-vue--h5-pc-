@@ -1,6 +1,6 @@
 <template>
   <div>
-    <base-table v-bind="tableConfig"></base-table>
+    <base-table v-bind="autoTableConfig"></base-table>
   </div>
 </template>
 
@@ -12,6 +12,8 @@ const props = withDefaults(
   }>(),
   {}
 );
+
+const autoTableConfig = computed(() => props.tableConfig);
 </script>
 
 <style scoped></style>

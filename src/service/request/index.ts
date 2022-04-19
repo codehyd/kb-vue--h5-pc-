@@ -1,8 +1,8 @@
 import axios from "axios";
 import type { AxiosInstance } from "axios";
 import type { HYRequestInterceptors, HYRequestConfig } from "./type";
-
-import store from "@/store";
+import router from "@/router";
+import message from "@/utils/message";
 
 class HYRequest {
   instance: AxiosInstance;
@@ -38,8 +38,22 @@ class HYRequest {
       this.interceptors?.responseInterceptorCatch
     );
 
+    this.instance.interceptors.request.use(
+      (config) => {
+        return config;
+      },
+      (err) => {
+        return err;
+      }
+    );
+
     this.instance.interceptors.response.use(
       (res) => {
+        if (res.data.code === -2) {
+          // 跳转到首页
+          router.replace("/login");
+          message.show("需要重新登陆");
+        }
         return res.data;
       },
       (err) => {
@@ -71,6 +85,7 @@ class HYRequest {
           resolve(res);
         })
         .catch((err) => {
+          console.log(1212, err);
           reject(err);
           return err;
         });

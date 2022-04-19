@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <header class="tableHeader">21222223</header> -->
     <page-table :tableConfig="tableConfig"></page-table>
   </div>
 </template>
@@ -39,9 +40,16 @@ const requestHeader = async () => {
 // 请求表格数据
 const requestTable = async () => {
   const tableData = await httpGetSalesDeliveryTableList(props.requestData);
+  console.log(tableData);
   tableConfig.data = tableData?.data?.[0]?.data ?? [];
 };
+
 requestHeader();
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.tableHeader {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

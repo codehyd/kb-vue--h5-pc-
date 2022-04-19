@@ -90,7 +90,7 @@ const labelWidth = ref("120px");
 const token = computed(() => store.state.login.token);
 
 watchEffect(() => {
-  if ("code" in token.value) {
+  if (token.value) {
     accountData.value.csname = token.value.csname;
     accountData.value.cnstr = token.value.csname;
     accountData.value.sns = token.value.softname;
