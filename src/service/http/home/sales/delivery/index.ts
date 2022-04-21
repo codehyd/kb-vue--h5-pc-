@@ -21,4 +21,14 @@ export const httpGetSalesDeliveryTableList = (params: ITableType) => {
   });
 };
 
+// 获取销售送货单详情的表格头部数据
+export const httpGetSalesDeliveryDetailHeaderList = () => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/gowebeditcolumn",
+    params: {
+      billtypeid: 103,
+    },
+  });
+};
+
 export * from "./type";

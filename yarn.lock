@@ -1914,6 +1914,11 @@
   "resolved" "https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz"
   "version" "1.0.2"
 
+"xe-clipboard@^1.10.2":
+  "integrity" "sha512-C2/n54DKMU/TaDHQmlOhjLksFTFopUs5sKj0chgoZcTMZTUQ0hlOeKgDWJidxQgrKa3e9BnRDkkRKAgFepeb9Q=="
+  "resolved" "https://registry.npmjs.org/xe-clipboard/-/xe-clipboard-1.10.2.tgz"
+  "version" "1.10.2"
+
 "xe-utils@^3.5.0", "xe-utils@^3.5.4":
   "integrity" "sha512-oH7VOgvHv34pn198dhKPVKnuEHV22Q06YpCTVnAS3JuutylmZj/rtJGvn0BxxWQ37w2LgCknoebLA4uIGXwFtw=="
   "resolved" "https://registry.npmjs.org/xe-utils/-/xe-utils-3.5.4.tgz"

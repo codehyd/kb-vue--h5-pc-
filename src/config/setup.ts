@@ -24,10 +24,18 @@ export const setupOptions: ISetupType[] = [
       {
         id: "queryTableMaxHeight",
         label: "查询表格最大高度",
-        value: 200,
+        value: 700,
         type: "number",
         help: "查询表格最大高度 默认700px",
         field: "queryTableMaxHeight",
+      },
+      {
+        id: "detailTableMaxHeight",
+        label: "详情表格最大高度",
+        value: 700,
+        type: "number",
+        help: "详情表格最大高度 默认700px",
+        field: "detailTableMaxHeight",
       },
       {
         id: "isAutoWidth",

@@ -1,6 +1,7 @@
 <template>
   <div class="delivery">
     <PageForm isHasConfirm :formConfig="searchConfig"></PageForm>
+
     <search-table :requestData="requestData"></search-table>
   </div>
 </template>

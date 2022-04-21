@@ -1,3 +1,6 @@
+import local from "@/utils/local";
+import base64 from "@/utils/base64";
+
 // vite 环境变量
 let mode = import.meta.env.MODE;
 
@@ -21,4 +24,21 @@ const getTaskBaseData = () => {
   };
 };
 
-export { baseUrl, getTaskBaseData };
+const getTaskTokenData = () => {
+  const tokenData: any = {};
+  const token = local.getCache("token2.x")
+    ? base64.decodeToObj(local.getCache("token2.x"))
+    : "";
+
+  if (token) {
+    tokenData.sns = token?.softname ?? "";
+    tokenData.csname = token?.csname ?? "";
+    tokenData.cnstr = token?.csname ?? "";
+    tokenData.uid = token?.uid ?? "";
+    tokenData.uname = token?.uname ?? "";
+    tokenData.upwd = token?.upwd ?? "";
+  }
+  return tokenData;
+};
+
+export { baseUrl, getTaskBaseData, getTaskTokenData };

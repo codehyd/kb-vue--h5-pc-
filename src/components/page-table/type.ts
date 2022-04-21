@@ -1,0 +1,16 @@
+import { ITableConfigType } from "@/base-ui/table";
+
+// 表格操作列选项
+export interface ITableActiveConfigType {
+  type: "text" | "button";
+  text: string;
+  icon?: string;
+  buttonType?: "primary" | "success" | "warning" | "danger" | "info";
+  isConfirm?: boolean;
+  optionType: string;
+}
+
+export interface IDetailTableConfig extends ITableConfigType {
+  messages?: any;
+  images?: any;
+}

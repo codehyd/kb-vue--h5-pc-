@@ -17,7 +17,7 @@
     </template>
     <!-- 字体图标 -->
     <template v-else>
-      <i :class="name" :style="{ 'font-size': size + 'px' }"></i>
+      <i :class="name" :style="{ 'font-size': size + 'px', color: color }"></i>
     </template>
   </span>
 </template>

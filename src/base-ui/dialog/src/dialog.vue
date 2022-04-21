@@ -94,18 +94,16 @@ const handleCloseClick = () => {
 </script>
 
 <style lang="less" scoped>
-.elDialog {
-  &:deep(.el-dialog__body) {
-    padding: 0;
-  }
-  .title {
+&:deep(.el-dialog .el-dialog__body) {
+  padding: 10px 20px;
+}
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .icons {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    .icons {
-      display: flex;
-      align-items: center;
-    }
   }
 }
 </style>
