@@ -31,12 +31,17 @@ for (const item of formItems) {
   }
 }
 if (props.isHasConfirm) {
-  formItems.push({
-    field: "confirm",
-    type: "button",
-    label: "确认",
-    otherButtonText: "查询",
-  });
+  const find = formItems.find(
+    (item) => item.field === "confirm" && item.otherButtonText === "查询"
+  );
+  if (!find) {
+    formItems.push({
+      field: "confirm",
+      type: "button",
+      label: "确认",
+      otherButtonText: "查询",
+    });
+  }
 }
 const formData = ref(formOriginData);
 

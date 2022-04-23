@@ -17,3 +17,11 @@ export interface IBaseUpdateImageType extends IBaseTableConfigType {
 export interface IBaseMessageType extends IBaseTableConfigType {
   message: string;
 }
+
+export interface IGoodListType {
+  flag: "select";
+  page: number;
+  Classid: number;
+  tj?: string;
+  count?: number;
+}

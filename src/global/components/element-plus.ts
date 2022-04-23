@@ -28,6 +28,7 @@ import {
   ElIcon,
   ElImage,
   ElInput,
+  ElInputNumber,
   ElMain,
   ElMenu,
   ElMenuItem,
@@ -94,6 +95,7 @@ const components = [
   ElTabs,
   ElTabPane,
   ElImage,
+  ElInputNumber,
 ];
 
 export default function (app: App): void {

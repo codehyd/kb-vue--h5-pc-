@@ -88,6 +88,10 @@ export default function (
     console.log(15);
   }
 
+  // --------------------------------------
+
+  // 因为组件ref在这里所以需要在这里定义
+
   return {
     handleMenuClick,
     onAudit,

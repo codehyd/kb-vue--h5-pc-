@@ -1,8 +1,22 @@
 <template>
   <div class="delivery">
-    <PageForm isHasConfirm :formConfig="searchConfig"></PageForm>
-
-    <search-table :requestData="requestData"></search-table>
+    <!-- 显示 -->
+    <template v-if="currentFlag == 'page'">
+      <PageForm isHasConfirm :formConfig="searchConfig"></PageForm>
+      <div class="active">
+        <el-button @click="handleEditClick" icon="plus">添加</el-button>
+      </div>
+      <search-table :requestData="requestData"></search-table>
+    </template>
+    <!-- 编辑 -->
+    <template v-else>
+      <page-edit-table
+        :tableConfig="editPageTableConfig"
+        @goBack="currentFlag = 'page'"
+        title="销售送货单开单编辑"
+        ref="pageEditTable"
+      ></page-edit-table>
+    </template>
   </div>
 </template>
 
@@ -10,8 +24,12 @@
 import PageForm from "@/components/page-form";
 import { searchConfig } from "./config/search-config";
 import SearchTable from "./cpns/search-table.vue";
-
+import { PageEditTable, IEditTableConfig } from "@/components/page-table";
 import type { ITableType } from "@/service/http/home/sales/delivery";
+
+import useEditTable from "@/hooks/useEditTable";
+
+const pageEditTableRef = ref<InstanceType<typeof PageEditTable>>();
 
 const requestData: ITableType = reactive({
   page: 1,
@@ -20,6 +38,39 @@ const requestData: ITableType = reactive({
   enddate: "2022-04-30",
   billtypeid: 103,
 });
+
+const editPageTableConfig: IEditTableConfig = reactive({
+  keyString: "fitemid",
+  column: [],
+  state: "edit",
+  showIndex: true,
+  showAction: false,
+});
+
+const { getEditTableAuth } = useEditTable();
+const currentFlag = ref<"edit" | "page">("edit");
+
+watchEffect(async () => {
+  if (currentFlag.value === "edit") {
+    const res = await getEditTableAuth(103);
+    editPageTableConfig.column = res?.data?.[0]?.data ?? [];
+  }
+});
+
+const handleEditClick = async () => {
+  const res = await getEditTableAuth(103);
+  console.log(res);
+  editPageTableConfig.column = res?.data?.[0]?.data ?? [];
+  // editPageTableConfig.column = res.data?.data[0]?.data ?? [];
+
+  currentFlag.value = "edit";
+};
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.active {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0;
+}
+</style>

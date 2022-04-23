@@ -1,4 +1,7 @@
 import { VxeTableInstance } from "vxe-table";
+import mitter from "@/mitt";
+import message from "@/utils/message";
+
 export default function () {
   const vxeTableRef = ref({} as VxeTableInstance);
 
@@ -10,6 +13,15 @@ export default function () {
     }
   };
 
+  mitter.on("add-table-rows", (row: any) => {
+    console.log("mitter.on接收");
+
+    const vxeTable = vxeTableRef.value;
+    if (vxeTable) {
+      vxeTable?.insertAt(row, -1);
+      message.success("添加成功");
+    }
+  });
   return {
     vxeTableRef,
     remove,

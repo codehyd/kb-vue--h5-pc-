@@ -16,6 +16,12 @@ class message {
       type: "error",
     });
   }
+  success(message: string) {
+    ElMessage({
+      message,
+      type: "success",
+    });
+  }
 
   // 消息提示框
   confirm(message: string, callback: () => void, catchBack?: () => void) {

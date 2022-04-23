@@ -3,7 +3,8 @@
     <base-table
       ref="baseTableRef"
       @menu-click="handleMenuClick"
-      v-bind="autoTableConfig"
+      @db-click="handleDbClick"
+      v-bind="tableConfig"
     >
       <!-- 操作选项 -->
       <template #table-active="{ row, column, rowIndex }">
@@ -17,6 +18,7 @@
         </div>
       </template>
     </base-table>
+
     <kb-dialog :top="2" v-model:show="showPrintPanel" title="单据打印预览">
       <iframe
         :style="{ height: '85vh', width: '100%' }"
@@ -33,6 +35,7 @@ import ActiveItem from "./cpns/active-item.vue";
 import { ITableActiveConfigType } from "../type";
 import useMenuHooks from "./hooks/useMenuHooks";
 import message from "@/utils/message";
+// import mitter from "@/mitt";
 
 const props = withDefaults(
   defineProps<{
@@ -44,8 +47,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["on-active-detail", "on-detail"]);
-const autoTableConfig = computed(() => props.tableConfig);
+const emit = defineEmits(["on-active-detail", "on-detail", "db-click"]);
 
 // 操作面板点击事件
 const handleMenuItemClick = (config: any, row: any, column: any) => {
@@ -57,7 +59,8 @@ const handleMenuItemClick = (config: any, row: any, column: any) => {
   }
 };
 
-const { handleMenuClick, baseTableRef } = useMenuHooks(
+// 表格双击事件
+const { handleMenuClick, baseTableRef, onPrint, onAudit } = useMenuHooks(
   auditCallback,
   printCallback,
   detailCallback,
@@ -98,8 +101,31 @@ function deleteCallback(params: any) {
   baseTableRef.value?.remove(row);
 }
 
+// 调用打印方法
+const printFn = (row: any) => {
+  onPrint(row);
+};
+
+// 调用审核方法
+const auditFn = (row: any) => {
+  onAudit(row);
+};
+
 // 收款回调
 function payCallback() {}
+
+// 双击点击
+const handleDbClick = (params: any) => {
+  emit("db-click", {
+    row: params.row,
+    column: params.column,
+  });
+};
+
+defineExpose({
+  printFn,
+  auditFn,
+});
 </script>
 
 <style scoped></style>

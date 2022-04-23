@@ -7,6 +7,7 @@ import {
   IDetailTableDataType,
   IBaseUpdateImageType,
   IBaseMessageType,
+  IGoodListType,
 } from "./type";
 
 import qs from "qs";
@@ -63,6 +64,51 @@ export const httpUpdateImage = (file: any, reqData: IBaseUpdateImageType) => {
 export const httpSubmitMessage = (params: IBaseMessageType) => {
   return kbBaseRequest.request({
     url: "/gosetbillmessage",
+    params,
+  });
+};
+
+// 获取edit表格的头部数据
+export const httpGetEditTableColumn = (billtypeid: number) => {
+  return kbBaseRequest.request({
+    url: "/gowebeditcolumn",
+    params: {
+      billtypeid,
+    },
+  });
+};
+
+// 通过barcode 获取商品信息
+export const httpGetGoodsInfoByBarcode = (barcode: number | string) => {
+  return kbBaseRequest.request({
+    url: "/gogetproductbarcode",
+    params: {
+      barcode,
+    },
+  });
+};
+
+// 获取show表格的头部数据
+export const httpGetShowTableColumn = (billtypeid: number) => {
+  return kbBaseRequest.request({
+    url: "/gowebshowcolumn",
+    params: {
+      billtypeid,
+    },
+  });
+};
+
+// 获取good表格的class列表
+export const httpGetGoodsClassList = () => {
+  return kbBaseRequest.request({
+    url: "/gogetproductfirstclass",
+  });
+};
+
+// 获取good表格的商品列表
+export const httpGetGoodsList = (params: IGoodListType) => {
+  return kbBaseRequest.request({
+    url: "/gogetproductdetail_page",
     params,
   });
 };

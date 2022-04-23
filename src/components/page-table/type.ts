@@ -14,3 +14,14 @@ export interface IDetailTableConfig extends ITableConfigType {
   messages?: any;
   images?: any;
 }
+
+export interface IEditTableConfig extends ITableConfigType {
+  current?: any;
+}
+
+export interface IGoodTableConfig extends ITableConfigType {
+  Classid: number;
+  classList?: any;
+  page: number;
+  tj?: string;
+}

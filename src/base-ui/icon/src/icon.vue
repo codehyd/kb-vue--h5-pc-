@@ -19,6 +19,9 @@
     <template v-else>
       <i :class="name" :style="{ 'font-size': size + 'px', color: color }"></i>
     </template>
+    <span :style="{ 'font-size': size + 'px', color: color }">
+      <slot name="text">{{ text }}</slot>
+    </span>
   </span>
 </template>
 
@@ -26,6 +29,7 @@
 const props = withDefaults(
   defineProps<{
     name: string;
+    text?: string;
     size?: number;
     flag?: "elIcon" | "icon";
     type?: "icon" | "button";
@@ -34,6 +38,7 @@ const props = withDefaults(
   }>(),
   {
     size: 16,
+    text: "",
     boolean: false,
     flag: "icon",
     type: "icon",

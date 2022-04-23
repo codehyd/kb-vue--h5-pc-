@@ -9,6 +9,7 @@
       :data="data"
       :menu-config="menuConfig"
       @menu-click="handleMenuClick"
+      @cell-dblclick="handleCellDbClick"
     >
       <!-- 索引 -->
       <template v-if="showIndex">
@@ -90,13 +91,15 @@
 import { VxeTablePropTypes, VxeTableEvents } from "vxe-table";
 import useTableSetup from "./hooks/useTableSetup";
 import useTableMethods from "./hooks/useTableMethods";
+import { ImodeType } from "../type";
+
 const props = withDefaults(
   defineProps<{
     column?: any[];
     data?: any[];
     keyString: string;
     size?: "medium" | "small" | "mini";
-    state?: "query" | "detail";
+    state?: ImodeType;
     showFooter?: boolean;
     showIndex?: boolean;
     showAction?: boolean;
@@ -122,7 +125,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["menu-click"]);
+const emit = defineEmits(["menu-click", "db-click"]);
 
 const formatAlign = (align: -1 | 0 | 1) => {
   const aligns = ["left", "center", "right"];
@@ -140,6 +143,10 @@ const { vxeTableRef, remove } = useTableMethods();
 // 点击表格菜单
 const handleMenuClick: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
   emit("menu-click", { menu, row, column });
+};
+
+const handleCellDbClick: VxeTableEvents.CellDblclick = ({ row, column }) => {
+  emit("db-click", { row, column });
 };
 
 defineExpose({

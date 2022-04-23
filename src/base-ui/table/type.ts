@@ -1,11 +1,12 @@
 import { VxeTablePropTypes } from "vxe-table";
+export type ImodeType = "query" | "detail" | "edit";
 
 export interface ITableConfigType {
   column?: any[];
   data?: any[];
   keyString: string;
   size?: "medium" | "small" | "mini";
-  state?: "query" | "detail";
+  state?: ImodeType;
   showFooter?: boolean;
   showIndex?: boolean;
   showAction?: boolean;
