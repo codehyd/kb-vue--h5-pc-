@@ -8,6 +8,7 @@ import {
   IBaseUpdateImageType,
   IBaseMessageType,
   IGoodListType,
+  IUseGoodPrice,
 } from "./type";
 
 import qs from "qs";
@@ -109,6 +110,24 @@ export const httpGetGoodsClassList = () => {
 export const httpGetGoodsList = (params: IGoodListType) => {
   return kbBaseRequest.request({
     url: "/gogetproductdetail_page",
+    params,
+  });
+};
+
+// 通过编码获取商品信息
+export const httpGetGoodsInfoByCode = (bianma: number | string) => {
+  return kbBaseRequest.request({
+    url: "/gogetproductbianma",
+    params: {
+      bianma,
+    },
+  });
+};
+
+// 获取用户价格
+export const httpGetUserPrice = (params: IUseGoodPrice) => {
+  return kbBaseRequest.request({
+    url: "/gogetsourceprice_extend",
     params,
   });
 };

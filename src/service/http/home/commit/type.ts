@@ -25,3 +25,11 @@ export interface IGoodListType {
   tj?: string;
   count?: number;
 }
+
+export interface IUseGoodPrice {
+  billtypeid: number | string;
+  color?: string;
+  csid: string | number;
+  modelids: string | number;
+  pack?: string;
+}

@@ -12,4 +12,6 @@ export interface ITableConfigType {
   showAction?: boolean;
   activeText?: string;
   menuConfig?: VxeTablePropTypes.MenuConfig;
+  veifyConfig?: object;
+  showSelect?: boolean;
 }

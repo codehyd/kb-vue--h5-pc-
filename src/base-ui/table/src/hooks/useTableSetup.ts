@@ -39,9 +39,58 @@ export default function (mode: ImodeType) {
       )?.value ?? false
   );
 
+  // 表格编辑配置项
+  const editConfig = () => {
+    if (mode !== "edit") return { enabled: false };
+    return {
+      trigger: "click",
+      mode: "cell",
+      activeMethod: (params: any) => isCellEdit(params),
+    };
+  };
+  function isCellEdit(params: any) {
+    const { row, column } = params;
+    // return true
+    return column.params.freadonly == 0 ? false : true;
+  }
+  const handlerEditActived = (params: any) => {
+    const isNumber = params.column.params.fdatatype == "decimal";
+    const key = params.column.params.ffieldname;
+    if (isNumber) {
+      params.row[key] = Number(params.row[key]);
+    }
+  };
+
+  // 可编辑渲染器配置项
+  const columnEditRender = (item: any) => {
+    if (mode !== "edit") return { enabled: false };
+    // return { enabled: true }
+    if (item.freadonly == 0) {
+      return { enabled: false };
+    } else {
+      return {
+        autofocus: ".el-input__inner",
+        immediate: true,
+        autoselect: true,
+        placeholder: "",
+      };
+    }
+  };
+
+  const cellClassName = (params: any) => {
+    if (mode !== "edit") return null;
+    const isReadonly = params.column.params?.freadonly == 0 ? true : false;
+    if (isReadonly) return "isReadonly";
+    return null;
+  };
+
   return {
     maxHeight,
     isAutoColumnWidth,
     isShowOverFlow,
+    editConfig,
+    handlerEditActived,
+    columnEditRender,
+    cellClassName,
   };
 }

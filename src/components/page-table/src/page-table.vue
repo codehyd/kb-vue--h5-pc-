@@ -4,8 +4,17 @@
       ref="baseTableRef"
       @menu-click="handleMenuClick"
       @db-click="handleDbClick"
-      v-bind="tableConfig"
+      v-bind="autoTableConfig"
     >
+      <!-- 编辑模式 -->
+      <template #edit="{ row, column, rowIndex }">
+        <edit-table-column
+          :column="column"
+          :row="row"
+          v-model="row[column.field]"
+          @update:modelValue="handleUpdateModelValue"
+        ></edit-table-column>
+      </template>
       <!-- 操作选项 -->
       <template #table-active="{ row, column, rowIndex }">
         <div class="tableActive">
@@ -16,6 +25,11 @@
             ></active-item>
           </template>
         </div>
+      </template>
+      <template #checked="{ row, column, rowIndex }">
+        <slot name="checked" :row="row" :column="column" :rowIndex="rowIndex">
+          <el-checkbox v-model="row.checked" size="large" />
+        </slot>
       </template>
     </base-table>
 
@@ -34,8 +48,10 @@ import KbDialog from "@/base-ui/dialog";
 import ActiveItem from "./cpns/active-item.vue";
 import { ITableActiveConfigType } from "../type";
 import useMenuHooks from "./hooks/useMenuHooks";
+import useEditHooks from "./hooks/useEditHooks";
 import message from "@/utils/message";
-// import mitter from "@/mitt";
+import EditTableColumn from "./cpns/edit-table-column.vue";
+import mitter from "@/mitt";
 
 const props = withDefaults(
   defineProps<{
@@ -58,6 +74,7 @@ const handleMenuItemClick = (config: any, row: any, column: any) => {
     emit(`on-active-${activeText}`, { row, column, config });
   }
 };
+// * -------------------------------
 
 // 表格双击事件
 const { handleMenuClick, baseTableRef, onPrint, onAudit } = useMenuHooks(
@@ -114,6 +131,8 @@ const auditFn = (row: any) => {
 // 收款回调
 function payCallback() {}
 
+// * --------------------------------------------
+
 // 双击点击
 const handleDbClick = (params: any) => {
   emit("db-click", {
@@ -122,9 +141,54 @@ const handleDbClick = (params: any) => {
   });
 };
 
+// 给tableConfig设置veifyConfig
+const autoTableConfig = computed(() => {
+  const { state, veifyConfig } = props.tableConfig;
+  if (state !== "edit") return props.tableConfig;
+  if (veifyConfig) return props.tableConfig;
+  else {
+    const column = [...(props.tableConfig?.column ?? [])] ?? [];
+    const veifyConfig: any = {};
+    column.forEach((item: any) => {
+      if (item.fnull == -1 && item.fdatatype == "decimal") {
+        veifyConfig[item.ffieldname] = [
+          {
+            required: true,
+            message: item.fshowname + "不能为空",
+          },
+          {
+            pattern: /[^0\x22]+/,
+            message: "不能等于0",
+          },
+        ];
+      } else if (item.fnull == -1 && item.fdatatype !== "decimal") {
+        veifyConfig[item.ffieldname] = [
+          {
+            required: true,
+            message: item.fshowname + "不能为空",
+          },
+        ];
+      }
+    });
+    return { ...props.tableConfig, veifyConfig };
+  }
+});
+
+// mitter.on("page-table-add-rows", (row) => {
+//   baseTableRef.value?.insert(row);
+// });
+
+const insert = (row: any, index: number = -1) => {
+  baseTableRef.value?.insert(row, index);
+};
+
+const { handleUpdateModelValue } = useEditHooks();
+// const handleUpdateModelValue = (val: any, key: string, row: any) => {};
+
 defineExpose({
   printFn,
   auditFn,
+  insert,
 });
 </script>
 

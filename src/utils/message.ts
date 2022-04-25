@@ -66,6 +66,33 @@ class message {
         });
     });
   }
+
+  // 消息输入提示框
+  messageBox(
+    title: string,
+    content: string,
+    type?: MessageType,
+    dangerouslyUseHTMLString?: boolean,
+    isShowCancelBtn: boolean = true,
+    isShowClose: boolean = true
+  ) {
+    return new Promise((resolve, reject) => {
+      ElMessageBox.confirm(content, title, {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        showCancelButton: isShowCancelBtn,
+        showClose: isShowClose,
+        dangerouslyUseHTMLString: dangerouslyUseHTMLString ?? false,
+        type,
+      })
+        .then(() => {
+          resolve(true);
+        })
+        .catch(() => {
+          reject(false);
+        });
+    });
+  }
 }
 
 export default new message();

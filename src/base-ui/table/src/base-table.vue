@@ -6,10 +6,32 @@
       :max-height="maxHeight"
       :size="size"
       :border="true"
+      resizable
+      header-align="center"
+      footer-align="center"
       :data="data"
       :menu-config="menuConfig"
       @menu-click="handleMenuClick"
       @cell-dblclick="handleCellDbClick"
+      :edit-config="editConfig()"
+      @edit-actived="handlerEditActived"
+      :edit-rules="veifyConfig"
+      :mouse-config="{ selected: true }"
+      keep-source
+      :keyboard-config="{
+        isArrow: true,
+        isEnter: true,
+        isTab: true,
+        isEdit: true,
+        isChecked: true,
+        enterToTab: true,
+      }"
+      border
+      :cell-class-name="cellClassName"
+      :checkbox-config="{
+        checkField: 'checked',
+        showHeader: false,
+      }"
     >
       <!-- 索引 -->
       <template v-if="showIndex">
@@ -26,7 +48,22 @@
           </template>
         </vxe-column>
       </template>
-      <!-- 表格内容 -->
+      <!-- 编辑模式下必须有的单选框 -->
+      <template v-if="state == 'edit' || showSelect">
+        <vxe-column fixed="left" type="checkbox" :width="80" align="center">
+          <template #checkbox="{ row, column, rowIndex }">
+            <slot
+              name="checked"
+              :row="row"
+              :column="column"
+              :rowIndex="rowIndex"
+            >
+              <el-checkbox v-model="row.checked" size="large" />
+            </slot>
+          </template>
+        </vxe-column>
+      </template>
+      <!-- 表格列内容 -->
       <template v-for="item in column" :key="item[keyString]">
         <vxe-column
           :width="!isAutoColumnWidth ? item.fwidth : 0"
@@ -36,6 +73,7 @@
           :align="formatAlign(item.falign)"
           :title="item.fshowname"
           :params="item"
+          :edit-render="columnEditRender(item)"
         >
           <!-- 默认模式 -->
           <template #default="{ row, column, rowIndex }">
@@ -48,8 +86,15 @@
               <span>{{ row[column.field] }}</span>
             </slot>
           </template>
+          <!-- 编辑模式 -->
+          <template v-if="state == 'edit'" #edit="{ row, column, rowIndex }">
+            <slot name="edit" :row="row" :column="column" :rowIndex="rowIndex">
+              <el-input v-model.trim="row[column.field]"></el-input>
+            </slot>
+          </template>
         </vxe-column>
       </template>
+      <!-- 右边操作选项 -->
       <template v-if="showAction">
         <vxe-column
           :width="!isAutoColumnWidth ? 60 : 0"
@@ -92,6 +137,8 @@ import { VxeTablePropTypes, VxeTableEvents } from "vxe-table";
 import useTableSetup from "./hooks/useTableSetup";
 import useTableMethods from "./hooks/useTableMethods";
 import { ImodeType } from "../type";
+import mitter from "@/mitt";
+import message from "@/utils/message";
 
 const props = withDefaults(
   defineProps<{
@@ -103,8 +150,10 @@ const props = withDefaults(
     showFooter?: boolean;
     showIndex?: boolean;
     showAction?: boolean;
+    showSelect?: boolean;
     activeText?: string;
     menuConfig?: VxeTablePropTypes.MenuConfig;
+    veifyConfig?: object;
   }>(),
   {
     column: () => {
@@ -118,8 +167,12 @@ const props = withDefaults(
     showFooter: false,
     showIndex: true,
     showAction: true,
+    showSelect: false,
     activeText: "操作",
     menuConfig: () => {
+      return {};
+    },
+    veifyConfig: () => {
       return {};
     },
   }
@@ -133,12 +186,18 @@ const formatAlign = (align: -1 | 0 | 1) => {
 };
 
 // 表格配置Hooks
-const { isShowOverFlow, maxHeight, isAutoColumnWidth } = useTableSetup(
-  props.state
-);
+const {
+  isShowOverFlow,
+  maxHeight,
+  isAutoColumnWidth,
+  editConfig,
+  handlerEditActived,
+  columnEditRender,
+  cellClassName,
+} = useTableSetup(props.state);
 
 // 表格行为Hooks
-const { vxeTableRef, remove } = useTableMethods();
+const { vxeTableRef, remove, insert } = useTableMethods();
 
 // 点击表格菜单
 const handleMenuClick: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
@@ -149,9 +208,48 @@ const handleCellDbClick: VxeTableEvents.CellDblclick = ({ row, column }) => {
   emit("db-click", { row, column });
 };
 
+// 事件总线 添加新行
+mitter.on("base-table-add-new-rows", () => {
+  const newRow = [...props.column]
+    .map((item) => item.ffieldname)
+    .reduce((init, key) => {
+      init[key] = "";
+      return init;
+    }, {});
+  newRow.checked = true;
+  const vxeTable = vxeTableRef.value;
+  if (vxeTable) {
+    vxeTable?.insertAt(newRow, -1);
+    message.success("添加成功");
+  }
+});
+// 删除选中行
+mitter.on("base-table-remove-select-rows", () => {
+  const vxeTable = vxeTableRef.value;
+  if (vxeTable) {
+    const rows = vxeTable.getCheckboxRecords();
+    if (rows.length == 0) return message.show("暂无选中行");
+    vxeTable?.remove(rows);
+  }
+});
+// 删除全部行 需要先获取全部行数据
+mitter.on("base-table-remove-all-rows", () => {
+  const vxeTable = vxeTableRef.value;
+  if (vxeTable) {
+    const { insertRecords } = vxeTable.getRecordset();
+    if (insertRecords.length == 0) return message.show("暂无数据");
+    vxeTable?.remove(insertRecords);
+  }
+});
+
 defineExpose({
   remove,
+  insert,
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+:deep(.vxe-table .vxe-table--body .isReadonly) {
+  background: #dadee665;
+}
+</style>

@@ -2,6 +2,10 @@ import { App } from "vue";
 import "vxe-table/lib/style.css";
 import VXETable from "vxe-table";
 
+// vxe-table 饿了吗适配
+import VXETablePluginElement from "vxe-table-plugin-element";
+import "vxe-table-plugin-element/dist/style.css";
+
 // import XEUtils from "xe-utils";
 // import zhCN from "vxe-table/es/locale/lang/zh-CN";
 
@@ -20,5 +24,6 @@ export default function (app: App): void {
   //   // console.log(component);
   //   app.component(component.name, component);
   // });
+  VXETable.use(VXETablePluginElement);
   app.use(VXETable);
 }

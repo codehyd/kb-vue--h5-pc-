@@ -18,10 +18,11 @@
         <kb-icon name="InfoFilled" flag="elIcon"></kb-icon>
         商品图片将在双击时显示
       </span>
-      <page-table
-        @db-click="handleDbClick"
-        :table-config="goodTableConfig"
-      ></page-table>
+      <page-table @db-click="handleDbClick" :table-config="goodTableConfig">
+        <template #checked="{ row }">
+          <span @click="handleSelectClick(row)" class="selectText">选择</span>
+        </template>
+      </page-table>
 
       <kb-dialog
         v-model:show="goodPanelShow"
@@ -102,6 +103,7 @@
 <script setup lang="ts">
 import BaseBarcode from "@/base-ui/barcode";
 import KbIcon from "@/base-ui/icon";
+import message from "@/utils/message";
 import {
   httpGetShowTableColumn,
   httpGetGoodsClassList,
@@ -114,7 +116,7 @@ import mitter from "@/mitt";
 
 // import type { ITableConfigType } from "@/base-ui/table";
 
-// const emit = defineEmits(["save-click"]);
+const emit = defineEmits(["save-click"]);
 
 const goodTableConfig: IGoodTableConfig = reactive({
   keyString: "fitemid",
@@ -125,6 +127,7 @@ const goodTableConfig: IGoodTableConfig = reactive({
   page: 1,
   showAction: false,
   tj: "",
+  showSelect: true,
 });
 
 const show = ref(false);
@@ -162,13 +165,20 @@ httpGetGoodsList({
 const handleDbClick = (params: any) => {
   const { row } = params;
   goodPanelShow.value = true;
-  currentGoodInfo.value = { ...row, fqty: 1 };
+  currentGoodInfo.value = { ...row, fqty: 1, checked: true };
 };
 
 const handleSaveClick = () => {
   goodPanelShow.value = false;
-  mitter.emit("add-table-rows", currentGoodInfo.value);
-  console.log("mitter.emit触发");
+  emit("save-click", currentGoodInfo.value);
+  // mitter.emit("add-table-rows", currentGoodInfo.value);
+};
+
+const handleSelectClick = (row: any) => {
+  emit("save-click", { ...row, fqty: 1, checked: true });
+  // // mitter.emit("add-table-rows", { ...row });
+  // mitter.emit("page-table-add-rows", currentGoodInfo.value);
+  // message.success("添加成功");
 };
 
 defineExpose({
@@ -199,5 +209,9 @@ defineExpose({
 
 .elDivider {
   margin: 20px 0 !important;
+}
+
+.select {
+  cursor: pointer;
 }
 </style>

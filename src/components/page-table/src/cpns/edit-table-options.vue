@@ -1,20 +1,15 @@
 <template>
   <div class="edit-table-option card">
+    <div class="select">表格基本操作</div>
+    <!-- 添加新行 -->
+    <el-button @click="handleAddNewRows">添加新行</el-button>
+    <!-- 删除选中 -->
+    <el-button @click="handleRemoveSelect">删除选中</el-button>
+    <!-- 删除全部 -->
+    <el-button @click="handleRemoveAll">删除全部</el-button>
+    <div class="select">表格基本操作</div>
     <!-- 添加商品 -->
     <el-button @click="handdleAddNewGoods">添加商品</el-button>
-
-    <!-- 添加新行 -->
-    <el-button>添加新行</el-button>
-
-    <!-- 删除选中 -->
-    <el-button>删除选中</el-button>
-
-    <!-- 全选 -->
-    <el-button>全部选中</el-button>
-
-    <!-- 反选  -->
-    <el-button>全部反选</el-button>
-
     <!-- 高级选项 -->
     <el-popover placement="bottom" :width="500" trigger="click">
       <template #reference>
@@ -76,11 +71,27 @@ const handlerEnter = async () => {
     return message.show("请输入条码");
   }
   const res = await httpGetGoodsInfoByBarcode(barcode.value);
+  if (res?.data?.[0]?.data?.length) {
+    emit("add-new-goods", { ...res.data[0].data[0], fqty: 1, checked: true });
+  }
+  barcode.value = "";
   message.show(res.msg, res.type);
 };
 
 const handleSaveClick = (row: any) => {
   emit("add-new-goods", row);
+};
+
+const handleAddNewRows = () => {
+  mitter.emit("base-table-add-new-rows");
+};
+
+const handleRemoveSelect = () => {
+  mitter.emit("base-table-remove-select-rows");
+};
+
+const handleRemoveAll = () => {
+  mitter.emit("base-table-remove-all-rows");
 };
 </script>
 

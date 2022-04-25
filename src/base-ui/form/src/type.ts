@@ -1,6 +1,7 @@
 export interface IFormItemsType {
   field: string;
   label: string;
+  readonly?: boolean;
   rules?: any;
   // # formitem类型
   type:

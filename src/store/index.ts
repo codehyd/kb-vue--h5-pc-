@@ -3,6 +3,7 @@ import type { IRootStore, IStoreType } from "./type";
 
 import login from "./login";
 import home from "./home";
+import bild from "./home/bild";
 import setup from "./setup";
 
 import {
@@ -73,6 +74,7 @@ const store = createStore<IRootStore>({
   modules: {
     login,
     home,
+    bild,
     setup,
   },
 });
@@ -83,6 +85,7 @@ export function useStore(): Store<IStoreType> {
 
 export const refreshWindowSetup = () => {
   store.dispatch("login/localSetup");
+  store.dispatch("bild/getBilltypeid");
 };
 
 export default store;

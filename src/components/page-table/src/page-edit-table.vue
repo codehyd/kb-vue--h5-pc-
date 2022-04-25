@@ -13,14 +13,17 @@
         当前: {{ title }}
       </span>
       <slot name="header">
-        <span class="select">客户信息</span>
+        <div class="card good">
+          <span class="select">客户信息</span>
+          <page-form :formConfig="formConfig"></page-form>
+        </div>
       </slot>
     </div>
-    <span class="select">商品信息</span>
-
     <edit-table-option @add-new-goods="handleAddNewGoods"></edit-table-option>
-
-    <page-table :tableConfig="tableConfig"></page-table>
+    <div class="card good">
+      <span class="select">商品信息</span>
+      <page-table ref="pageTableRef" :tableConfig="tableConfig"></page-table>
+    </div>
   </div>
 </template>
 
@@ -29,23 +32,30 @@ import PageTable from "@/components/page-table";
 import KbIcon from "@/base-ui/icon";
 import EditTableOption from "./cpns/edit-table-options.vue";
 import { ITableConfigType } from "@/base-ui/table";
+import message from "@/utils/message";
+import PageForm from "@/components/page-form";
+import { IFormType } from "@/base-ui/form";
 
 const props = withDefaults(
   defineProps<{
     title: string;
     tableConfig: ITableConfigType;
+    formConfig: IFormType;
   }>(),
   {}
 );
 
 const emit = defineEmits(["goBack"]);
 
+const pageTableRef = ref<InstanceType<typeof PageTable>>();
+
 const handleGoBack = () => {
   emit("goBack");
 };
 
 const handleAddNewGoods = (row: any) => {
-  console.log(row);
+  pageTableRef.value?.insert(row);
+  message.success("添加成功");
 };
 </script>
 
@@ -57,5 +67,8 @@ const handleAddNewGoods = (row: any) => {
   border-bottom: 1px solid #e8eaec;
   padding: 0 0 10px 0;
   margin: 0 0 10px 0;
+}
+.good {
+  padding: 10px;
 }
 </style>
