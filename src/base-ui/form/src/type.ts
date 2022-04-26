@@ -18,6 +18,7 @@ export interface IFormItemsType {
     | "button";
   // # 多选框列表
   otherCheckList?: any[];
+  checkKey?: string;
   // # 按钮的文字
   otherButtonText?: string;
   // # 日期类型

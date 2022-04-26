@@ -1,13 +1,15 @@
 <template>
   <div class="delivery">
-    <!-- 显示 -->
+    <!-- 查询 -->
     <template v-if="currentFlag == 'page'">
-      <PageForm isHasConfirm :formConfig="searchConfig"></PageForm>
+      <page-search :searchFormConfig="bildFormConfig"></page-search>
+      <!-- <PageForm isHasConfirm :formConfig="searchConfig"></PageForm> -->
       <div class="active">
         <el-button @click="handleEditClick" icon="plus">添加</el-button>
       </div>
       <search-table :requestData="requestData"></search-table>
     </template>
+
     <!-- 编辑 -->
     <template v-else>
       <page-edit-table
@@ -22,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import PageSearch from "@/components/page-search";
 import PageForm from "@/components/page-form";
 import { searchConfig } from "./config/search-config";
 import SearchTable from "./cpns/search-table.vue";
@@ -50,7 +53,7 @@ const editPageTableConfig: IEditTableConfig = reactive({
 });
 
 const { getEditTableAuth } = useEditTable();
-const currentFlag = ref<"edit" | "page">("edit");
+const currentFlag = ref<"edit" | "page">("page");
 
 watchEffect(async () => {
   if (currentFlag.value === "edit") {

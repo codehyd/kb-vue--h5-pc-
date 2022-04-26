@@ -20,7 +20,7 @@
       </span>
       <page-table @db-click="handleDbClick" :table-config="goodTableConfig">
         <template #checked="{ row }">
-          <span @click="handleSelectClick(row)" class="selectText">选择</span>
+          <span @click="handleSelectClick(row)" class="selectText">添加</span>
         </template>
       </page-table>
 
@@ -211,7 +211,7 @@ defineExpose({
   margin: 20px 0 !important;
 }
 
-.select {
+.selectText {
   cursor: pointer;
 }
 </style>

@@ -1,15 +1,14 @@
-import { IFormType } from "@/base-ui/form";
+import { IForm } from "@/base-ui/base-form";
+import { IPageDesciptionType } from "@/components/page-description";
 import { useStore } from "@/store";
-import { computed } from "vue";
 
 export default function () {
   const store = useStore();
   const dropDownList: any = computed(() => store.state?.selectOptions ?? []);
-
-  const bildFormConfig: IFormType = {
+  const bildFormConfig: IForm = {
     formItems: [
       {
-        type: "input",
+        type: "kehu",
         field: "kehu",
         label: "客户",
         rules: [
@@ -29,7 +28,7 @@ export default function () {
         type: "select", //选择
         field: "fchepai",
         label: "车牌",
-        otherCheckList: dropDownList.value?.arrchepai ?? [],
+        options: dropDownList.value?.arrchepai ?? [],
       },
       {
         type: "date", //日期选择
@@ -53,19 +52,19 @@ export default function () {
         type: "select", //选择
         field: "fyewuyuan",
         label: "业务员",
-        otherCheckList: dropDownList.value?.arryewuyuan ?? [],
+        options: dropDownList.value?.arryewuyuan ?? [],
       },
       {
         type: "select", //选择
         field: "fsiji",
         label: "司机",
-        otherCheckList: dropDownList.value?.arrsiji ?? [],
+        options: dropDownList.value?.arrsiji ?? [],
       },
       {
         type: "select", //选择
         field: "fstock",
         label: "仓库",
-        otherCheckList: dropDownList.value?.arrstock ?? [],
+        options: dropDownList.value?.arrstock ?? [],
 
         rules: [
           {
@@ -96,7 +95,6 @@ export default function () {
         label: "备注",
       },
     ],
-    itemStyle: {},
   };
 
   return {

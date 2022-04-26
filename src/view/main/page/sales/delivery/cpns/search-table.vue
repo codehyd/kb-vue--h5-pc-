@@ -27,12 +27,6 @@
         </el-tag>
       </template>
     </page-bild-detail-table>
-
-    <!-- <page-edit-table
-      ref="pageEditTableRef"
-      title="销售送货单新增编辑"
-      :tableConfig="editTableConfig"
-    ></page-edit-table> -->
   </div>
 </template>
 

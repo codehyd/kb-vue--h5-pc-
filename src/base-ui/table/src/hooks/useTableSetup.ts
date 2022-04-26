@@ -20,6 +20,10 @@ export default function (mode: ImodeType) {
       maxHeight =
         tableConfig?.find((item: any) => item.id == "detailTableMaxHeight")
           ?.value ?? 700;
+    } else if (mode == "edit") {
+      maxHeight =
+        tableConfig?.find((item: any) => item.id == "editTableMaxHeight")
+          ?.value ?? 700;
     }
     return maxHeight ?? 700;
   });
@@ -38,6 +42,41 @@ export default function (mode: ImodeType) {
         (item: any) => item.id == "isShowOverFlow"
       )?.value ?? false
   );
+
+  // 是否开启性能表格优化
+  const scrollConfig = computed(() => {
+    const isOpenVirtualScroll =
+      store.state.setup.config?.["pc-table"]?.setup?.find(
+        (item: any) => item.id == "isOpenVirtualScroll"
+      )?.value ?? false;
+    console.log(isOpenVirtualScroll);
+    return isOpenVirtualScroll
+      ? {
+          "scroll-x": {
+            gt: 0,
+          },
+          "scroll-y": {
+            gt: 0,
+          },
+        }
+      : {
+          "scroll-x": {
+            enabled: false,
+          },
+          "scroll-y": {
+            enabled: false,
+          },
+        };
+  });
+
+  // 编辑表格占位行
+  const virtualScrollSize = computed(() => {
+    const virtualScrollSize =
+      store.state.setup.config?.["pc-table"]?.setup?.find(
+        (item: any) => item.id == "virtualScrollSize"
+      )?.value ?? 1;
+    return virtualScrollSize;
+  });
 
   // 表格编辑配置项
   const editConfig = () => {
@@ -92,5 +131,7 @@ export default function (mode: ImodeType) {
     handlerEditActived,
     columnEditRender,
     cellClassName,
+    scrollConfig,
+    virtualScrollSize,
   };
 }

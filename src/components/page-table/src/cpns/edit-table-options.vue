@@ -1,5 +1,5 @@
 <template>
-  <div class="edit-table-option card">
+  <div class="edit-table-option">
     <div class="select">表格基本操作</div>
     <!-- 添加新行 -->
     <el-button @click="handleAddNewRows">添加新行</el-button>
@@ -7,6 +7,7 @@
     <el-button @click="handleRemoveSelect">删除选中</el-button>
     <!-- 删除全部 -->
     <el-button @click="handleRemoveAll">删除全部</el-button>
+
     <div class="select">表格基本操作</div>
     <!-- 添加商品 -->
     <el-button @click="handdleAddNewGoods">添加商品</el-button>
@@ -36,6 +37,7 @@
         </el-input>
       </div>
     </el-popover>
+    <el-button @click="handleSaveBildClick">保存提交</el-button>
 
     <page-good-table
       @save-click="handleSaveClick"
@@ -51,7 +53,7 @@ import KbIcon from "@/base-ui/icon";
 import message from "@/utils/message";
 import mitter from "@/mitt";
 
-const emit = defineEmits(["add-new-goods"]);
+const emit = defineEmits(["add-new-goods", "save-bild"]);
 
 const pageGoodTableRef = ref<InstanceType<typeof PageGoodTable>>();
 
@@ -93,14 +95,12 @@ const handleRemoveSelect = () => {
 const handleRemoveAll = () => {
   mitter.emit("base-table-remove-all-rows");
 };
+const handleSaveBildClick = () => {
+  emit("save-bild");
+};
 </script>
 
 <style lang="less" scoped>
-.edit-table-option {
-  padding: 10px;
-  margin: 10px 0;
-}
-
 // 媒体查询低于700
 .el-button {
   margin: 0 10px 10px 0;

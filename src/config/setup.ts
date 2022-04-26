@@ -1,5 +1,5 @@
 // setup设置
-type classType = "pc-table";
+type classType = "pc-table" | "pc-form";
 type formType = "input" | "number" | "switch";
 
 interface ISetupOptionType {
@@ -38,6 +38,14 @@ export const setupOptions: ISetupType[] = [
         field: "detailTableMaxHeight",
       },
       {
+        id: "editTableMaxHeight",
+        label: "编辑表格最大高度",
+        value: 700,
+        type: "number",
+        help: "开单编辑表格最大高度 默认700px",
+        field: "edit",
+      },
+      {
         id: "isAutoWidth",
         label: "表格是否根据宽度设置",
         value: true,
@@ -52,6 +60,36 @@ export const setupOptions: ISetupType[] = [
         type: "switch",
         help: "当表格的内容过长时显示为省略号",
         field: "isShowOverFlow",
+      },
+      {
+        id: "isOpenVirtualScroll",
+        label: "是否开启性能表格优化",
+        value: true,
+        type: "switch",
+        help: "开启后会优化表格的渲染",
+        field: "isOpenVirtualScroll",
+      },
+      {
+        id: "virtualScrollSize",
+        label: "编辑表格占位行",
+        value: 1,
+        type: "number",
+        help: "开启性能优化表格渲染后编辑表格需要设置占位行的个数 否则性能优化失败",
+        field: "virtualScrollSize",
+      },
+    ],
+  },
+  {
+    label: "表单相关设置",
+    class: "pc-form",
+    setup: [
+      {
+        id: "isShowAuthMessage",
+        label: "表单默认显示错误校验信息",
+        value: true,
+        type: "switch",
+        help: "表单默认显示错误校验信息",
+        field: "isShowAuthMessage",
       },
     ],
   },

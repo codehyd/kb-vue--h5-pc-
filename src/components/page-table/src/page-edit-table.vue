@@ -1,26 +1,19 @@
 <template>
   <div class="page-edit-table">
-    <div class="table-header">
-      <span class="goBack">
-        <kb-icon
-          @click="handleGoBack"
-          flag="elIcon"
-          name="ArrowLeftBold"
-          text="返回"
-        ></kb-icon>
-        <el-divider direction="vertical" />
-
-        当前: {{ title }}
-      </span>
-      <slot name="header">
-        <div class="card good">
-          <span class="select">客户信息</span>
-          <page-form :formConfig="formConfig"></page-form>
-        </div>
-      </slot>
+    <div class="current card">
+      <div class="select">客户信息</div>
+      <page-search
+        ref="pageSearchRef"
+        class="currentPageSearch"
+        :searchFormConfig="formConfig"
+      ></page-search>
     </div>
-    <edit-table-option @add-new-goods="handleAddNewGoods"></edit-table-option>
-    <div class="card good">
+
+    <div class="good card">
+      <edit-table-option
+        @save-bild="handleSaveBildClick"
+        @add-new-goods="handleAddNewGoods"
+      ></edit-table-option>
       <span class="select">商品信息</span>
       <page-table ref="pageTableRef" :tableConfig="tableConfig"></page-table>
     </div>
@@ -28,19 +21,21 @@
 </template>
 
 <script setup lang="ts">
+import PageSearch, { IForm } from "@/components/page-search";
 import PageTable from "@/components/page-table";
 import KbIcon from "@/base-ui/icon";
 import EditTableOption from "./cpns/edit-table-options.vue";
 import { ITableConfigType } from "@/base-ui/table";
 import message from "@/utils/message";
-import PageForm from "@/components/page-form";
+// import PageForm from "@/components/page-form";
 import { IFormType } from "@/base-ui/form";
+import CurrentInfo from "./cpns/current-info.vue";
 
 const props = withDefaults(
   defineProps<{
     title: string;
     tableConfig: ITableConfigType;
-    formConfig: IFormType;
+    formConfig: IForm;
   }>(),
   {}
 );
@@ -48,6 +43,7 @@ const props = withDefaults(
 const emit = defineEmits(["goBack"]);
 
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
+const pageSearchRef = ref<InstanceType<typeof PageSearch>>();
 
 const handleGoBack = () => {
   emit("goBack");
@@ -57,17 +53,41 @@ const handleAddNewGoods = (row: any) => {
   pageTableRef.value?.insert(row);
   message.success("添加成功");
 };
+
+// 保存提交
+const handleSaveBildClick = async () => {
+  // 先校验表单
+  const formData = await pageSearchRef.value?.getFormData();
+  if (formData) {
+    // 校验表格
+    const tableData: any = await pageTableRef.value?.validate();
+    if (tableData?.data) {
+      // 获取表格数据后提交 post
+    }
+  }
+};
 </script>
 
-<style scoped>
-.goBack {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  border-bottom: 1px solid #e8eaec;
-  padding: 0 0 10px 0;
+<style lang="less" scoped>
+.current {
+  padding: 10px;
   margin: 0 0 10px 0;
+  .currentPageSearch {
+    &:deep(.el-form-item__content) {
+      border: 1px solid #ebeef5;
+      margin: 0px -1px;
+    }
+    &:deep(.el-form-item__label) {
+      background-color: #f5f7fa;
+      border: 1px solid #ebeef5;
+    }
+    &:deep(.el-input__inner) {
+      border: none;
+      box-shadow: none;
+    }
+  }
 }
+
 .good {
   padding: 10px;
 }

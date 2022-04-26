@@ -178,8 +178,29 @@ const autoTableConfig = computed(() => {
 //   baseTableRef.value?.insert(row);
 // });
 
+// 添加
 const insert = (row: any, index: number = -1) => {
   baseTableRef.value?.insert(row, index);
+};
+
+// 校验数据
+const validate = () => {
+  return new Promise((resolve) => {
+    baseTableRef.value?.fullValiTable().then((res) => {
+      if (res) {
+        message.show("校验表格失败 请输入表格必填信息");
+        resolve({
+          valitable: false,
+          ...res,
+        });
+      } else {
+        resolve({
+          valitable: true,
+          data: baseTableRef.value?.getTableData()?.fullData ?? [],
+        });
+      }
+    });
+  });
 };
 
 const { handleUpdateModelValue } = useEditHooks();
@@ -189,6 +210,7 @@ defineExpose({
   printFn,
   auditFn,
   insert,
+  validate,
 });
 </script>
 

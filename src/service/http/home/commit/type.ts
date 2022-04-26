@@ -26,6 +26,14 @@ export interface IGoodListType {
   count?: number;
 }
 
+export interface IClientListType {
+  flag: "select";
+  page: number;
+  parentid: number;
+  tj?: string;
+  count?: number;
+}
+
 export interface IUseGoodPrice {
   billtypeid: number | string;
   color?: string;

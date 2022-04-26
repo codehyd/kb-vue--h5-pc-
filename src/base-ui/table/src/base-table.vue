@@ -9,7 +9,6 @@
       resizable
       header-align="center"
       footer-align="center"
-      :data="data"
       :menu-config="menuConfig"
       @menu-click="handleMenuClick"
       @cell-dblclick="handleCellDbClick"
@@ -32,6 +31,7 @@
         checkField: 'checked',
         showHeader: false,
       }"
+      v-bind="scrollConfig"
     >
       <!-- 索引 -->
       <template v-if="showIndex">
@@ -194,10 +194,19 @@ const {
   handlerEditActived,
   columnEditRender,
   cellClassName,
+  scrollConfig,
+  virtualScrollSize,
 } = useTableSetup(props.state);
 
 // 表格行为Hooks
-const { vxeTableRef, remove, insert } = useTableMethods();
+const {
+  vxeTableRef,
+  remove,
+  insert,
+  loadTableData,
+  fullValiTable,
+  getTableData,
+} = useTableMethods();
 
 // 点击表格菜单
 const handleMenuClick: VxeTableEvents.MenuClick = ({ menu, row, column }) => {
@@ -210,13 +219,7 @@ const handleCellDbClick: VxeTableEvents.CellDblclick = ({ row, column }) => {
 
 // 事件总线 添加新行
 mitter.on("base-table-add-new-rows", () => {
-  const newRow = [...props.column]
-    .map((item) => item.ffieldname)
-    .reduce((init, key) => {
-      init[key] = "";
-      return init;
-    }, {});
-  newRow.checked = true;
+  const newRow = getInitColumn();
   const vxeTable = vxeTableRef.value;
   if (vxeTable) {
     vxeTable?.insertAt(newRow, -1);
@@ -242,14 +245,49 @@ mitter.on("base-table-remove-all-rows", () => {
   }
 });
 
+onMounted(() => {
+  if (props.state == "edit") {
+    const newRow = getInitColumn();
+    const size = virtualScrollSize.value ?? 1;
+    const dataList = [];
+    for (let i = 0; i < size; i++) {
+      dataList.push(newRow);
+    }
+    loadTableData(dataList);
+  }
+});
+
+function getInitColumn() {
+  const newRow = [...props.column]
+    .map((item) => item.ffieldname)
+    .reduce((init, key) => {
+      init[key] = "";
+      return init;
+    }, {});
+  newRow.checked = true;
+  return newRow;
+}
+
+watchEffect(() => {
+  const data = props.data;
+  if (data && data.length > 0) {
+    loadTableData(data);
+  }
+});
+
 defineExpose({
   remove,
   insert,
+  loadTableData,
+  fullValiTable,
+  getTableData,
 });
 </script>
 
 <style scoped>
 :deep(.vxe-table .vxe-table--body .isReadonly) {
-  background: #dadee665;
+  background: #f5f7fa50;
+  border-right: 1px solid #e8eaec;
+  border-bottom: 1px solid #e8eaec;
 }
 </style>

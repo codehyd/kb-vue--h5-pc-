@@ -9,6 +9,7 @@ import {
   IBaseMessageType,
   IGoodListType,
   IUseGoodPrice,
+  IClientListType,
 } from "./type";
 
 import qs from "qs";
@@ -132,4 +133,18 @@ export const httpGetUserPrice = (params: IUseGoodPrice) => {
   });
 };
 
+// 获取客户Class列表
+export const httpGetClientClassList = () => {
+  return kbBaseRequest.request({
+    url: "/gogetcustomerfirstclass",
+  });
+};
+
+// 获取客户列表
+export const httpGetClientList = (params: IClientListType) => {
+  return kbBaseRequest.request({
+    url: "/gogetcustomerdetail_page",
+    params,
+  });
+};
 export * from "./type";

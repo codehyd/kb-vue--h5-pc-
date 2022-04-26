@@ -25,3 +25,10 @@ export interface IGoodTableConfig extends ITableConfigType {
   page: number;
   tj?: string;
 }
+
+export interface IClientTableConfig extends ITableConfigType {
+  parentid: number;
+  classList?: any;
+  page: number;
+  tj?: string;
+}

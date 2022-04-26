@@ -63,6 +63,24 @@
       />
     </template>
 
+    <!-- 选择 -->
+    <template v-if="itemConfig.type == 'select'">
+      <el-select
+        v-model="modelValue"
+        @update:modelValue="
+          handleChangeValue($event, itemConfig.field, itemConfig)
+        "
+      >
+        <el-option
+          v-for="(option, index) in itemConfig.otherCheckList"
+          :key="itemConfig.checkKey ? option[itemConfig.checkKey] : option"
+          :label="itemConfig.checkKey ? option[itemConfig.checkKey] : option"
+          :value="itemConfig.checkKey ? option[itemConfig.checkKey] : option"
+        >
+        </el-option>
+      </el-select>
+    </template>
+
     <!-- 按钮 -->
     <template v-if="itemConfig.type == 'button'">
       <el-button @click="handleBtnClick">
