@@ -34,6 +34,8 @@ import {
   ElMenuItem,
   ElMenuItemGroup,
   ElOption,
+  ElPageHeader,
+  ElPagination,
   ElPopover,
   ElRadio,
   ElRadioGroup,
@@ -96,6 +98,8 @@ const components = [
   ElTabPane,
   ElImage,
   ElInputNumber,
+  ElPageHeader,
+  ElPagination,
 ];
 
 export default function (app: App): void {

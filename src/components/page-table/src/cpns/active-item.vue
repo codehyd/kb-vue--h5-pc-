@@ -38,6 +38,7 @@ const handleItemClick = (config: ITableActiveConfigType) => {
   display: inline-block;
   .text {
     cursor: pointer;
+    margin: 0 10px;
     &:hover {
       text-decoration: underline;
     }

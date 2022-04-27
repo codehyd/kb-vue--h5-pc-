@@ -8,9 +8,9 @@
     <!-- 删除全部 -->
     <el-button @click="handleRemoveAll">删除全部</el-button>
 
-    <div class="select">表格基本操作</div>
+    <div class="select">单据操作</div>
     <!-- 添加商品 -->
-    <el-button @click="handdleAddNewGoods">添加商品</el-button>
+    <el-button @click="handdleAddNewGoods">选择商品</el-button>
     <!-- 高级选项 -->
     <el-popover placement="bottom" :width="500" trigger="click">
       <template #reference>
@@ -37,9 +37,10 @@
         </el-input>
       </div>
     </el-popover>
-    <el-button @click="handleSaveBildClick">保存提交</el-button>
+    <el-button type="primary" @click="handleSaveBildClick">保存提交</el-button>
 
     <page-good-table
+      v-model:show="showGoodPanel"
       @save-click="handleSaveClick"
       ref="pageGoodTableRef"
     ></page-good-table>
@@ -60,11 +61,9 @@ const pageGoodTableRef = ref<InstanceType<typeof PageGoodTable>>();
 const barcode = ref("");
 
 // 新增
+const showGoodPanel = ref(false);
 const handdleAddNewGoods = () => {
-  const pageGoodTable = pageGoodTableRef.value;
-  if (pageGoodTable) {
-    pageGoodTable.show = true;
-  }
+  showGoodPanel.value = true;
 };
 
 const handlerEnter = async () => {

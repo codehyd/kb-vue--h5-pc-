@@ -7,6 +7,10 @@
       :size="size"
       :border="true"
       resizable
+      show-header-overflow
+      show-footer-overflow
+      highlight-hover-row
+      :loading="isLoading"
       header-align="center"
       footer-align="center"
       :menu-config="menuConfig"
@@ -32,6 +36,8 @@
         showHeader: false,
       }"
       v-bind="scrollConfig"
+      show-footer
+      :footer-method="footerMethod"
     >
       <!-- 索引 -->
       <template v-if="showIndex">
@@ -83,7 +89,7 @@
               :column="column"
               :rowIndex="rowIndex"
             >
-              <span>{{ row[column.field] }}</span>
+              <span>{{ row[column.field] == 0 ? "" : row[column.field] }}</span>
             </slot>
           </template>
           <!-- 编辑模式 -->
@@ -101,7 +107,7 @@
           :min-width="isAutoColumnWidth ? 60 : 0"
           resizable
           align="center"
-          title="操作"
+          title="操作选项"
         >
           <!-- 默认模式 -->
           <template #default="{ row, column, rowIndex }">
@@ -111,7 +117,13 @@
               popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
             >
               <template #reference>
-                <div>{{ activeText }}</div>
+                <kb-icon
+                  flag="elIcon"
+                  name="Setting"
+                  :text="activeText"
+                  :size="12"
+                ></kb-icon>
+                <!-- <div class="activeText">{{ activeText }}</div> -->
               </template>
               <div>{{ row["fbillno"] }}单号操作</div>
               <div style="margin: 10px 0 0 0">
@@ -139,6 +151,7 @@ import useTableMethods from "./hooks/useTableMethods";
 import { ImodeType } from "../type";
 import mitter from "@/mitt";
 import message from "@/utils/message";
+import KbIcon from "@/base-ui/icon";
 
 const props = withDefaults(
   defineProps<{
@@ -154,6 +167,7 @@ const props = withDefaults(
     activeText?: string;
     menuConfig?: VxeTablePropTypes.MenuConfig;
     veifyConfig?: object;
+    loading?: boolean;
   }>(),
   {
     column: () => {
@@ -175,6 +189,7 @@ const props = withDefaults(
     veifyConfig: () => {
       return {};
     },
+    loading: false,
   }
 );
 
@@ -196,6 +211,7 @@ const {
   cellClassName,
   scrollConfig,
   virtualScrollSize,
+  footerMethod,
 } = useTableSetup(props.state);
 
 // 表格行为Hooks
@@ -206,6 +222,7 @@ const {
   loadTableData,
   fullValiTable,
   getTableData,
+  updateFooter,
 } = useTableMethods();
 
 // 点击表格菜单
@@ -247,30 +264,47 @@ mitter.on("base-table-remove-all-rows", () => {
 
 onMounted(() => {
   if (props.state == "edit") {
-    const newRow = getInitColumn();
-    const size = virtualScrollSize.value ?? 1;
-    const dataList = [];
-    for (let i = 0; i < size; i++) {
-      dataList.push(newRow);
-    }
-    loadTableData(dataList);
+    watchEffect(
+      () => {
+        const newRow = getInitColumn();
+        const size = virtualScrollSize.value ?? 1;
+        const dataList = [];
+        for (let i = 0; i < size; i++) {
+          dataList.push(newRow);
+        }
+        loadTableData(dataList);
+      },
+      { flush: "post" }
+    );
   }
 });
 
 function getInitColumn() {
-  const newRow = [...props.column]
-    .map((item) => item.ffieldname)
-    .reduce((init, key) => {
-      init[key] = "";
-      return init;
-    }, {});
+  const newRow: any = {};
+  [...props.column].forEach((item) => {
+    if (item.fdatatype == "decimal") {
+      newRow[item.ffieldname] = 0;
+    } else {
+      newRow[item.ffieldname] = "";
+    }
+  });
   newRow.checked = true;
   return newRow;
 }
 
+const isLoading = ref(false);
+
 watchEffect(() => {
-  const data = props.data;
-  if (data && data.length > 0) {
+  const data = props.data ?? [];
+  if (props.loading) {
+    isLoading.value = true;
+    loadTableData(data);
+    nextTick(() => {
+      setTimeout(() => {
+        isLoading.value = false;
+      }, 500);
+    });
+  } else {
     loadTableData(data);
   }
 });
@@ -281,6 +315,7 @@ defineExpose({
   loadTableData,
   fullValiTable,
   getTableData,
+  updateFooter,
 });
 </script>
 
@@ -289,5 +324,8 @@ defineExpose({
   background: #f5f7fa50;
   border-right: 1px solid #e8eaec;
   border-bottom: 1px solid #e8eaec;
+}
+.activeText {
+  cursor: pointer;
 }
 </style>

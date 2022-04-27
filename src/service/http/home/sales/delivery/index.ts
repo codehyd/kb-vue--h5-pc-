@@ -14,10 +14,9 @@ export const httpGetSalesDeliveryHeaderList = () => {
 
 // 获取销售送货单的表格数据
 export const httpGetSalesDeliveryTableList = (params: ITableType) => {
-  return kbBaseRequest.request<IDataType>({
+  return kbBaseRequest.request({
     url: "/gogetstockbilltotallist_page",
     params,
-    data: {},
   });
 };
 

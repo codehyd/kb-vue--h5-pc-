@@ -21,10 +21,10 @@ export default function () {
   };
 
   // 加载表格数据
-  const loadTableData = (tableData: any) => {
+  const loadTableData = (tableData: any, isReload: boolean = false) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        vxeTableRef.value?.reloadData(tableData);
+        vxeTableRef.value?.[isReload ? "reloadData" : "loadData"](tableData);
         resolve(null);
       }, 300);
     });
@@ -34,11 +34,15 @@ export default function () {
   const getTableData = () => vxeTableRef.value?.getTableData();
 
   // 完整校验
-  const fullValiTable = async () => {
+  const fullValiTable = async (isSelect: boolean = false) => {
     const { fullData } = getTableData();
-    return vxeTableRef.value?.fullValidate(fullData);
+    const newData = isSelect
+      ? fullData.filter((item) => item.checked)
+      : fullData;
+    return vxeTableRef.value?.fullValidate(newData);
   };
 
+  const updateFooter = () => vxeTableRef.value?.updateFooter();
   return {
     vxeTableRef,
     remove,
@@ -46,5 +50,6 @@ export default function () {
     loadTableData,
     fullValiTable,
     getTableData,
+    updateFooter,
   };
 }

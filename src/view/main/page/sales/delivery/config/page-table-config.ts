@@ -2,15 +2,35 @@ import { ITableActiveConfigType } from "@/components/page-table";
 import { IPageDesciptionType } from "@/components/page-description";
 import { VxeTablePropTypes } from "vxe-table";
 
-export const tableActiveConfig: ITableActiveConfigType[] = [
+export const queryTableActiveConfig: ITableActiveConfigType[] = [
   {
     type: "text",
     text: "详情",
     optionType: "detail",
   },
+  {
+    type: "text",
+    text: "打印",
+    optionType: "print",
+  },
+  {
+    type: "text",
+    text: "审核",
+    optionType: "audit",
+  },
+  {
+    type: "text",
+    text: "删除",
+    optionType: "delete",
+  },
+  {
+    type: "text",
+    text: "收款",
+    optionType: "pay",
+  },
 ];
 
-export const tableMenusConfig: VxeTablePropTypes.MenuConfig = {
+export const queryTableMenusConfig: VxeTablePropTypes.MenuConfig = {
   body: {
     options: [
       [

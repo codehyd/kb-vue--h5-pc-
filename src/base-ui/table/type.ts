@@ -14,4 +14,8 @@ export interface ITableConfigType {
   menuConfig?: VxeTablePropTypes.MenuConfig;
   veifyConfig?: object;
   showSelect?: boolean;
+  loading?: boolean;
+  isShowPage?: boolean;
+  page?: number;
+  totalPage?: number;
 }

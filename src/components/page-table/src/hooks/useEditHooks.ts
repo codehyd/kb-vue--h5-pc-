@@ -1,7 +1,7 @@
 import { useStore } from "@/store";
 import useGetUserPrice from "@/hooks/useGetUserPrice";
 
-export default function () {
+export default function (changeFootMethodCallback?: () => void) {
   const store = useStore();
   const derNumber = computed(
     () => store.state.selectOptions?.paras?.["0"]?.fvalue ?? 1
@@ -92,12 +92,15 @@ export default function () {
     });
 
     amount = price * fqty * totalDiscount + totalTjAmount;
-    console.log(price, fqty, totalDiscount, totalTjAmount);
+    // console.log(price, fqty, totalDiscount, totalTjAmount);
     row.fweight = row.fqty * row.funitweight;
     row.famount = Math.floor(amount * 100) / 100;
     row.famountbefore = price * fqty + totalTjAmount;
     row.fzhekouamount = row.famountbefore - row.famount;
     const newRow = { ...row };
+
+    changeFootMethodCallback && changeFootMethodCallback();
+
     return { newRow, totalDiscount, totalTjAmount };
   };
 

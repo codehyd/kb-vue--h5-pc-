@@ -2,7 +2,7 @@ type IFormType =
   | "input"
   | "password"
   | "select"
-  | "datepicker"
+  | "daterange"
   | "date"
   | "kehu";
 
@@ -18,6 +18,8 @@ export interface IFormItem {
   otherOptions?: any;
   isHidden?: boolean;
   readonly?: boolean;
+  // defaultValue?: any;
+  defaultDateValue?: any[];
 }
 
 export interface IForm {
@@ -25,4 +27,6 @@ export interface IForm {
   labelWidth?: string;
   colLayout?: any;
   itemStyle?: any;
+  // 行内模式
+  inline?: boolean;
 }

@@ -1,10 +1,16 @@
 <template>
   <div class="base-form">
-    <el-form ref="elFormRef" :model="modelValue" :label-width="labelWidth">
+    <el-form
+      :inline="inline"
+      ref="elFormRef"
+      :model="modelValue"
+      :label-width="labelWidth"
+    >
       <el-row>
         <template v-for="item in formItems" :key="item.label">
-          <el-col v-bind="colLayout">
+          <el-col v-bind="autoColLayout">
             <el-form-item
+              :style="itemStyle"
               v-if="!item.isHidden"
               :label="item.label"
               :rules="item.rules"
@@ -45,12 +51,16 @@
                 </el-select>
               </template>
               <!-- date 日期选择 -->
-              <template v-else-if="item.type === 'datepicker'">
+              <template
+                v-else-if="item.type === 'daterange' || item.type === 'date'"
+              >
                 <el-date-picker
+                  :type="item.type"
                   style="width: 100%"
                   v-bind="item.otherOptions"
                   v-model="modelValue[`${item.field}`]"
                   @update:modelValue="handleValueChange($event, item.field)"
+                  :shortcuts="item.type === 'daterange' ? dateShortcuts : []"
                 ></el-date-picker>
               </template>
               <!-- kehu 客户选择 -->
@@ -73,19 +83,10 @@
                   </template>
                 </el-input>
               </template>
-              <!-- date 日期 -->
-              <template v-else-if="item.type === 'date'">
-                <el-date-picker
-                  value-format="YYYY-MM-DD"
-                  style="width: 100%"
-                  v-bind="item.otherOptions"
-                  v-model="modelValue[`${item.field}`]"
-                  @update:modelValue="handleValueChange($event, item.field)"
-                ></el-date-picker>
-              </template>
             </el-form-item>
           </el-col>
         </template>
+        <slot name="option"></slot>
       </el-row>
     </el-form>
   </div>
@@ -95,16 +96,25 @@
 import useFormSetup from "./hooks/useFormSetup";
 import useFormMethods from "./hooks/useFormMethods";
 import { IFormItem } from "../type";
+import { dateShortcuts } from "./config";
 const props = withDefaults(
   defineProps<{
     modelValue: any;
     labelWidth?: string;
     formItems?: IFormItem[];
     colLayout?: any;
+    inline?: boolean;
+    itemStyle?: object;
   }>(),
   {
     labelWidth: "100px",
-    formItems: () => [],
+    inline: false,
+    formItems: () => {
+      return [];
+    },
+    itemStyle: () => {
+      return {};
+    },
     colLayout: () => {
       return {
         xl: 6, // >1920px 4个
@@ -119,6 +129,7 @@ const props = withDefaults(
 
 const emit = defineEmits(["update:modelValue", "kehu-click"]);
 
+console.log(props);
 const { isShowAuthMessage } = useFormSetup();
 const { elFormRef, validateForm } = useFormMethods();
 
@@ -126,7 +137,10 @@ const handleSelectClick = () => {
   emit("kehu-click");
 };
 
-// const autoColLayout = computed(() => {});
+const autoColLayout = computed(() => {
+  // 判断是否为行内模式 如果是行内模式则返回 {} 如果不是则返回对应的colLayout
+  return props.inline ? {} : props.colLayout;
+});
 
 const handleValueChange = (value: any, field: string) => {
   console.log(value);

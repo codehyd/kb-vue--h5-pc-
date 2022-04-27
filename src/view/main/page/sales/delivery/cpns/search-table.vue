@@ -1,5 +1,6 @@
 <template>
   <div class="search-table">
+    <!-- 查询表格 -->
     <page-bild-table
       :tableConfig="tableConfig"
       :tableActiveConfig="tableActiveConfig"
@@ -8,6 +9,7 @@
       @on-menu-detail="handleMenuDetail"
     ></page-bild-table>
 
+    <!-- 详情表格 -->
     <page-bild-detail-table
       title="销售送货单详情"
       :tableConfig="detailTableConfig"
@@ -31,15 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  PageBildTable,
-  PageBildDetailTable,
-  // PageEditTable,
-} from "@/components/page-table";
-import type {
-  IDetailTableConfig,
-  IEditTableConfig,
-} from "@/components/page-table";
+import { PageBildTable, PageBildDetailTable } from "@/components/page-table";
+import type { IDetailTableConfig } from "@/components/page-table";
 import { ITableConfigType } from "@/base-ui/table";
 
 import {
@@ -50,16 +45,13 @@ import {
 } from "../config/page-table-config";
 
 // 网络请求
-import type { ITableType } from "@/service/http/home/sales/delivery";
+import type { ITableType } from "@/service/http/home/commit";
 import {
   httpGetSalesDeliveryHeaderList,
   httpGetSalesDeliveryTableList,
   httpGetSalesDeliveryDetailHeaderList,
 } from "@/service/http/home/sales/delivery";
-import {
-  httpGetDetailBild,
-  httpGetEditTableColumn,
-} from "@/service/http/home/commit";
+import { httpGetDetailBild } from "@/service/http/home/commit";
 
 const props = withDefaults(
   defineProps<{
@@ -69,13 +61,16 @@ const props = withDefaults(
 );
 
 const pageBildDetailTableRef = ref<InstanceType<typeof PageBildDetailTable>>();
-// const pageEditTableRef = ref<InstanceType<typeof PageEditTable>>();
 
 const tableConfig: ITableConfigType = reactive({
   keyString: "fitemid",
   column: [],
   data: [],
   menuConfig: tableMenusConfig,
+  loading: true,
+  isShowPage: true,
+  page: props.requestData.page,
+  totalPage: 1,
 });
 
 const detailTableConfig: IDetailTableConfig = reactive({
@@ -86,16 +81,6 @@ const detailTableConfig: IDetailTableConfig = reactive({
   images: [],
   showAction: false,
   state: "detail",
-});
-
-const editTableConfig: IEditTableConfig = reactive({
-  keyString: "fitemid",
-  column: [],
-  data: [],
-  messages: [],
-  images: [],
-  showAction: false,
-  state: "edit",
 });
 
 // 请求表格头部数据
@@ -113,11 +98,11 @@ const requestDetailHeader = async () => {
 // 请求表格数据
 const requestTable = async () => {
   const tableData = await httpGetSalesDeliveryTableList(props.requestData);
-  console.log(tableData);
   tableConfig.data = tableData?.data?.[0]?.data ?? [];
+  tableConfig.totalPage = tableData?.allpages ?? 1;
 };
 
-// 点击操作面板详情
+// 右键点击操作面板详情
 const handleActiveDetail = async (params: any) => {
   const { row } = params;
   const res = await httpGetDetailBild({
@@ -134,6 +119,7 @@ const handleMenuDetail = async (params: any) => {
   openBildDetailPanel(params);
 };
 
+// 打开详情面板
 async function openBildDetailPanel(params: any) {
   const pageBildDetailTable = pageBildDetailTableRef.value;
   if (pageBildDetailTable) {
@@ -163,17 +149,11 @@ const currentFlag = (str: string) => {
   return str === "未打印" ? "info" : "";
 };
 
-// const handleShowEditPanel = async () => {
-//   // 1. 获取表格列表的头部数据
-//   const res = await httpGetEditTableColumn(103);
-//   editTableConfig.column = res.code >= 1 ? res.data?.[0]?.data ?? [] : [];
-//   const pageEditTable = pageEditTableRef.value;
-//   if (pageEditTable) {
-//     pageEditTable.show = true;
-//   }
-// };
-
 requestHeader();
+
+defineExpose({
+  requestTable,
+});
 </script>
 
 <style lang="less" scoped>

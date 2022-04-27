@@ -1,7 +1,9 @@
 import { IDataType } from "@/service/type";
 
+export type IBillid = 103;
+
 export interface IBaseTableConfigType {
-  billtypeid: string | number;
+  billtypeid: IBillid;
   billid: string | number;
 }
 
@@ -40,4 +42,18 @@ export interface IUseGoodPrice {
   csid: string | number;
   modelids: string | number;
   pack?: string;
+}
+
+export interface ISaveBildType {
+  billtypeid: number | string;
+  content: string | any;
+}
+
+export interface ITableType {
+  billtypeid: IBillid;
+  begdate: string;
+  enddate: string;
+  page: number;
+  tj?: string;
+  count?: number;
 }

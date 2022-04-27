@@ -8,25 +8,31 @@
         </div>
       </header>
 
+      <!-- 客户信息 -->
       <page-description
         :data="clientInfo"
         :config="clientConfig"
       ></page-description>
 
+      <!-- 详情表格 -->
       <page-table ref="pageTableRef" :tableConfig="tableConfig"></page-table>
 
+      <!-- 附件操作 -->
       <div class="active">
         <em>更改图片</em>
         <em @click="handleMessageAddClick">添加留言</em>
       </div>
 
+      <!-- 附件内容 -->
       <div class="accessory card">
+        <!-- 图片 -->
         <base-image
           @update-file="handleUpdateFile"
           :urls="imagesList"
           :height="100"
           :width="100"
         ></base-image>
+        <!-- 留言 -->
         <div class="message">
           <template v-for="item in messageList" :key="item.fid">
             <div class="message-item card" @click="handleMessageClick(item)">
@@ -59,6 +65,7 @@
         </div>
       </div>
 
+      <!-- 底部 -->
       <template #footer>
         <template
           v-for="(item, index) in detailOption"

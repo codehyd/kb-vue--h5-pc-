@@ -6,6 +6,18 @@
       v-model="formData"
       v-bind="searchFormConfig"
     >
+      <template #option>
+        <slot name="option">
+          <el-button
+            v-if="isShowQuery"
+            @click="handleQueryClick"
+            style="margin: 0 0 0 20px"
+            icon="search"
+          >
+            查询
+          </el-button>
+        </slot>
+      </template>
     </base-form>
 
     <template v-if="isExistClient">
@@ -30,7 +42,10 @@
           </template>
         </el-tabs>
         <!-- table -->
-        <page-table :table-config="clientTableConfig">
+        <page-table
+          @page-change="handlePageChange"
+          :table-config="clientTableConfig"
+        >
           <template #checked="{ row }">
             <span @click="handleSelectClient(row)" class="selectText">
               选择
@@ -47,6 +62,7 @@ import BaseForm, { IForm } from "@/base-ui/base-form";
 import KbDialog from "@/base-ui/dialog";
 import PageTable, { IClientTableConfig } from "@/components/page-table";
 import { useStore } from "@/store";
+
 import {
   httpGetClientClassList,
   httpGetShowTableColumn,
@@ -57,9 +73,13 @@ import message from "@/utils/message";
 const props = withDefaults(
   defineProps<{
     searchFormConfig: IForm;
+    isShowQuery?: boolean;
   }>(),
-  {}
+  {
+    isShowQuery: false,
+  }
 );
+const emit = defineEmits(["query-click"]);
 
 const store = useStore();
 
@@ -68,7 +88,11 @@ const baseFormRef = ref<InstanceType<typeof BaseForm>>();
 const formItems = props.searchFormConfig?.formItems ?? [];
 const formOriginData: any = {};
 for (const item of formItems) {
-  formOriginData[item.field] = "";
+  if (item.defaultDateValue) {
+    formOriginData[item.field] = item.defaultDateValue;
+  } else {
+    formOriginData[item.field] = "";
+  }
 }
 const formData = ref(formOriginData);
 
@@ -90,6 +114,9 @@ const clientTableConfig: IClientTableConfig = reactive({
   showAction: false,
   showSelect: true,
   parentid: 0,
+  isShowPage: true,
+  totalPage: 1,
+  loading: true,
 });
 
 const handleKehuClick = () => {
@@ -109,8 +136,9 @@ async function requestClientConfig() {
   const tableRes = await httpGetShowTableColumn(1003);
   clientTableConfig.column = tableRes?.data?.[0]?.data ?? [];
 
-  const { data } = await requestClientList();
+  const { data, totalPage } = await requestClientList();
   clientTableConfig.data = data ?? [];
+  clientTableConfig.totalPage = totalPage ?? 1;
 }
 
 async function requestClientList() {
@@ -120,16 +148,18 @@ async function requestClientList() {
     page: clientTableConfig.page,
     tj: clientTableConfig.tj,
   });
-  console.log(res);
+  // console.log(res);
   return {
     data: res?.data?.[0]?.data ?? [],
+    totalPage: res?.allpages ?? 1,
   };
 }
 
 const handleSearchClick = async () => {
   clientTableConfig.page = 1;
-  const { data } = await requestClientList();
+  const { data, totalPage } = await requestClientList();
   clientTableConfig.data = data ?? [];
+  clientTableConfig.totalPage = totalPage ?? 1;
 };
 
 const handleClick = (payload: any) => {
@@ -157,6 +187,18 @@ const getFormData = async () => {
   } else {
     message.show("需要输入必填带星号的信息");
   }
+};
+
+const handleQueryClick = () => {
+  // 获取数据
+  emit("query-click", formData.value);
+};
+
+const handlePageChange = async (val: number) => {
+  clientTableConfig.page = val as number;
+  const { data, totalPage } = await requestClientList();
+  clientTableConfig.data = data ?? [];
+  clientTableConfig.totalPage = totalPage ?? 1;
 };
 
 defineExpose({

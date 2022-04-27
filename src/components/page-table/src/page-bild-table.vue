@@ -11,7 +11,6 @@
 
 <script setup lang="ts">
 import { ITableConfigType } from "@/base-ui/table";
-import {} from "@/service/http/home/sales/delivery";
 
 import PageTable, { ITableActiveConfigType } from "@/components/page-table";
 const props = withDefaults(
@@ -26,6 +25,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(["on-menu-detail", "on-active-detail"]);
+
 const handleMenuClickDetail = (params: any) => {
   emit("on-menu-detail", params);
 };

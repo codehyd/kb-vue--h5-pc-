@@ -115,3 +115,12 @@ export function doHandleMonth(month: number) {
   }
   return m;
 }
+
+// Thu Jan 27 2022 10:31:30 GMT+0800 (中国标准时间)格式转化为 yyyy-mm-dd
+export function formatDate(date: any) {
+  if (!date) return "";
+  const d = new Date(date);
+  const resDate =
+    d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  return resDate;
+}

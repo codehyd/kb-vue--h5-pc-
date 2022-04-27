@@ -1,6 +1,6 @@
 <template>
   <div class="page-goods-table">
-    <kb-dialog :top="2" appendToBody v-model:show="show" title="商品信息">
+    <kb-dialog :top="2" appendToBody v-model:show="autoShow" title="商品信息">
       <el-input v-model="goodTableConfig.tj">
         <template #append>
           <span class="searchInput">搜索</span>
@@ -100,10 +100,11 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup name="page-goods-table" lang="ts">
 import BaseBarcode from "@/base-ui/barcode";
 import KbIcon from "@/base-ui/icon";
 import message from "@/utils/message";
+
 import {
   httpGetShowTableColumn,
   httpGetGoodsClassList,
@@ -112,11 +113,22 @@ import {
 import KbDialog from "@/base-ui/dialog";
 import PageTable, { IGoodTableConfig } from "@/components/page-table";
 
-import mitter from "@/mitt";
-
 // import type { ITableConfigType } from "@/base-ui/table";
 
-const emit = defineEmits(["save-click"]);
+const props = withDefaults(
+  defineProps<{
+    show: boolean;
+  }>(),
+  {}
+);
+
+const emit = defineEmits(["save-click", "update:show"]);
+
+console.log(123212, props.show);
+const autoShow = computed({
+  get: () => props.show,
+  set: (val) => emit("update:show", val),
+});
 
 const goodTableConfig: IGoodTableConfig = reactive({
   keyString: "fitemid",
@@ -128,9 +140,11 @@ const goodTableConfig: IGoodTableConfig = reactive({
   showAction: false,
   tj: "",
   showSelect: true,
+  isShowPage: true,
+  totalPage: 1,
 });
 
-const show = ref(false);
+// const show = ref(false);
 const goodPanelShow = ref(false);
 
 const activeName = ref("");
@@ -152,14 +166,19 @@ httpGetGoodsClassList().then((res) => {
   activeName.value = data?.[0]?.name ?? "";
 });
 
-httpGetGoodsList({
-  flag: "select",
-  page: goodTableConfig.page,
-  Classid: goodTableConfig.Classid,
-  tj: goodTableConfig.tj,
-}).then((res) => {
-  goodTableConfig.data = res?.data?.[0]?.data ?? [];
-});
+async function getGoodList() {
+  const res = await httpGetGoodsList({
+    flag: "select",
+    page: goodTableConfig.page,
+    Classid: goodTableConfig.Classid,
+    tj: goodTableConfig.tj,
+  });
+  return { data: res?.data?.[0]?.data ?? [], allPage: res.allpages ?? 1 };
+}
+
+const { data, allPage } = await getGoodList();
+goodTableConfig.data = data ?? [];
+goodTableConfig.totalPage = allPage ?? 1;
 
 // 双击表格
 const handleDbClick = (params: any) => {
@@ -171,19 +190,11 @@ const handleDbClick = (params: any) => {
 const handleSaveClick = () => {
   goodPanelShow.value = false;
   emit("save-click", currentGoodInfo.value);
-  // mitter.emit("add-table-rows", currentGoodInfo.value);
 };
 
 const handleSelectClick = (row: any) => {
   emit("save-click", { ...row, fqty: 1, checked: true });
-  // // mitter.emit("add-table-rows", { ...row });
-  // mitter.emit("page-table-add-rows", currentGoodInfo.value);
-  // message.success("添加成功");
 };
-
-defineExpose({
-  show,
-});
 </script>
 
 <style lang="less" scoped>

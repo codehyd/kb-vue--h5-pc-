@@ -83,6 +83,7 @@ const props = withDefaults(
     modelValue: any;
     row: any;
     column: any;
+    editFooterMethod: () => void;
   }>(),
   {}
 );
@@ -156,6 +157,7 @@ const handlerEnterInput = async (
       newRow.fqty = 1;
       // newRow.checked = "checked" in newRow ? newRow.checked : true;
       row = Object.assign(row, changeAmount(newRow).newRow);
+      props.editFooterMethod && props.editFooterMethod();
     } else {
       message
         .messageBox(res.msg, "是否重置该行", res.type, false, true, false)
@@ -165,9 +167,11 @@ const handlerEnterInput = async (
             if (item == "_X_ROW_KEY") return;
             row[item] = "";
           });
+          props.editFooterMethod && props.editFooterMethod();
         })
         .catch(() => {
           row["fcpbianma"] = "";
+          props.editFooterMethod && props.editFooterMethod();
         });
     }
   }

@@ -10,6 +10,9 @@ import {
   IGoodListType,
   IUseGoodPrice,
   IClientListType,
+  ISaveBildType,
+  IBillid,
+  ITableType,
 } from "./type";
 
 import qs from "qs";
@@ -144,6 +147,43 @@ export const httpGetClientClassList = () => {
 export const httpGetClientList = (params: IClientListType) => {
   return kbBaseRequest.request({
     url: "/gogetcustomerdetail_page",
+    params,
+  });
+};
+
+// 提交保存 post
+export const httpPostSave = (data: ISaveBildType) => {
+  return kbBaseRequest.request({
+    url: "/gosetbillsubmit_post",
+    data: {
+      flag: "web",
+      ...data,
+    },
+    method: "POST",
+  });
+};
+
+// 获取表格数据
+export const httpGetTableData = (id: IBillid, params: ITableType) => {
+  const urls = {
+    103: "gogetstockbilltotallist_page",
+  };
+  return kbBaseRequest.request({
+    url: "/" + urls[id],
+    params,
+  });
+};
+
+// 获取详情表格的数据
+export const httpGetDetailTableData = (
+  id: IBillid,
+  params: IBaseTableConfigType
+) => {
+  const urls = {
+    103: "gogetstockbilldetaillist",
+  };
+  return kbBaseRequest.request({
+    url: "/" + urls[id],
     params,
   });
 };

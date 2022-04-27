@@ -123,6 +123,28 @@ export default function (mode: ImodeType) {
     return null;
   };
 
+  // 表尾方法
+  const footerMethod = (params: any) => {
+    const { data, columns } = params;
+    let sum: [string?, number?] = [];
+    if (data.length > 0) {
+      columns.forEach((item: any, index: number) => {
+        const isSumColumn = item.params?.fdatatype === "decimal" ? true : false;
+        if (!isSumColumn) {
+          sum[index] = "";
+        } else {
+          const key = item.params?.ffieldname;
+          const total = data
+            .map((item: any) => Number(item[key]))
+            .reduce((init: number, item: number) => init + item, 0);
+          sum[index] = total.toFixed(2);
+        }
+      });
+    }
+    sum[0] = "∑";
+    return [sum];
+  };
+
   return {
     maxHeight,
     isAutoColumnWidth,
@@ -133,5 +155,6 @@ export default function (mode: ImodeType) {
     cellClassName,
     scrollConfig,
     virtualScrollSize,
+    footerMethod,
   };
 }

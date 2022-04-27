@@ -34,6 +34,11 @@ export default function () {
         type: "date", //日期选择
         field: "fdate",
         label: "日期",
+        otherOptions: {
+          format: "YYYY/MM/DD",
+          "value-format": "YYYY-MM-DD",
+        },
+        // defaultDateValue: [],
         rules: [
           {
             type: "date",

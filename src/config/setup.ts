@@ -9,6 +9,7 @@ interface ISetupOptionType {
   type: formType;
   help?: string;
   field: string;
+  otherOptions?: any;
 }
 interface ISetupType {
   label: string;
@@ -32,9 +33,9 @@ export const setupOptions: ISetupType[] = [
       {
         id: "detailTableMaxHeight",
         label: "详情表格最大高度",
-        value: 700,
+        value: 300,
         type: "number",
-        help: "详情表格最大高度 默认700px",
+        help: "详情表格最大高度 默认300px",
         field: "detailTableMaxHeight",
       },
       {
@@ -76,6 +77,17 @@ export const setupOptions: ISetupType[] = [
         type: "number",
         help: "开启性能优化表格渲染后编辑表格需要设置占位行的个数 否则性能优化失败",
         field: "virtualScrollSize",
+      },
+      {
+        id: "count",
+        label: "分页数量",
+        value: 20,
+        type: "number",
+        help: "查询表格分页显示的数量",
+        field: "count",
+        otherOptions: {
+          min: 20,
+        },
       },
     ],
   },

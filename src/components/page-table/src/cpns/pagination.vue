@@ -1,0 +1,48 @@
+<template>
+  <div class="pagination">
+    <span>每页显示{{ count }}条数据</span>
+    <el-pagination
+      hide-on-single-page
+      :page-count="totalPage"
+      background
+      layout="prev, pager, next, jumper"
+      @current-change="handleCurrentPage"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useStore } from "@/store";
+
+const props = withDefaults(
+  defineProps<{
+    totalPage: number;
+  }>(),
+  {}
+);
+
+const emit = defineEmits(["page-change"]);
+
+const store = useStore();
+
+const count = computed(() => {
+  const count =
+    store.state.setup.config?.["pc-table"]?.setup?.find(
+      (item: any) => item.id === "count"
+    )?.value ?? 10;
+  return count;
+});
+
+const handleCurrentPage = (val: number) => {
+  emit("page-change", val);
+};
+</script>
+
+<style scoped>
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+</style>

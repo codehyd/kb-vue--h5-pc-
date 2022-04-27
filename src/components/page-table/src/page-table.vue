@@ -9,6 +9,7 @@
       <!-- 编辑模式 -->
       <template #edit="{ row, column, rowIndex }">
         <edit-table-column
+          :editFooterMethod="editFooterMethod"
           :column="column"
           :row="row"
           v-model="row[column.field]"
@@ -33,6 +34,13 @@
       </template>
     </base-table>
 
+    <template v-if="tableConfig.isShowPage">
+      <pagination
+        @page-change="handlePageChange"
+        :totalPage="tableConfig.totalPage!"
+      ></pagination>
+    </template>
+
     <kb-dialog :top="2" v-model:show="showPrintPanel" title="单据打印预览">
       <iframe
         :style="{ height: '85vh', width: '100%' }"
@@ -51,6 +59,7 @@ import useMenuHooks from "./hooks/useMenuHooks";
 import useEditHooks from "./hooks/useEditHooks";
 import message from "@/utils/message";
 import EditTableColumn from "./cpns/edit-table-column.vue";
+import Pagination from "./cpns/pagination.vue";
 import mitter from "@/mitt";
 
 const props = withDefaults(
@@ -63,27 +72,32 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["on-active-detail", "on-detail", "db-click"]);
+const emit = defineEmits(["on-detail", "db-click", "page-change"]);
 
 // 操作面板点击事件
 const handleMenuItemClick = (config: any, row: any, column: any) => {
-  const activeConfig: "detail"[] = ["detail"];
-
-  if (activeConfig.indexOf(config.type) > -1) {
-    const activeText = activeConfig[activeConfig.indexOf(config.type)];
-    emit(`on-active-${activeText}`, { row, column, config });
-  }
+  // const type = ["detail", "print"];
+  const menuType = config.type;
+  const options = {
+    print: () => onPrint(row),
+    detail: () => onDetail(row),
+    audit: () => onAudit(row),
+    delete: () => onDelete(row),
+  };
+  options[menuType] && options[menuType]();
 };
+
 // * -------------------------------
 
 // 表格双击事件
-const { handleMenuClick, baseTableRef, onPrint, onAudit } = useMenuHooks(
-  auditCallback,
-  printCallback,
-  detailCallback,
-  deleteCallback,
-  payCallback
-);
+const { handleMenuClick, baseTableRef, onPrint, onAudit, onDetail, onDelete } =
+  useMenuHooks(
+    auditCallback,
+    printCallback,
+    detailCallback,
+    deleteCallback,
+    payCallback
+  );
 
 // 审核回调
 function auditCallback() {}
@@ -174,19 +188,15 @@ const autoTableConfig = computed(() => {
   }
 });
 
-// mitter.on("page-table-add-rows", (row) => {
-//   baseTableRef.value?.insert(row);
-// });
-
 // 添加
 const insert = (row: any, index: number = -1) => {
   baseTableRef.value?.insert(row, index);
 };
 
 // 校验数据
-const validate = () => {
+const validate = (isSelect: boolean) => {
   return new Promise((resolve) => {
-    baseTableRef.value?.fullValiTable().then((res) => {
+    baseTableRef.value?.fullValiTable(isSelect).then((res) => {
       if (res) {
         message.show("校验表格失败 请输入表格必填信息");
         resolve({
@@ -203,7 +213,18 @@ const validate = () => {
   });
 };
 
-const { handleUpdateModelValue } = useEditHooks();
+const handlePageChange = (val: number) => {
+  emit("page-change", val);
+};
+
+const { handleUpdateModelValue } = useEditHooks(editFooterMethod);
+
+function editFooterMethod() {
+  const baseTable = baseTableRef.value;
+  if (baseTable) {
+    baseTable.updateFooter();
+  }
+}
 // const handleUpdateModelValue = (val: any, key: string, row: any) => {};
 
 defineExpose({

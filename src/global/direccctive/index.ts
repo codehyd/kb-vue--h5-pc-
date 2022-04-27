@@ -71,7 +71,18 @@ const tabScroll = {
   },
 };
 
+const inlineFormCol = {
+  mounted(el: HTMLElement, bind: any) {
+    // 拿到el的style.flex属性
+    const flex = getComputedStyle(el).flex;
+    const value = bind.value;
+    // 如果value = true，则设置el的style.flex属性为none 否则为flex
+    el.style.flex = value ? "none" : flex;
+  },
+};
+
 export default function (app: App): void {
   app.directive("drag", drag);
   app.directive("tabScroll", tabScroll);
+  app.directive("inlineFormCol", inlineFormCol);
 }

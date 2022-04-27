@@ -1,18 +1,22 @@
 <template>
   <div class="delivery">
-    <!-- 查询 -->
     <template v-if="currentFlag == 'page'">
-      <page-search :searchFormConfig="bildFormConfig"></page-search>
-      <!-- <PageForm isHasConfirm :formConfig="searchConfig"></PageForm> -->
-      <div class="active">
-        <el-button @click="handleEditClick" icon="plus">添加</el-button>
-      </div>
-      <search-table :requestData="requestData"></search-table>
+      <!-- 查询 -->
+      <bild-query-content
+        ref="bildQueryContentRef"
+        :showColumnBilltypeid="1102"
+        v-model:data="requestData"
+        :searchConfig="searchConfig"
+        @query-click="handleQueryClick"
+        @toggle-click="currentFlag = 'edit'"
+        :clientConfig="clientConfig"
+      ></bild-query-content>
     </template>
 
-    <!-- 编辑 -->
     <template v-else>
+      <!-- 编辑 -->
       <page-edit-table
+        :billtypeid="103"
         :formConfig="bildFormConfig"
         :tableConfig="editPageTableConfig"
         @goBack="currentFlag = 'page'"
@@ -24,23 +28,38 @@
 </template>
 
 <script setup lang="ts">
-import PageSearch from "@/components/page-search";
-import PageForm from "@/components/page-form";
-import { searchConfig } from "./config/search-config";
+import BildQueryContent from "@/components/bild-query-content";
+import { searchConfig } from "./config/bild-query-content";
+import { clientConfig } from "./config/page-table-config";
+// import BildSearch from "./cpns/bild-search.vue";
+// import BildQueryTable from "./cpns/bild-query-table.vue";
+import dayjs from "dayjs";
+// import PageSearch from "@/components/page-search";
+// import { formatDate } from "@/utils/timer";
+// import { searchConfig } from "./config/search-config";
 import SearchTable from "./cpns/search-table.vue";
 import { PageEditTable, IEditTableConfig } from "@/components/page-table";
-import type { ITableType } from "@/service/http/home/sales/delivery";
+import type { ITableType } from "@/service/http/home/commit";
 import useEditTable from "@/hooks/useEditTable";
 import pageAddTablleConfig from "./config/page-addTable-config";
 import { useStore } from "@/store";
+import mitter from "@/mitt";
 
 const store = useStore();
 
+const bildQueryContentRef = ref<InstanceType<typeof BildQueryContent>>();
+
+const searchTableRef = ref<InstanceType<typeof SearchTable>>();
+
+const haaa = (data: any) => {
+  console.log(requestData);
+};
+// 网络请求数据
 const requestData: ITableType = reactive({
   page: 1,
   tj: "",
-  begdate: "2022-04-01",
-  enddate: "2022-04-30",
+  begdate: dayjs().startOf("month").format("YYYY-MM-DD"),
+  enddate: dayjs().endOf("month").format("YYYY-MM-DD"),
   billtypeid: 103,
 });
 
@@ -71,6 +90,21 @@ const handleEditClick = async () => {
 };
 
 const { bildFormConfig } = pageAddTablleConfig();
+
+const handleQueryClick = (formData: any) => {
+  requestData.tj = formData.tj;
+  requestData.begdate = formData.begdate;
+  requestData.enddate = formData.enddate;
+  requestData.page = 1;
+  bildQueryContentRef.value?.getTableData();
+};
+
+mitter.on("change-page", (val) => {
+  requestData.page = val as number;
+  searchTableRef.value?.requestTable();
+});
+
+const billtypeid = 103;
 </script>
 
 <style lang="less" scoped>
