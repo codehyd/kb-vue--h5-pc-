@@ -19,7 +19,10 @@
       <!-- 操作选项 -->
       <template #table-active="{ row, column, rowIndex }">
         <div class="tableActive">
-          <template v-for="item in tableActiveConfig" :key="item">
+          <template
+            v-for="(item, indexx) in tableConfig.tableActiveConfig"
+            :key="item.optionType"
+          >
             <active-item
               @menu-click="handleMenuItemClick($event, row, column)"
               :config="item"
@@ -38,6 +41,7 @@
       <pagination
         @page-change="handlePageChange"
         :totalPage="tableConfig.totalPage!"
+        v-model:currentPage="tableConfig.page"
       ></pagination>
     </template>
 
@@ -54,21 +58,24 @@
 import BaseTable, { ITableConfigType } from "@/base-ui/table";
 import KbDialog from "@/base-ui/dialog";
 import ActiveItem from "./cpns/active-item.vue";
-import { ITableActiveConfigType } from "../type";
+
 import useMenuHooks from "./hooks/useMenuHooks";
 import useEditHooks from "./hooks/useEditHooks";
 import message from "@/utils/message";
 import EditTableColumn from "./cpns/edit-table-column.vue";
 import Pagination from "./cpns/pagination.vue";
 import mitter from "@/mitt";
+import { IBillid } from "@/service/http/home/commit";
 
 const props = withDefaults(
   defineProps<{
     tableConfig: ITableConfigType;
-    tableActiveConfig?: ITableActiveConfigType[];
+    billtypeid?: IBillid;
+
+    // tableActiveConfig?: ITableActiveConfigType[];
   }>(),
   {
-    tableActiveConfig: () => [],
+    // tableActiveConfig: () => [],
   }
 );
 
@@ -90,14 +97,24 @@ const handleMenuItemClick = (config: any, row: any, column: any) => {
 // * -------------------------------
 
 // 表格双击事件
-const { handleMenuClick, baseTableRef, onPrint, onAudit, onDetail, onDelete } =
-  useMenuHooks(
-    auditCallback,
-    printCallback,
-    detailCallback,
-    deleteCallback,
-    payCallback
-  );
+const {
+  handleMenuClick,
+  baseTableRef,
+  onPrint,
+  onAudit,
+  onDetail,
+  onDelete,
+  getTableData,
+  reloadData,
+  getInitColumn,
+} = useMenuHooks(
+  props.billtypeid!,
+  auditCallback,
+  printCallback,
+  detailCallback,
+  deleteCallback,
+  payCallback
+);
 
 // 审核回调
 function auditCallback() {}
@@ -123,7 +140,8 @@ function printCallback(params: any) {
 
 // 详情回调
 function detailCallback(params: any) {
-  emit("on-detail", params);
+  // emit("on-detail", params);
+  mitter.emit("menu-detail-click", params);
 }
 
 // 删除回调
@@ -219,12 +237,14 @@ const handlePageChange = (val: number) => {
 
 const { handleUpdateModelValue } = useEditHooks(editFooterMethod);
 
+// 修改footer
 function editFooterMethod() {
   const baseTable = baseTableRef.value;
   if (baseTable) {
     baseTable.updateFooter();
   }
 }
+
 // const handleUpdateModelValue = (val: any, key: string, row: any) => {};
 
 defineExpose({
@@ -232,6 +252,9 @@ defineExpose({
   auditFn,
   insert,
   validate,
+  getTableData,
+  reloadData,
+  getInitColumn,
 });
 </script>
 

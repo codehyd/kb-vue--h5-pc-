@@ -75,9 +75,11 @@ const colLayStyle = {
   xl: 6,
 };
 
-const formatContent = (value: string, keys?: string[]) => {
+const formatContent = (value: string | number, keys?: string[]) => {
   if (keys) {
     return keys.map((item) => props.data[item]).join(" ");
+  } else if (value == 0) {
+    return "";
   }
   return value ?? "";
 };

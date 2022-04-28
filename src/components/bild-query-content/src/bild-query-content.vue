@@ -1,25 +1,32 @@
 <template>
   <div class="bild-query-content">
     <!-- 检索内容 -->
-    <page-search
-      @query-click="handleQueryClick"
-      v-bind="searchConfig"
-    ></page-search>
+    <div class="search card">
+      <page-search
+        @query-click="handleQueryClick"
+        v-bind="searchConfig"
+      ></page-search>
+    </div>
 
     <!-- 查询表格 -->
-    <div class="options">
-      <el-button @click="handleToggle" icon="plus" round>开单</el-button>
+    <div class="table card">
+      <div class="options">
+        <el-button @click="handleToggle" icon="plus" round>开单</el-button>
+      </div>
+      <page-table
+        ref="pageTableRef"
+        @db-click="handleDbClick"
+        @page-change="handlePageChange"
+        :table-config="tableConfig"
+        :billtypeid="billtypeid"
+      ></page-table>
     </div>
-    <page-table
-      @db-click="handleDbClick"
-      @page-change="handlePageChange"
-      :table-config="tableConfig"
-    ></page-table>
 
     <!-- 详情表格 -->
     <detail-panel
+      @active-click="handleActiveClick"
       :tableConfig="detailTableConfig"
-      :clientConfig="clientConfig"
+      :billtypeid="billtypeid"
       ref="detailPanelRef"
     ></detail-panel>
   </div>
@@ -29,35 +36,52 @@
 // 检索组件
 import PageSearch from "@/components/page-search";
 // 检索组件传递的类型
-import type { IBildQueryForm } from "../type";
+import type {
+  IBildQueryDetailTable,
+  IBildQueryForm,
+  IBildQueryTable,
+} from "../type";
 // 表格请求类型
-import type { ITableType } from "@/service/http/home/commit";
+import type { IBillid, ITableType } from "@/service/http/home/commit";
 // 表格组件
-import PageTable from "@/components/page-table";
+import PageTable, { activeType } from "@/components/page-table";
 // 表格hooks
 import useTableHooks from "./hooks/useTableHooks";
 // 详情面板
 import DetailPanel from "./cpns/detail-panel.vue";
 // 客户config的类型
 import { IPageDesciptionType } from "@/components/page-description";
+// 状态管理
+import { useStore } from "@/store";
 
 const props = withDefaults(
   defineProps<{
     searchConfig: IBildQueryForm;
+    tableConfig: IBildQueryTable;
+    detailTablConfig: IBildQueryDetailTable;
     data: ITableType;
     showColumnBilltypeid: number;
-    clientConfig: IPageDesciptionType[];
+    billtypeid: IBillid;
   }>(),
   {}
 );
 
-const emit = defineEmits(["query-click", "toggle-click"]);
+const emit = defineEmits(["query-click", "toggle-click", "another-click"]);
+
+const store = useStore();
 
 // 组件ref
 const detailPanelRef = ref<InstanceType<typeof DetailPanel>>();
+const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
 const { tableConfig, getTableData, detailTableConfig, handleDbClick } =
-  useTableHooks(props.data, props.showColumnBilltypeid, openDetailFn);
+  useTableHooks(
+    props.data,
+    props.showColumnBilltypeid,
+    openDetailFn,
+    props.tableConfig,
+    props.detailTablConfig
+  );
 
 // 点击查询
 const handleQueryClick = (data: any) => {
@@ -83,13 +107,30 @@ function openDetailFn() {
     detailPanel.isShowPanel = true;
   }
 }
+const handleMenuDetail = (params: any) => {
+  console.log(params.finterid);
+};
 
 // 打开打印预览
 function openPrePrint() {}
 
 // 开单
 const handleToggle = () => {
+  store.commit("bild/changeBilltypeid", props.billtypeid);
   emit("toggle-click");
+};
+
+const handleActiveClick = (type: activeType, rows: any) => {
+  const methods = {
+    audit: () => pageTableRef.value?.auditFn(rows[0]),
+    print: () => pageTableRef.value?.printFn(rows[0]),
+    anotherList: () => {
+      detailPanelRef.value!.isShowPanel = false;
+      emit("another-click", rows);
+    },
+  };
+
+  methods[type] && methods[type]();
 };
 
 // 导出方法
@@ -99,6 +140,9 @@ defineExpose({
 </script>
 
 <style scoped>
+.search {
+  margin: 0 0 10px 0;
+}
 .options {
   display: flex;
   justify-content: flex-end;

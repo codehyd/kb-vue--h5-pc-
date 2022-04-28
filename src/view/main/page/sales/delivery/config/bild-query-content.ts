@@ -1,5 +1,9 @@
 import dayjs from "dayjs";
-import { IBildQueryForm } from "@/components/bild-query-content";
+import {
+  IBildQueryForm,
+  IBildQueryTable,
+  IBildQueryDetailTable,
+} from "@/components/bild-query-content";
 
 export const searchConfig: IBildQueryForm = {
   searchFormConfig: {
@@ -27,4 +31,132 @@ export const searchConfig: IBildQueryForm = {
     ],
   },
   isShowQuery: true,
+};
+
+export const tableConfig: IBildQueryTable = {
+  menuConfig: {
+    body: {
+      options: [
+        [
+          { code: "print", name: "打印", visible: true, disabled: false },
+          { code: "detail", name: "详情", visible: true, disabled: false },
+          { code: "audit", name: "审核", visible: true, disabled: false },
+          { code: "delete", name: "删除", visible: true, disabled: false },
+          { code: "pay", name: "收款", visible: true, disabled: false },
+        ],
+      ],
+    },
+  },
+  tableActiveConfig: [
+    {
+      type: "text",
+      text: "详情",
+      optionType: "detail",
+    },
+    {
+      type: "text",
+      text: "打印",
+      optionType: "print",
+    },
+    {
+      type: "text",
+      text: "审核",
+      optionType: "audit",
+    },
+    {
+      type: "text",
+      text: "删除",
+      optionType: "delete",
+    },
+    {
+      type: "text",
+      text: "收款",
+      optionType: "pay",
+    },
+  ],
+};
+
+export const detailTableConfig: IBildQueryDetailTable = {
+  clientConfig: [
+    {
+      field: "fkhname",
+      label: "客户",
+      icon: "avatar",
+    },
+    {
+      field: "fsiji",
+      label: "司机",
+    },
+    {
+      field: "fdate",
+      label: "日期",
+    },
+    {
+      field: "fcsaddress",
+      label: "地址",
+    },
+    {
+      field: "fchepai",
+      label: "车牌",
+    },
+    {
+      field: "fstock",
+      label: "仓库",
+    },
+    {
+      field: "fcslinker",
+      label: "联系",
+      custormKeys: ["fcslinker", "fcsphone"],
+    },
+    {
+      field: "forderno",
+      label: "订单号",
+    },
+    {
+      field: "fcontractno",
+      label: "合同号",
+    },
+    {
+      field: "fyewuyuan",
+      label: "业务员",
+    },
+    {
+      field: "fauditor",
+      label: "审核员",
+    },
+    {
+      field: "fmemo",
+      label: "备注",
+    },
+  ],
+  status: [
+    {
+      field: "fbillstatus",
+      successText: "已审核",
+      successType: "success",
+      failText: "未审核",
+      failType: "danger",
+    },
+    {
+      field: "fshflag",
+      successText: "已打印",
+      successType: "",
+      failText: "未打印",
+      failType: "info",
+    },
+  ],
+  active: [
+    {
+      type: "audit",
+      text: "审核单据",
+    },
+    {
+      type: "print",
+      text: "打印单据",
+    },
+    {
+      type: "anotherList",
+      text: "再来一单",
+    },
+  ],
 };

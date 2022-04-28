@@ -5,12 +5,14 @@ import {
   httpPrintBild,
   httpGetDetailBild,
   httpDeleteBild,
+  IBillid,
 } from "@/service/http/home/commit";
 import { useStore } from "@/store";
 import message from "@/utils/message";
 
 type callback = (data?: any) => void;
 export default function (
+  billtypeid: IBillid,
   auditCallback?: callback,
   printCallback?: callback,
   detailCallback?: callback,
@@ -35,23 +37,25 @@ export default function (
   };
 
   // 审核
-  async function onAudit(row: any) {
-    const res = await httpAuditBild({
-      billid: row.finterid,
-      billtypeid: row.ftype,
+  function onAudit(row: any) {
+    message.confirm(`确定审核${row.fbillno}吗？`, async () => {
+      const res = await httpAuditBild({
+        billid: row.finterid,
+        billtypeid: billtypeid,
+      });
+      if (res.code >= 1) {
+        row["fbillstatus"] = "已审核";
+        row["fauditor"] = store.state.login.token.uname;
+        auditCallback && auditCallback();
+      }
+      message.show(res.msg, res.type);
     });
-    if (res.code >= 1) {
-      row["fbillstatus"] = "已审核";
-      row["fauditor"] = store.state.login.token.uname;
-      auditCallback && auditCallback();
-    }
-    message.show(res.msg, res.type);
   }
   // 打印
   async function onPrint(row: any) {
     const res = await httpPrintBild({
       billid: row.finterid,
-      billtypeid: row.ftype,
+      billtypeid: billtypeid,
     });
     if (res.code >= 1) {
       printCallback && printCallback({ ...res });
@@ -63,7 +67,7 @@ export default function (
   async function onDetail(row: any) {
     const res = await httpGetDetailBild({
       billid: row.finterid,
-      billtypeid: row.ftype,
+      billtypeid: billtypeid,
     });
     if (res.code >= 1) {
       detailCallback && detailCallback({ ...res });
@@ -72,15 +76,20 @@ export default function (
     }
   }
   // 删除
-  async function onDelete(row: any) {
-    const res = await httpDeleteBild({
-      billid: row.finterid,
-      billtypeid: row.ftype,
-    });
-    if (res.code >= 1) {
-      deleteCallback && deleteCallback({ row, res });
-    }
-    message.show(res.msg, res.type);
+  function onDelete(row: any) {
+    message.confirm(
+      `确定删除${row.fbillno}单据吗? 当前单据状态:${row.fbillstatus}`,
+      async () => {
+        const res = await httpDeleteBild({
+          billid: row.finterid,
+          billtypeid: billtypeid,
+        });
+        if (res.code >= 1) {
+          deleteCallback && deleteCallback({ row, res });
+        }
+        message.show(res.msg, res.type);
+      }
+    );
   }
 
   // 收款
@@ -92,6 +101,30 @@ export default function (
 
   // 因为组件ref在这里所以需要在这里定义
 
+  // 获取表格数据
+  const getTableData = () => {
+    const baseTable = baseTableRef.value;
+    if (baseTable) {
+      return baseTable.getTableData();
+    }
+  };
+
+  // 重载表格数据
+  const reloadData = (row: any, isReload: boolean = false) => {
+    const baseTable = baseTableRef.value;
+    if (baseTable) {
+      return baseTable.loadTableData(row, isReload);
+    }
+  };
+
+  // 重载表格数据
+  const getInitColumn = () => {
+    const baseTable = baseTableRef.value;
+    if (baseTable) {
+      return baseTable.getInitColumn();
+    }
+  };
+
   return {
     handleMenuClick,
     onAudit,
@@ -100,5 +133,8 @@ export default function (
     onDelete,
     onPay,
     baseTableRef,
+    getTableData,
+    reloadData,
+    getInitColumn,
   };
 }

@@ -167,6 +167,15 @@ export const httpPostSave = (data: ISaveBildType) => {
 export const httpGetTableData = (id: IBillid, params: ITableType) => {
   const urls = {
     103: "gogetstockbilltotallist_page",
+    1: "gogetstockbilltotallist_page",
+    2: "gogetstockbilltotallist_page",
+    101: "gogetsalequotebilltotallist_page",
+    102: "gogetsaleorderbilltotallist_page",
+    105: "gogetstockbilltotallist_page",
+    4000: "gogetproduceplanbilltotallist_page",
+    111: "gogetprocureorderbilltotallist_page",
+    112: "gogetstockbilltotallist_page",
+    114: "gogetstockbilltotallist_page",
   };
   return kbBaseRequest.request({
     url: "/" + urls[id],
@@ -181,6 +190,15 @@ export const httpGetDetailTableData = (
 ) => {
   const urls = {
     103: "gogetstockbilldetaillist",
+    1: "gogetstockbilldetaillist",
+    2: "gogetstockbilldetaillist",
+    101: "gogetsalequotebilldetaillist",
+    102: "gogetsaleorderbilldetaillist",
+    105: "gogetstockbilldetaillist",
+    4000: "gogetproduceplanbilldetaillist",
+    111: "gogetprocureorderbilldetaillist",
+    112: "gogetstockbilldetaillist",
+    114: "gogetstockbilldetaillist",
   };
   return kbBaseRequest.request({
     url: "/" + urls[id],

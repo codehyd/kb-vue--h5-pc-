@@ -7,6 +7,9 @@
     <el-button @click="handleRemoveSelect">删除选中</el-button>
     <!-- 删除全部 -->
     <el-button @click="handleRemoveAll">删除全部</el-button>
+    <!-- 缓存操作 -->
+    <el-button @click="handleSaveData">缓存当前数据</el-button>
+    <el-button @click="handleLoadData">加载缓存数据</el-button>
 
     <div class="select">单据操作</div>
     <!-- 添加商品 -->
@@ -40,7 +43,6 @@
     <el-button type="primary" @click="handleSaveBildClick">保存提交</el-button>
 
     <page-good-table
-      v-model:show="showGoodPanel"
       @save-click="handleSaveClick"
       ref="pageGoodTableRef"
     ></page-good-table>
@@ -53,17 +55,27 @@ import { httpGetGoodsInfoByBarcode } from "@/service/http/home/commit";
 import KbIcon from "@/base-ui/icon";
 import message from "@/utils/message";
 import mitter from "@/mitt";
+import { useStore } from "@/store";
 
-const emit = defineEmits(["add-new-goods", "save-bild"]);
+const emit = defineEmits([
+  "add-new-goods",
+  "save-bild",
+  "reloadData",
+  "save-local-data",
+]);
+
+const store = useStore();
 
 const pageGoodTableRef = ref<InstanceType<typeof PageGoodTable>>();
 
 const barcode = ref("");
 
 // 新增
-const showGoodPanel = ref(false);
 const handdleAddNewGoods = () => {
-  showGoodPanel.value = true;
+  const pageGoodTable = pageGoodTableRef.value;
+  if (pageGoodTable) {
+    pageGoodTable.show = true;
+  }
 };
 
 const handlerEnter = async () => {
@@ -96,6 +108,19 @@ const handleRemoveAll = () => {
 };
 const handleSaveBildClick = () => {
   emit("save-bild");
+};
+const handleLoadData = () => {
+  const data = store.state.bild.bildData;
+  if (data.length == 0) {
+    return message.show("没有缓存数据");
+  }
+  emit("reloadData", data);
+
+  // emit('add-new-goods', data);
+};
+
+const handleSaveData = () => {
+  emit("save-local-data");
 };
 </script>
 

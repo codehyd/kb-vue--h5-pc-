@@ -2,6 +2,7 @@
   <div class="pagination">
     <span>每页显示{{ count }}条数据</span>
     <el-pagination
+      :current-page="currentPageModelValue"
       hide-on-single-page
       :page-count="totalPage"
       background
@@ -17,13 +18,21 @@ import { useStore } from "@/store";
 const props = withDefaults(
   defineProps<{
     totalPage: number;
+    currentPage?: number;
   }>(),
   {}
 );
 
-const emit = defineEmits(["page-change"]);
+const emit = defineEmits(["page-change", "update:currentPage"]);
 
 const store = useStore();
+
+const currentPageModelValue = computed({
+  get: () => props.currentPage,
+  set: (val) => {
+    emit("update:currentPage", val);
+  },
+});
 
 const count = computed(() => {
   const count =

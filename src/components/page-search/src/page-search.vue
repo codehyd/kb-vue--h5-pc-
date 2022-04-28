@@ -20,8 +20,8 @@
       </template>
     </base-form>
 
-    <template v-if="isExistClient">
-      <kb-dialog title="选择客户" v-model:show="isShowClientPanelShow">
+    <template v-if="isExistClient && isShowClientPanelShow">
+      <kb-dialog title="选择客户/供应商" v-model:show="isShowClientPanelShow">
         <!-- input -->
         <el-input
           @keyup.enter.native="handleSearchClick"

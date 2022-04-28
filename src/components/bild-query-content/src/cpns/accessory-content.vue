@@ -1,7 +1,10 @@
 <template>
   <div class="accessory-content card">
     <div class="active">
-      <em>更改图片</em>
+      <upddate-file :update-before="updateBefore" @update="handleUpdate">
+        <em>更改图片</em>
+      </upddate-file>
+
       <em @click="handleMessageAddClick">添加留言</em>
     </div>
 
@@ -58,7 +61,12 @@
 </template>
 
 <script setup lang="ts">
-import { httpSubmitMessage, httpUpdateImage } from "@/service/http/home/commit";
+import UpddateFile from "@/base-ui/update-file";
+import {
+  httpSubmitMessage,
+  httpUpdateImage,
+  IBillid,
+} from "@/service/http/home/commit";
 import message from "@/utils/message";
 // 图片组件
 import BaseImage from "@/base-ui/image";
@@ -74,6 +82,7 @@ const props = withDefaults(
     images: string[];
     messages: any[];
     bildInfo: any;
+    billtypeid: IBillid;
   }>(),
   {
     images: () => {
@@ -93,7 +102,7 @@ const handleUpdateFile = async (files: any, index: number) => {
   const res = await httpUpdateImage(formData, {
     billid: props.bildInfo.finterid,
     fileindex,
-    billtypeid: props.bildInfo.ftype,
+    billtypeid: props.billtypeid,
   });
   if (res.code >= 1) {
     mitter.emit("update-image", res.atturlarray);
@@ -106,7 +115,7 @@ const handleMessageAddClick = () => {
     const res = await httpSubmitMessage({
       message: msg,
       billid: props.bildInfo.finterid,
-      billtypeid: props.bildInfo.ftype,
+      billtypeid: props.billtypeid,
     });
     if (res.code >= 1) {
       mitter.emit("update-message", res.data[0].data);
@@ -132,6 +141,20 @@ const handleMessageClick = (item: any) => {
       }
     );
   }
+};
+let fileindex = 0;
+const updateBefore = async (file: any) => {
+  const res = await message.prompt("请输入替换第几张图片", "替换图片");
+  if (res !== "1" && res !== "2" && res !== "3") {
+    message.show("请输入1-3的序号");
+  } else {
+    file();
+    fileindex = Number(res) - 1;
+  }
+};
+
+const handleUpdate = (files: any) => {
+  handleUpdateFile(files, fileindex);
 };
 </script>
 

@@ -1,3 +1,4 @@
+import { ITableActiveConfigType } from "@/components/page-table";
 import { VxeTablePropTypes } from "vxe-table";
 export type ImodeType = "query" | "detail" | "edit";
 
@@ -18,4 +19,5 @@ export interface ITableConfigType {
   isShowPage?: boolean;
   page?: number;
   totalPage?: number;
+  tableActiveConfig?: ITableActiveConfigType[];
 }

@@ -1,4 +1,5 @@
 import { ITableConfigType } from "@/base-ui/table";
+import { IPageDesciptionType } from "../page-description/type";
 
 // 表格操作列选项
 export interface ITableActiveConfigType {
@@ -10,9 +11,26 @@ export interface ITableActiveConfigType {
   optionType: string;
 }
 
+export type activeType = "audit" | "print" | "anotherList";
+export interface IBildActiveType {
+  text: string;
+  type: activeType;
+}
+
+export interface IBildStatusType {
+  field: string;
+  successType?: "success" | "warning" | "danger" | "info" | "";
+  successText?: string;
+  failType?: "success" | "warning" | "danger" | "info" | "";
+  failText?: string;
+}
+
 export interface IDetailTableConfig extends ITableConfigType {
   messages?: any;
   images?: any;
+  clientConfig?: IPageDesciptionType[];
+  status?: IBildStatusType[];
+  active?: IBildActiveType[];
 }
 
 export interface IEditTableConfig extends ITableConfigType {

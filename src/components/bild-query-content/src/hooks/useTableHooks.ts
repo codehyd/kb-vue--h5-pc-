@@ -15,11 +15,14 @@ import { IDetailTableConfig } from "@/components/page-table";
 import mitter from "@/mitt";
 
 type callback = () => void;
+import type { IBildQueryTable, IBildQueryDetailTable } from "../../type";
 
 export default function (
   reqData: ITableType,
   showBilltypeid: number,
-  detailCallback?: callback
+  detailCallback?: callback,
+  otherTableConfig?: IBildQueryTable,
+  otherDetailTableConfig?: IBildQueryDetailTable
 ) {
   // 查询表格的配置
   const tableConfig: ITableConfigType = reactive({
@@ -32,6 +35,7 @@ export default function (
     isShowPage: true,
     loading: true,
     state: "query",
+    ...otherTableConfig,
   });
 
   // 详情表格的配置
@@ -43,6 +47,7 @@ export default function (
     images: [],
     showAction: false,
     state: "detail",
+    ...otherDetailTableConfig,
   });
 
   // const isShowDetailPanel = ref(false);
@@ -62,6 +67,15 @@ export default function (
       tableConfig.data = res?.data?.[0]?.data ?? [];
     });
   };
+
+  mitter.on("menu-detail-click", async (params: any) => {
+    detailTableConfig.column = await requestDetailHeader();
+    detailTableConfig.data = params.data[0].data;
+    detailTableConfig.images = params.atturlarray;
+    detailTableConfig.messages = params.message[0].data;
+
+    detailCallback && detailCallback();
+  });
 
   // 监听双击表格的行 点击详情
   const handleDbClick = async (params: any) => {

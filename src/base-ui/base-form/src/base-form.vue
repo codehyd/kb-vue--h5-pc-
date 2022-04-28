@@ -28,7 +28,7 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
-                  v-model="modelValue[`${item.field}`]"
+                  v-model.trim="modelValue[`${item.field}`]"
                   @update:modelValue="handleValueChange($event, item.field)"
                 />
               </template>
@@ -78,7 +78,6 @@
                       round
                       icon="search"
                     >
-                      选择客户
                     </el-button>
                   </template>
                 </el-input>
@@ -143,7 +142,7 @@ const autoColLayout = computed(() => {
 });
 
 const handleValueChange = (value: any, field: string) => {
-  console.log(value);
+  // console.log(value);
   emit("update:modelValue", { ...props.modelValue, [field]: value });
 };
 

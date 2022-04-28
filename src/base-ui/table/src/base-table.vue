@@ -256,10 +256,14 @@ mitter.on("base-table-remove-select-rows", () => {
 mitter.on("base-table-remove-all-rows", () => {
   const vxeTable = vxeTableRef.value;
   if (vxeTable) {
-    const { insertRecords } = vxeTable.getRecordset();
-    if (insertRecords.length == 0) return message.show("暂无数据");
-    vxeTable?.remove(insertRecords);
+    const allRowData = vxeTableRef.value?.getTableData().fullData;
+    if (allRowData.length == 0) return message.show("暂无删除行");
+    vxeTable?.remove(allRowData);
   }
+});
+// 加载
+mitter.on("base-table-reload-data", (data: any) => {
+  console.log(data);
 });
 
 onMounted(() => {
@@ -316,6 +320,7 @@ defineExpose({
   fullValiTable,
   getTableData,
   updateFooter,
+  getInitColumn,
 });
 </script>
 

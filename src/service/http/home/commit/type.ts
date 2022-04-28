@@ -1,6 +1,6 @@
 import { IDataType } from "@/service/type";
 
-export type IBillid = 103;
+export type IBillid = 103 | 101 | 102 | 105 | 4000 | 1 | 2 | 111 | 112 | 114;
 
 export interface IBaseTableConfigType {
   billtypeid: IBillid;
