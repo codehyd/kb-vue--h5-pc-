@@ -70,7 +70,10 @@
         </vxe-column>
       </template>
       <!-- 表格列内容 -->
-      <template v-for="item in column" :key="item[keyString]">
+      <template
+        v-for="(item, index) in column"
+        :key="keyString ? item[keyString] : index"
+      >
         <vxe-column
           :width="!isAutoColumnWidth ? item.fwidth : 0"
           :min-width="isAutoColumnWidth ? item.fwidth : 0"
@@ -223,6 +226,8 @@ const {
   fullValiTable,
   getTableData,
   updateFooter,
+  removeSelectData,
+  removeAllData,
 } = useTableMethods();
 
 // 点击表格菜单
@@ -235,32 +240,42 @@ const handleCellDbClick: VxeTableEvents.CellDblclick = ({ row, column }) => {
 };
 
 // 事件总线 添加新行
-mitter.on("base-table-add-new-rows", () => {
+// mitter.on("base-table-add-new-rows", () => {
+//   const newRow = getInitColumn();
+//   const vxeTable = vxeTableRef.value;
+//   if (vxeTable) {
+//     vxeTable?.insertAt(newRow, -1);
+//     message.success("添加成功");
+//   }
+// });
+
+const loadingNewColumn = () => {
   const newRow = getInitColumn();
   const vxeTable = vxeTableRef.value;
   if (vxeTable) {
     vxeTable?.insertAt(newRow, -1);
     message.success("添加成功");
   }
-});
+};
+
 // 删除选中行
-mitter.on("base-table-remove-select-rows", () => {
-  const vxeTable = vxeTableRef.value;
-  if (vxeTable) {
-    const rows = vxeTable.getCheckboxRecords();
-    if (rows.length == 0) return message.show("暂无选中行");
-    vxeTable?.remove(rows);
-  }
-});
+// mitter.on("base-table-remove-select-rows", () => {
+//   const vxeTable = vxeTableRef.value;
+//   if (vxeTable) {
+//     const rows = vxeTable.getCheckboxRecords();
+//     if (rows.length == 0) return message.show("暂无选中行");
+//     vxeTable?.remove(rows);
+//   }
+// });
 // 删除全部行 需要先获取全部行数据
-mitter.on("base-table-remove-all-rows", () => {
-  const vxeTable = vxeTableRef.value;
-  if (vxeTable) {
-    const allRowData = vxeTableRef.value?.getTableData().fullData;
-    if (allRowData.length == 0) return message.show("暂无删除行");
-    vxeTable?.remove(allRowData);
-  }
-});
+// mitter.on("base-table-remove-all-rows", () => {
+//   const vxeTable = vxeTableRef.value;
+//   if (vxeTable) {
+//     const allRowData = vxeTableRef.value?.getTableData().fullData;
+//     if (allRowData.length == 0) return message.show("暂无删除行");
+//     vxeTable?.remove(allRowData);
+//   }
+// });
 // 加载
 mitter.on("base-table-reload-data", (data: any) => {
   console.log(data);
@@ -321,6 +336,9 @@ defineExpose({
   getTableData,
   updateFooter,
   getInitColumn,
+  loadingNewColumn,
+  removeSelectData,
+  removeAllData,
 });
 </script>
 

@@ -13,6 +13,7 @@ import {
   ISaveBildType,
   IBillid,
   ITableType,
+  IStoreInquireType,
 } from "./type";
 
 import qs from "qs";
@@ -114,7 +115,7 @@ export const httpGetGoodsClassList = () => {
 export const httpGetGoodsList = (params: IGoodListType) => {
   return kbBaseRequest.request({
     url: "/gogetproductdetail_page",
-    params,
+    params: { ...params, ...{ flag: "select" } },
   });
 };
 
@@ -147,6 +148,13 @@ export const httpGetClientClassList = () => {
 export const httpGetClientList = (params: IClientListType) => {
   return kbBaseRequest.request({
     url: "/gogetcustomerdetail_page",
+    params,
+  });
+};
+// 获取存货查询
+export const httpStoreInquire = (params: IStoreInquireType) => {
+  return kbBaseRequest.request({
+    url: "/gogetstockquery_page",
     params,
   });
 };
@@ -205,4 +213,5 @@ export const httpGetDetailTableData = (
     params,
   });
 };
+
 export * from "./type";

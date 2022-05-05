@@ -26,6 +26,8 @@ const formOriginData: any = {};
 for (const item of formItems) {
   if (item.type === "checkbox") {
     formOriginData[item.field] = [];
+  } else if (item.type == "number") {
+    formOriginData[item.field] = 0;
   } else {
     formOriginData[item.field] = "";
   }

@@ -22,6 +22,9 @@
         @add-new-goods="handleAddNewGoods"
         @reloadData="handleReloadData"
         @save-local-data="handleSaveLocalData"
+        @load-new-data="handleLoadNewData"
+        @remove-select-data="handleRemoveSelectData"
+        @remove-all-data="handleRemoveAllData"
       ></edit-table-option>
       <!-- <span class="select">商品信息</span> -->
       <page-table ref="pageTableRef" :tableConfig="tableConfig"></page-table>
@@ -115,36 +118,47 @@ const handleSaveBildClick = async () => {
   }
 };
 
-function submitContent(currentInfo: any, tableData: any) {
-  console.log(currentInfo, tableData, store.state.bild.currentInfo.fitemid);
+async function submitContent(currentInfo: any, tableData: any) {
+  // console.log(currentInfo, tableData, store.state.bild.currentInfo.fitemid);
   const content = base64.objToEncode({
     ...currentInfo,
     fcsid: store.state.bild.currentInfo.fitemid,
     data: tableData,
   });
-  httpPostSave({
+  const res = await httpPostSave({
     billtypeid: props.billtypeid,
     content,
-  }).then((res) => {
-    if (res.code >= 1) {
-      message.confirm(
-        "保存成功，是否继续添加商品？",
-        () => {},
-        () => {
-          handleGoBack();
-        }
-      );
-
-      // 删除打钩的数据
-      mitter.emit("base-table-remove-select-rows");
-    }
-
-    message.show(
-      res.code >= 1 ? `提交成功 单号为${res.billno}` : res.msg,
-      res.type
-    );
   });
+  if (res.code >= 1) {
+    message.confirm(
+      "保存成功，是否继续添加商品？",
+      () => {},
+      () => {
+        handleGoBack();
+      }
+    );
+
+    // 删除打钩的数据
+    mitter.emit("base-table-remove-select-rows");
+  }
+
+  message.show(
+    res.code >= 1 ? `提交成功 单号为${res.billno}` : res.msg,
+    res.type
+  );
 }
+
+const handleLoadNewData = () => {
+  pageTableRef.value?.loadingNewColumn();
+};
+
+const handleRemoveSelectData = () => {
+  pageTableRef.value?.removeSelectData();
+};
+
+const handleRemoveAllData = () => {
+  pageTableRef.value?.removeAllData();
+};
 
 const handleReloadData = (data: any) => {
   pageTableRef.value?.reloadData(data);
@@ -152,6 +166,7 @@ const handleReloadData = (data: any) => {
 };
 const handleSaveLocalData = () => {
   const fullData = pageTableRef.value?.getTableData()?.fullData ?? [];
+  if (fullData.length == 0) return message.show("暂无数据缓存");
   store.commit("bild/changeBildData", fullData);
   message.show("缓存成功", "success");
 };

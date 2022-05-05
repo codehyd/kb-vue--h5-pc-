@@ -32,6 +32,15 @@
                   @update:modelValue="handleValueChange($event, item.field)"
                 />
               </template>
+              <template v-else-if="item.type === 'number'">
+                <el-input-number
+                  style="width: 100%"
+                  :placeholder="item.placeholder"
+                  v-bind="item.otherOptions"
+                  v-model="modelValue[`${item.field}`]"
+                  @update:modelValue="handleValueChange($event, item.field)"
+                />
+              </template>
               <!-- select选择框 -->
               <template v-else-if="item.type === 'select'">
                 <el-select
@@ -128,7 +137,7 @@ const props = withDefaults(
 
 const emit = defineEmits(["update:modelValue", "kehu-click"]);
 
-console.log(props);
+// console.log(props);
 const { isShowAuthMessage } = useFormSetup();
 const { elFormRef, validateForm } = useFormMethods();
 

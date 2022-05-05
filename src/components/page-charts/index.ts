@@ -1,2 +1,3 @@
 import LineCharts from "./src/line-charts.vue";
-export { LineCharts };
+import BarCharts from "./src/bar-charts.vue";
+export { LineCharts, BarCharts };

@@ -74,6 +74,7 @@ const props = withDefaults(
   defineProps<{
     searchFormConfig: IForm;
     isShowQuery?: boolean;
+    defaultValue?: any;
   }>(),
   {
     isShowQuery: false,
@@ -86,12 +87,27 @@ const store = useStore();
 const baseFormRef = ref<InstanceType<typeof BaseForm>>();
 
 const formItems = props.searchFormConfig?.formItems ?? [];
+// console.log(12, formItems);
 const formOriginData: any = {};
 for (const item of formItems) {
+  // 先判断是否有defaultValue 如果有则赋值 没有则根据type赋值
+  if (props.defaultValue) {
+    // console.log(props.defaultValue);
+    formOriginData[item.field] =
+      item.type === "number"
+        ? Number(props.defaultValue[item.field])
+        : props.defaultValue[item.field];
+    continue;
+    // formOriginData[item.name] = item.defaultValue;
+  }
   if (item.defaultDateValue) {
     formOriginData[item.field] = item.defaultDateValue;
   } else {
-    formOriginData[item.field] = "";
+    if (item.type == "number") {
+      formOriginData[item.field] = 0;
+    } else {
+      formOriginData[item.field] = "";
+    }
   }
 }
 const formData = ref(formOriginData);
@@ -99,7 +115,9 @@ const formData = ref(formOriginData);
 // 点击选择客户
 const isExistClient = computed(() => {
   // 判断kehu字段是否出现在formItems中
-  const isExist = formItems.some((item) => item.field === "kehu");
+  const isExist = formItems.some(
+    (item) => item.field === "kehu" || item.type === "kehu"
+  );
   return isExist;
 });
 const isShowClientPanelShow = ref(false);

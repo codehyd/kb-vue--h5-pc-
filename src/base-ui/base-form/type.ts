@@ -4,7 +4,8 @@ type IFormType =
   | "select"
   | "daterange"
   | "date"
-  | "kehu";
+  | "kehu"
+  | "number";
 
 export interface IFormItem {
   field: string;

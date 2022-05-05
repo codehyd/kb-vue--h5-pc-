@@ -15,7 +15,9 @@ export interface IFormItemsType {
     | "date"
     | "time"
     | "datetime"
-    | "button";
+    | "button"
+    | "number";
+
   // # 多选框列表
   otherCheckList?: any[];
   checkKey?: string;

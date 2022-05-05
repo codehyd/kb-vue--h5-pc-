@@ -21,9 +21,16 @@ export interface IBaseMessageType extends IBaseTableConfigType {
 }
 
 export interface IGoodListType {
-  flag: "select";
+  // flag: "select";
   page: number;
   Classid: number;
+  tj?: string;
+  count?: number;
+}
+
+export interface IStoreInquireType {
+  page: number;
+  classid: number;
   tj?: string;
   count?: number;
 }

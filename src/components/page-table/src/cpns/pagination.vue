@@ -3,7 +3,6 @@
     <span>每页显示{{ count }}条数据</span>
     <el-pagination
       :current-page="currentPageModelValue"
-      hide-on-single-page
       :page-count="totalPage"
       background
       layout="prev, pager, next, jumper"

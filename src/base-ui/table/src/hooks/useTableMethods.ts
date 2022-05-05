@@ -43,6 +43,24 @@ export default function () {
   };
 
   const updateFooter = () => vxeTableRef.value?.updateFooter();
+
+  const removeSelectData = () => {
+    const vxeTable = vxeTableRef.value;
+    if (vxeTable) {
+      const rows = vxeTable.getCheckboxRecords();
+      if (rows.length == 0) return message.show("暂无选中行");
+      vxeTable?.remove(rows);
+    }
+  };
+
+  const removeAllData = () => {
+    const vxeTable = vxeTableRef.value;
+    if (vxeTable) {
+      const allRowData = vxeTableRef.value?.getTableData().fullData;
+      if (allRowData.length == 0) return message.show("暂无删除行");
+      vxeTable?.remove(allRowData);
+    }
+  };
   return {
     vxeTableRef,
     remove,
@@ -51,5 +69,7 @@ export default function () {
     fullValiTable,
     getTableData,
     updateFooter,
+    removeSelectData,
+    removeAllData,
   };
 }

@@ -1,42 +1,46 @@
 <template>
   <div class="page-table">
-    <base-table
-      ref="baseTableRef"
-      @menu-click="handleMenuClick"
-      @db-click="handleDbClick"
-      v-bind="autoTableConfig"
-    >
-      <!-- 编辑模式 -->
-      <template #edit="{ row, column, rowIndex }">
-        <edit-table-column
-          :editFooterMethod="editFooterMethod"
-          :column="column"
-          :row="row"
-          v-model="row[column.field]"
-          @update:modelValue="handleUpdateModelValue"
-        ></edit-table-column>
-      </template>
-      <!-- 操作选项 -->
-      <template #table-active="{ row, column, rowIndex }">
-        <div class="tableActive">
-          <template
-            v-for="(item, indexx) in tableConfig.tableActiveConfig"
-            :key="item.optionType"
-          >
-            <active-item
-              @menu-click="handleMenuItemClick($event, row, column)"
-              :config="item"
-            ></active-item>
-          </template>
-        </div>
-      </template>
-      <template #checked="{ row, column, rowIndex }">
-        <slot name="checked" :row="row" :column="column" :rowIndex="rowIndex">
-          <el-checkbox v-model="row.checked" size="large" />
-        </slot>
-      </template>
-    </base-table>
-
+    <template v-if="currentFlag == 'table'">
+      <base-table
+        ref="baseTableRef"
+        @menu-click="handleMenuClick"
+        @db-click="handleDbClick"
+        v-bind="autoTableConfig"
+      >
+        <!-- 编辑模式 -->
+        <template #edit="{ row, column, rowIndex }">
+          <edit-table-column
+            :editFooterMethod="editFooterMethod"
+            :column="column"
+            :row="row"
+            v-model="row[column.field]"
+            @update:modelValue="handleUpdateModelValue"
+          ></edit-table-column>
+        </template>
+        <!-- 操作选项 -->
+        <template #table-active="{ row, column, rowIndex }">
+          <div class="tableActive">
+            <template
+              v-for="(item, indexx) in tableConfig.tableActiveConfig"
+              :key="item.optionType"
+            >
+              <active-item
+                @menu-click="handleMenuItemClick($event, row, column)"
+                :config="item"
+              ></active-item>
+            </template>
+          </div>
+        </template>
+        <template #checked="{ row, column, rowIndex }">
+          <slot name="checked" :row="row" :column="column" :rowIndex="rowIndex">
+            <el-checkbox v-model="row.checked" size="large" />
+          </slot>
+        </template>
+      </base-table>
+    </template>
+    <template v-else>
+      <slot name="list"></slot>
+    </template>
     <template v-if="tableConfig.isShowPage">
       <pagination
         @page-change="handlePageChange"
@@ -80,6 +84,7 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(["on-detail", "db-click", "page-change"]);
+const currentFlag = ref<"list" | "table">("table");
 
 // 操作面板点击事件
 const handleMenuItemClick = (config: any, row: any, column: any) => {
@@ -107,6 +112,9 @@ const {
   getTableData,
   reloadData,
   getInitColumn,
+  loadingNewColumn,
+  removeSelectData,
+  removeAllData,
 } = useMenuHooks(
   props.billtypeid!,
   auditCallback,
@@ -255,6 +263,10 @@ defineExpose({
   getTableData,
   reloadData,
   getInitColumn,
+  loadingNewColumn,
+  removeSelectData,
+  removeAllData,
+  currentFlag,
 });
 </script>
 

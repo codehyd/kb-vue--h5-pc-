@@ -125,6 +125,27 @@ export default function (
     }
   };
 
+  const loadingNewColumn = () => {
+    const baseTable = baseTableRef.value;
+    if (baseTable) {
+      return baseTable.loadingNewColumn();
+    }
+  };
+
+  const removeSelectData = () => {
+    const baseTable = baseTableRef.value;
+    if (baseTable) {
+      return baseTable.removeSelectData();
+    }
+  };
+
+  const removeAllData = () => {
+    const baseTable = baseTableRef.value;
+    if (baseTable) {
+      return baseTable.removeAllData();
+    }
+  };
+
   return {
     handleMenuClick,
     onAudit,
@@ -136,5 +157,8 @@ export default function (
     getTableData,
     reloadData,
     getInitColumn,
+    loadingNewColumn,
+    removeSelectData,
+    removeAllData,
   };
 }

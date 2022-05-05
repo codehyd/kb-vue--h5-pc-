@@ -62,6 +62,9 @@ const emit = defineEmits([
   "save-bild",
   "reloadData",
   "save-local-data",
+  "load-new-data",
+  "remove-select-data",
+  "remove-all-data",
 ]);
 
 const store = useStore();
@@ -96,15 +99,18 @@ const handleSaveClick = (row: any) => {
 };
 
 const handleAddNewRows = () => {
-  mitter.emit("base-table-add-new-rows");
+  emit("load-new-data");
+  // mitter.emit("base-table-add-new-rows");
 };
 
 const handleRemoveSelect = () => {
-  mitter.emit("base-table-remove-select-rows");
+  emit("remove-select-data");
+  // mitter.emit("base-table-remove-select-rows");
 };
 
 const handleRemoveAll = () => {
-  mitter.emit("base-table-remove-all-rows");
+  emit("remove-all-data");
+  // mitter.emit("base-table-remove-all-rows");
 };
 const handleSaveBildClick = () => {
   emit("save-bild");

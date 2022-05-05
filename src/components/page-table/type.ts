@@ -42,11 +42,26 @@ export interface IGoodTableConfig extends ITableConfigType {
   classList?: any;
   page: number;
   tj?: string;
+  // flag: "select";
 }
 
 export interface IClientTableConfig extends ITableConfigType {
   parentid: number;
   classList?: any;
   page: number;
+  tj?: string;
+}
+
+export interface IStoreinquireConfig extends ITableConfigType {
+  classid: number;
+  classList?: any;
+  page: number;
+  tj?: string;
+}
+
+export interface IHasTimerOrTj extends ITableConfigType {
+  begdate: string;
+  enddate: string;
+  page?: number;
   tj?: string;
 }
