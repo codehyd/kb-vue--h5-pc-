@@ -5,7 +5,6 @@
       <el-button @click="handleNewAddGoods">新增商品资料</el-button>
     </div>
     <el-tabs
-      addable
       @tab-add="handleTabAddClick"
       v-model="currentName"
       class="demo-tabs"
@@ -18,6 +17,7 @@
 
     <page-table
       ref="pageTableRef"
+      @db-click="handleDbClick"
       @page-change="handlePageChange"
       :tableConfig="goodListConfig"
     >
@@ -100,9 +100,26 @@ const handleTabAddClick = () => {
 const handleEditGood = async (data: any) => {
   const res = await httpGetGoodsInfo({ id: data.item.fmodelid });
   if (res.code >= 1) {
-    emit("edit-good", res.data[0].data[0]);
+    emit("edit-good", res);
   }
 };
+
+const addGoods = (rows: any) => {
+  // 先判断当前的显示样式
+  if (currentFlag.value === "table") {
+    // 如果是表格样式，则直接调用表格的编辑方法
+    pageTableRef.value!.insert(rows);
+  }
+};
+
+const handleDbClick = async (params: any) => {
+  const { row } = params;
+  handleEditGood({ item: { ...row } });
+};
+
+defineExpose({
+  addGoods,
+});
 </script>
 
 <style scoped>

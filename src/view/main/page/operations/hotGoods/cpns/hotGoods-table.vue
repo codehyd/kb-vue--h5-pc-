@@ -18,7 +18,7 @@ const props = withDefaults(
 );
 
 const tableConfig = computed(() => {
-  console.log(props.data);
+  // console.log(props.data);
   return {
     column: [
       {
@@ -81,6 +81,7 @@ const tableConfig = computed(() => {
     data: props.data,
     keyString: "",
     showAction: false,
+    loading: true,
   };
 });
 </script>

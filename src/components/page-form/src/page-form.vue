@@ -53,7 +53,12 @@ const getFormData = () => {
     kbFormRef.value
       ?.validateForm()
       ?.then((validata) => {
-        resolve(kbFormRef.value?.modelValue);
+        const formData: any = { ...(kbFormRef.value?.modelValue ?? {}) };
+        if ("confirm" in formData!) {
+          console.log(1221, kbFormRef.value?.modelValue, formData);
+          delete formData.confirm;
+        }
+        resolve(formData);
       })
       .catch((err) => {
         console.log(err);

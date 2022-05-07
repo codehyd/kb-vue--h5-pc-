@@ -1,6 +1,10 @@
 <template>
   <div class="goods">
-    <good-search :formConfig="goodSearchConfig"></good-search>
+    <good-search
+      v-model:tj="goodListConfig.tj"
+      @update:tj="handleQueryClick"
+      :formConfig="goodSearchConfig"
+    ></good-search>
 
     <good-list
       @change-tabs="handleChangeTabs"
@@ -8,9 +12,11 @@
       @new-goods="handleNewGoods"
       @edit-good="handleEditGood"
       :goodListConfig="goodListConfig"
+      ref="goodListRef"
     ></good-list>
 
     <good-edit-panel
+      v-model:images="images"
       @save-success="handleSaveSuccess"
       ref="goodEditPanel"
     ></good-edit-panel>
@@ -28,6 +34,7 @@ import { httpGetGoodsClassList } from "@/service/http/home/commit";
 import GoodEditPanel from "./cpns/good-edit-panel.vue";
 
 const goodEditPanel = ref<InstanceType<typeof GoodEditPanel>>();
+const goodListRef = ref<InstanceType<typeof GoodList>>();
 
 const goodListConfig: IGoodTableConfig = reactive({
   keyString: "",
@@ -40,6 +47,9 @@ const goodListConfig: IGoodTableConfig = reactive({
   loading: true,
   flag: "select",
 });
+
+const images = ref([]);
+
 httpGetGoodsClassList().then((res: any) => {
   goodListConfig.classList = res?.data?.[0]?.data ?? [];
 });
@@ -73,21 +83,36 @@ const handleChangePage = (val: number) => {
 };
 
 const handleNewGoods = () => {
-  goodEditPanel.value!.show = true;
   goodEditPanel.value!.defaultData = {};
   goodEditPanel.value!.id = 0;
+  images.value = [];
+  goodEditPanel.value!.show = true;
 };
 
 const handleEditGood = async (res: any) => {
+  const data = res.data[0].data[0];
+  goodEditPanel.value!.defaultData = data;
+  goodEditPanel.value!.id = data.fmodelid;
+  images.value = res.atturlarray;
   goodEditPanel.value!.show = true;
-  goodEditPanel.value!.defaultData = res;
-  goodEditPanel.value!.id = res.fmodelid;
 };
 
+const handleQueryClick = (formData: any) => {
+  // goodListConfig.tj = formData.tj;
+  goodListConfig.page = 1;
+  requestGoodList({
+    Classid: goodListConfig.Classid,
+    page: goodListConfig.page,
+    tj: goodListConfig.tj,
+  });
+};
 // console.log(data);
 
 const handleSaveSuccess = (res: any) => {
-  console.log(res);
+  const data = res.data[0].data[0];
+  goodListConfig.data?.push(data);
+  goodListRef.value?.addGoods(data);
+  // console.log(res);
 };
 </script>
 

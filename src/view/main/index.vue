@@ -22,6 +22,7 @@
         </div>
 
         <el-main class="elMain">
+          <page-tabs></page-tabs>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -42,6 +43,7 @@
 <script setup lang="ts">
 import PageHeader from "@/components/page-header";
 import PageMenus from "@/components/page-menus/src/page-menus.vue";
+import PageTabs from "@/components/page-tabs";
 import KbIcon from "@/base-ui/icon";
 
 const currentFold = ref(true);

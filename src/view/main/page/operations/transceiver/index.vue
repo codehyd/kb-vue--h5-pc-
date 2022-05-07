@@ -1,6 +1,10 @@
 <template>
   <div>
-    <page-search :searchFormConfig="searchConfig" isShowQuery></page-search>
+    <page-search
+      @query-click="handleQueryClick"
+      :searchFormConfig="searchConfig"
+      isShowQuery
+    ></page-search>
     <page-table :tableConfig="tableConfig"></page-table>
   </div>
 </template>
@@ -93,6 +97,16 @@ const getOrderData = () => {
     tj: tableConfig.tj,
     begdate: tableConfig.begdate,
     enddate: tableConfig.enddate,
+  }).then((res) => {
+    tableConfig.data = res?.data?.[0]?.data ?? [];
+  });
+};
+
+const handleQueryClick = (formData: any) => {
+  httpGetStockData({
+    tj: formData.tj,
+    begdate: formData.date[0],
+    enddate: formData.date[1],
   }).then((res) => {
     tableConfig.data = res?.data?.[0]?.data ?? [];
   });

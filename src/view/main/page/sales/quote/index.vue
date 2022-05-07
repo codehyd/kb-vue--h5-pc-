@@ -58,10 +58,10 @@ const requestData: ITableType = reactive({
 
 // 查询
 const handleQueryClick = (formData: any) => {
-  requestData.tj = formData.tj;
-  requestData.begdate = formData.begdate;
-  requestData.enddate = formData.enddate;
-  requestData.page = 1;
+  requestData.tj = formData.tj ?? requestData.tj;
+  requestData.begdate = formData.begdate ?? requestData.begdate;
+  requestData.enddate = formData.enddate ?? requestData.enddate;
+  requestData.page = formData.page ?? requestData.page;
   bildQueryContentRef.value?.getTableData();
 };
 
@@ -80,6 +80,13 @@ watchEffect(async () => {
   if (currentFlag.value === "edit") {
     const res = await getEditTableAuth(requestData.billtypeid);
     editPageTableConfig.column = res?.data?.[0]?.data ?? [];
+  } else {
+    const begdate = requestData.begdate;
+    const enddate = requestData.enddate;
+    searchConfig.searchFormConfig.formItems[1].defaultDateValue = [
+      begdate,
+      enddate,
+    ];
   }
 });
 

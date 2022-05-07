@@ -20,6 +20,7 @@
       </template>
     </base-form>
 
+    <!-- 选择客户 -->
     <template v-if="isExistClient && isShowClientPanelShow">
       <kb-dialog title="选择客户/供应商" v-model:show="isShowClientPanelShow">
         <!-- input -->
@@ -95,8 +96,8 @@ for (const item of formItems) {
     // console.log(props.defaultValue);
     formOriginData[item.field] =
       item.type === "number"
-        ? Number(props.defaultValue[item.field])
-        : props.defaultValue[item.field];
+        ? Number(props.defaultValue[item.field] ?? 0)
+        : props.defaultValue[item.field] ?? "";
     continue;
     // formOriginData[item.name] = item.defaultValue;
   }
@@ -194,7 +195,13 @@ const handleSelectClient = (row: any) => {
   formData.value.flinker = row.flinker;
   formData.value.fyewuyuan = row.fyewuyuan;
   formData.value.fmemo = row.fmemo;
-  formData.value.kehu = row.fcsname;
+  // type类型为kehu的值赋值
+  for (const item of formItems) {
+    if (item.type === "kehu") {
+      formData.value[item.field] = row.fcsname;
+    }
+  }
+
   message.success("选择客户成功");
 };
 

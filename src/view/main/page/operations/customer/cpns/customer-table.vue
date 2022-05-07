@@ -63,6 +63,7 @@ const tableConfig = computed(() => {
     data: props.data,
     keyString: "",
     showAction: false,
+    loading: true,
   };
 });
 </script>

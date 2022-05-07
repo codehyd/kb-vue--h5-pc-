@@ -5,11 +5,18 @@ import {
   IGoodListType,
   httpGetClientList,
   httpStoreInquire,
+  httpGetTableData,
 } from "@/service/http/home/commit";
 
-type IFlagType = "good" | "client" | "storeInquire";
+type IFlagType =
+  | "good"
+  | "client"
+  | "storeInquire"
+  | "financeCollections"
+  | "financePurchase"
+  | "financeExpenses";
 export default function (
-  showTableId: number,
+  showTableId: IBillid,
   flag: IFlagType,
   requestData: any,
   billtypeid?: IBillid
@@ -26,6 +33,9 @@ export default function (
     good: requestGoodList,
     client: requestClientList,
     storeInquire: requestStoreInquire,
+    financeCollections: requestBildInfo,
+    financeExpenses: requestBildInfo,
+    financePurchase: requestBildInfo,
   };
   requestFlag[flag]();
 
@@ -58,11 +68,25 @@ export default function (
     });
   }
 
+  // 获取单据信息
+  function requestBildInfo(reqData?: any) {
+    httpGetTableData(
+      reqData?.billtypeid ?? requestData?.billtypeid ?? showTableId,
+      {
+        ...(reqData ?? requestData),
+      }
+    ).then((res) => {
+      data.value = res?.data?.[0]?.data ?? [];
+      totalPage.value = res?.allpages ?? 1;
+    });
+  }
+
   return {
     column,
     data,
     totalPage,
     requestGoodList,
     requestClientList,
+    requestBildInfo,
   };
 }

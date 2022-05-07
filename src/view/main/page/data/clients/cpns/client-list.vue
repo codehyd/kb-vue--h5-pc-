@@ -1,33 +1,36 @@
 <template>
   <div class="good-list card">
-    <div @click="handleToggleClick">12123</div>
-    <el-tabs
-      addable
-      @tab-add="handleTabAddClick"
-      v-model="currentName"
-      class="demo-tabs"
-      @tab-click="handleClick"
-    >
+    <div class="options">
+      <el-button @click="handleToggleClick">切换显示样式</el-button>
+      <el-button @click="handleNewAddGoods">新增客户资料</el-button>
+    </div>
+    <el-tabs v-model="currentName" class="demo-tabs" @tab-click="handleClick">
       <template v-for="item in clientListConfig.classList" :key="item.fclassid">
         <el-tab-pane :label="item.name" :name="item.name"></el-tab-pane>
       </template>
     </el-tabs>
 
-    <template v-if="currentFlag == 'table'">
-      <page-table
-        @page-change="handlePageChange"
-        :tableConfig="clientListConfig"
-      ></page-table>
-    </template>
-    <template v-else>
-      <client-list-item :data="clientListConfig.data"></client-list-item>
-    </template>
+    <page-table
+      @db-click="handleDbClick"
+      ref="pageTableRef"
+      @page-change="handlePageChange"
+      :tableConfig="clientListConfig"
+    >
+      <template #list>
+        <client-list-item
+          @detail-click="handleDetailClick"
+          :data="clientListConfig.data"
+        ></client-list-item>
+      </template>
+    </page-table>
   </div>
 </template>
 
 <script setup lang="ts">
 import PageTable, { IClientTableConfig } from "@/components/page-table";
 import ClientListItem from "./client-list-item.vue";
+import { httpGetUserInfo } from "@/service/http/home/data";
+
 const props = withDefaults(
   defineProps<{
     clientListConfig: IClientTableConfig;
@@ -35,9 +38,13 @@ const props = withDefaults(
   {}
 );
 
-const emit = defineEmits(["change-tabs", "change-page"]);
-
-const currentFlag = ref<"list" | "table">("table");
+const emit = defineEmits([
+  "change-tabs",
+  "change-page",
+  "new-client",
+  "edit-client",
+]);
+const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
 const currentId = ref<number>(0);
 const currentName = ref<string>("");
@@ -54,11 +61,11 @@ watch(
 );
 
 const handleToggleClick = () => {
-  currentFlag.value = currentFlag.value === "table" ? "list" : "table";
+  pageTableRef.value!.currentFlag =
+    pageTableRef.value?.currentFlag === "table" ? "list" : "table";
 };
 
 const handleClick = (params: any) => {
-  // const { props } = params;
   currentName.value = params.props.name;
   currentId.value =
     props.clientListConfig?.classList?.find(
@@ -75,9 +82,27 @@ const handlePageChange = (val: number) => {
   emit("change-page", val);
 };
 
-const handleTabAddClick = () => {
-  console.log(123);
+const handleNewAddGoods = () => {
+  emit("new-client");
+};
+
+const handleDetailClick = async (data: any, index?: number) => {
+  const res = await httpGetUserInfo({ id: data.fitemid });
+  if (res.code >= 1) {
+    emit("edit-client", res);
+  }
+};
+const handleDbClick = (params: any) => {
+  // emit("");
+  console.log(params);
+  const { row } = params;
+  handleDetailClick(row);
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.options {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

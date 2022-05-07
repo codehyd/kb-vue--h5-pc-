@@ -26,22 +26,45 @@
         </div>
       </template>
       <div class="content">
-        <template
+        <vxe-list height="430" :data="billList">
+          <template #default="{ items }">
+            <div
+              class="listItem"
+              v-for="(item, index) in items"
+              :key="index + ' ' + item.finterid"
+              @click="handleListClick(items)"
+            >
+              <div class="title">
+                <b class="select">{{ item.fbillname }}</b>
+                <span>{{ item.fbillstatus }}</span>
+              </div>
+              <div class="info">
+                <div>{{ item.fkhname }}</div>
+                <div>{{ item.fbillno }}</div>
+                <div>{{ item.fdate }}</div>
+              </div>
+            </div>
+          </template>
+          <!-- <template #default="{ items }">
+            <div class="listItem" @click="handleListClick(items)">
+              <div class="title">
+                <b class="select">{{ items.fbillname }}</b>
+                <span>{{ items.fbillstatus }}</span>
+              </div>
+              <div class="info">
+                <div>{{ items.fkhname }}</div>
+                <div>{{ items.fbillno }}</div>
+                <div>{{ items.fdate }}</div>
+              </div>
+            </div>
+          </template> -->
+        </vxe-list>
+
+        <!-- <template
           v-for="(item, index) in billList"
           :key="index + ' ' + item.finterid"
         >
-          <div class="listItem" @click="handleListClick(item)">
-            <div class="title">
-              <b class="select">{{ item.fbillname }}</b>
-              <span>{{ item.fbillstatus }}</span>
-            </div>
-            <div class="info">
-              <div>{{ item.fkhname }}</div>
-              <div>{{ item.fbillno }}</div>
-              <div>{{ item.fdate }}</div>
-            </div>
-          </div>
-        </template>
+        </template> -->
         <template v-if="billList.length == 0">
           <div class="empty">
             <el-empty description="暂无数据" />

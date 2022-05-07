@@ -25,7 +25,7 @@ export default function (
   otherDetailTableConfig?: IBildQueryDetailTable
 ) {
   // 查询表格的配置
-  const tableConfig: ITableConfigType = reactive({
+  const pageTableConfig: ITableConfigType = reactive({
     keyString: "fitemid",
     column: [],
     showAction: true,
@@ -55,7 +55,7 @@ export default function (
   // 获取表格的头部数据
   const getShowTableColumn = () => {
     httpGetShowTableColumn(showBilltypeid).then((res) => {
-      tableConfig.column = res?.data?.[0]?.data ?? [];
+      pageTableConfig.column = res?.data?.[0]?.data ?? [];
       console.log(res);
     });
   };
@@ -63,8 +63,8 @@ export default function (
   // 获取查询表格的数据
   const getTableData = () => {
     httpGetTableData(reqData.billtypeid, reqData).then((res) => {
-      tableConfig.totalPage = res?.allpages ?? 1;
-      tableConfig.data = res?.data?.[0]?.data ?? [];
+      pageTableConfig.totalPage = res?.allpages ?? 1;
+      pageTableConfig.data = res?.data?.[0]?.data ?? [];
     });
   };
 
@@ -122,7 +122,7 @@ export default function (
   getTableData();
 
   return {
-    tableConfig,
+    pageTableConfig,
     getTableData,
     detailTableConfig,
     handleDbClick,

@@ -7,12 +7,19 @@
       unique-opened
       :background-color="'transparency'"
       class="el-menu-vertical-demo"
+      @open="handleOpen"
+      :default-active="defaultActive"
     >
       <template v-for="(menu, index) in menus" :key="menu.parent">
         <el-sub-menu :index="index + ''">
           <template #title>
             <!-- {{ isFold ? menu.menuTitle : menu.menuTitle[0] }} -->
-            {{ menu.menuTitle }}
+            <div
+              :class="activeIndex == index ? 'select' : ''"
+              style="--selectBg: white"
+            >
+              {{ menu.menuTitle }}
+            </div>
           </template>
           <template v-for="childMenu in menu.children">
             <el-menu-item
@@ -36,8 +43,12 @@ import { getMenuByParent } from "@/utils/mapMenus";
 const store = useStore();
 const router = useRouter();
 const menus = computed(() => store.state.login.classMenus);
+const allMenus = computed(() => store.state.login.menus);
 
 const menuIndex = ref("");
+const activeIndex = ref<number>(0);
+
+const defaultActive = ref("");
 const defaultActiveId = ref("");
 
 const handlerClickMenu = (item: any) => {
@@ -45,6 +56,26 @@ const handlerClickMenu = (item: any) => {
   menuIndex.value = item.id + "";
   router.push("/main" + item.path);
   // emit("menu-click");
+};
+
+const route = useRoute();
+
+watch(
+  () => route,
+  (val: any) => {
+    const path = val.fullPath;
+
+    defaultActive.value =
+      allMenus.value.find((item: any) => "/main" + item.path == path)?.id + "";
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
+
+const handleOpen = (params: any) => {
+  activeIndex.value = params;
 };
 </script>
 

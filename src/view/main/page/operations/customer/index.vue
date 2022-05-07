@@ -1,6 +1,9 @@
 <template>
   <div class="hotGoods">
-    <customer-search :searchConfig="customerSearchConfig"></customer-search>
+    <customer-search
+      @query-click="handleQueryClick"
+      :searchConfig="customerSearchConfig"
+    ></customer-search>
     <customer-chart :config="customerSearchConfig"></customer-chart>
     <customer-table :data="data"></customer-table>
   </div>
@@ -26,6 +29,12 @@ const getHotGoodsData = async () => {
   const res = await httpGetCustomerContributeData(tableConfig);
   customerConfig.value = res;
   data.value = res?.data?.[0]?.data;
+};
+
+const handleQueryClick = (formData: any) => {
+  tableConfig.begdate = formData.date[0];
+  tableConfig.enddate = formData.date[1];
+  getHotGoodsData();
 };
 
 getHotGoodsData();

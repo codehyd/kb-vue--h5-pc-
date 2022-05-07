@@ -1,18 +1,38 @@
 <template>
   <div class="good-search card">
-    <page-form isHasConfirm :formConfig="formConfig"></page-form>
+    <page-search
+      ref="pageFormRef"
+      isShowQuery
+      @query-click="handleQueryClick"
+      :searchFormConfig="formConfig"
+    ></page-search>
   </div>
 </template>
 
 <script setup lang="ts">
-import PageForm from "@/components/page-form";
+import PageSearch from "@/components/page-search";
 
 const props = withDefaults(
   defineProps<{
     formConfig: any;
+    tj?: string;
   }>(),
-  {}
+  {
+    tj: "",
+  }
 );
+const emit = defineEmits(["query-click", "update:tj"]);
+
+const pageFormRef = ref<InstanceType<typeof PageSearch>>();
+
+const handleQueryClick = (formData: any) => {
+  // emit("query-click", formData);
+  emit("update:tj", formData.tj);
+};
+
+// defineExpose({
+//   getCurrentFormData,
+// });
 </script>
 
 <style scoped>

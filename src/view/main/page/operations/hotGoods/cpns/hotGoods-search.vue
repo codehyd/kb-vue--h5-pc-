@@ -1,6 +1,10 @@
 <template>
   <div class="hotGoods-searach">
-    <page-search :searchFormConfig="searchConfig" isShowQuery></page-search>
+    <page-search
+      @query-click="handleQueryClick"
+      :searchFormConfig="searchConfig"
+      isShowQuery
+    ></page-search>
   </div>
 </template>
 
@@ -13,6 +17,11 @@ const props = withDefaults(
   }>(),
   {}
 );
+const emit = defineEmits(["query-click"]);
+
+const handleQueryClick = (formData: any) => {
+  emit("query-click", formData);
+};
 </script>
 
 <style scoped></style>

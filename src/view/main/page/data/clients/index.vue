@@ -1,11 +1,23 @@
 <template>
   <div class="goods">
-    <client-search :formConfig="clientSearchConfig"></client-search>
+    <client-search
+      v-model:tj="clientListConfig.tj"
+      @update:tj="handleUpdateTj"
+      :formConfig="clientSearchConfig"
+    ></client-search>
+
     <client-list
       @change-tabs="handleChangeTabs"
       @change-page="handleChangePage"
+      @new-client="handleNewClient"
+      @edit-client="handleEditClient"
       :clientListConfig="clientListConfig"
     ></client-list>
+
+    <client-edit-panel
+      ref="clientEditPanelRef"
+      :data="clientListConfig.data"
+    ></client-edit-panel>
   </div>
 </template>
 
@@ -16,6 +28,9 @@ import ClientList from "./cpns/client-list.vue";
 import { IClientTableConfig } from "@/components/page-table";
 import requestTable from "@/hooks/request-table";
 import { httpGetClientClassList } from "@/service/http/home/commit";
+import ClientEditPanel from "./cpns/client-edit-panel.vue";
+
+const clientEditPanelRef = ref<InstanceType<typeof ClientEditPanel>>();
 
 const clientListConfig: IClientTableConfig = reactive({
   keyString: "",
@@ -58,6 +73,23 @@ const handleChangePage = (val: number) => {
     page: clientListConfig.page,
     tj: clientListConfig.tj,
   });
+};
+
+const handleUpdateTj = () => {
+  handleChangePage(1);
+};
+
+const handleNewClient = () => {
+  clientEditPanelRef.value!.show = true;
+  clientEditPanelRef.value!.defaultData = {};
+  clientEditPanelRef.value!.id = 0;
+};
+
+const handleEditClient = (res: any) => {
+  const data = res.data[0].data[0];
+  clientEditPanelRef.value!.show = true;
+  clientEditPanelRef.value!.defaultData = data;
+  clientEditPanelRef.value!.id = data.fitemid;
 };
 </script>
 

@@ -17,7 +17,7 @@
         ref="pageTableRef"
         @db-click="handleDbClick"
         @page-change="handlePageChange"
-        :table-config="tableConfig"
+        :table-config="pageTableConfig"
         :billtypeid="billtypeid"
       ></page-table>
     </div>
@@ -74,7 +74,7 @@ const store = useStore();
 const detailPanelRef = ref<InstanceType<typeof DetailPanel>>();
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
-const { tableConfig, getTableData, detailTableConfig, handleDbClick } =
+const { pageTableConfig, getTableData, detailTableConfig, handleDbClick } =
   useTableHooks(
     props.data,
     props.showColumnBilltypeid,
@@ -94,6 +94,7 @@ const handleQueryClick = (data: any) => {
 };
 // 修改页码
 const handlePageChange = (val: number) => {
+  pageTableConfig.page = val;
   emit("query-click", {
     ...props.data,
     page: val,
@@ -132,6 +133,12 @@ const handleActiveClick = (type: activeType, rows: any) => {
 
   methods[type] && methods[type]();
 };
+
+const newTableConfig = computed(() => {
+  return {
+    ...props.tableConfig,
+  };
+});
 
 // 导出方法
 defineExpose({

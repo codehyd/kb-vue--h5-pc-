@@ -80,6 +80,13 @@ watchEffect(async () => {
   if (currentFlag.value === "edit") {
     const res = await getEditTableAuth(requestData.billtypeid);
     editPageTableConfig.column = res?.data?.[0]?.data ?? [];
+  } else {
+    const begdate = requestData.begdate;
+    const enddate = requestData.enddate;
+    searchConfig.searchFormConfig.formItems[1].defaultDateValue = [
+      begdate,
+      enddate,
+    ];
   }
 });
 

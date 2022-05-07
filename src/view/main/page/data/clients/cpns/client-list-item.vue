@@ -78,6 +78,7 @@ const props = withDefaults(
   }>(),
   {}
 );
+const emit = defineEmits(["detail-click"]);
 const colLayout = {
   xs: 24,
   sm: 24,
@@ -86,14 +87,8 @@ const colLayout = {
   xl: 6,
 };
 
-const mapCardTitle = (item: any) => {
-  return !item.fname
-    ? item.fname + item.fxinghao
-    : item.fname + " / " + item.fxinghao;
-};
-
 const handlerBtnClick = (item: any, index: number) => {
-  // emit("btnClick", item, index);
+  emit("detail-click", item, index);
 };
 </script>
 

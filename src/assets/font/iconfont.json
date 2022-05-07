@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1490585",
+      "name": "货款_1",
+      "font_class": "huokuan_",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "7738010",
+      "name": "收款",
+      "font_class": "shoukuan",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
+      "icon_id": "23267113",
+      "name": "期初欠款管理",
+      "font_class": "qichuqiankuanguanli",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "26740056",
+      "name": "往来单位欠款表",
+      "font_class": "wanglaidanweiqiankuanbiao",
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
+    },
+    {
       "icon_id": "1489084",
       "name": "缩小",
       "font_class": "suoxiao",

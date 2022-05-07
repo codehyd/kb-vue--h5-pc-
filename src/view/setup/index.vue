@@ -5,7 +5,8 @@
         <page-header></page-header>
       </el-header>
       <el-container>
-        <el-aside class="elAside">
+        123
+        <!-- <el-aside class="elAside">
           <el-tabs tab-position="left" style="height: 200px" class="demo-tabs">
             <el-tab-pane label="User"></el-tab-pane>
             <el-tab-pane label="Config"></el-tab-pane>
@@ -19,7 +20,7 @@
             <set-wrap></set-wrap>
             <faq-wrap></faq-wrap>
           </div>
-        </el-main>
+        </el-main> -->
       </el-container>
     </el-container>
   </div>

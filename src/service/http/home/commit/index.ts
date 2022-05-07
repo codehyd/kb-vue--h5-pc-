@@ -160,7 +160,7 @@ export const httpStoreInquire = (params: IStoreInquireType) => {
 };
 
 // 提交保存 post
-export const httpPostSave = (data: ISaveBildType) => {
+export const httpPostSave = (data: ISaveBildType | any) => {
   return kbBaseRequest.request({
     url: "/gosetbillsubmit_post",
     data: {
@@ -183,11 +183,18 @@ export const httpGetTableData = (id: IBillid, params: ITableType) => {
     4000: "gogetproduceplanbilltotallist_page",
     111: "gogetprocureorderbilltotallist_page",
     112: "gogetstockbilltotallist_page",
+    113: "gogetfukuanlist_page",
     114: "gogetstockbilltotallist_page",
+    104: "gogetshoukuanlist_page",
+    150: "gogetshouruzhichulist",
+    151: "gogetshouruzhichulist",
   };
   return kbBaseRequest.request({
     url: "/" + urls[id],
-    params,
+    params: {
+      ...params,
+      // count: 2,
+    },
   });
 };
 
@@ -210,6 +217,14 @@ export const httpGetDetailTableData = (
   };
   return kbBaseRequest.request({
     url: "/" + urls[id],
+    params,
+  });
+};
+
+// 获取销售对账单数据
+export const httpGetSaleCheckData = (params: any) => {
+  return kbBaseRequest.request({
+    url: "/gorptsalestatement",
     params,
   });
 };

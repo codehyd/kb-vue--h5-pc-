@@ -42,3 +42,9 @@ export const addDynamicRoutes = (menus: any[]): RouteRecordRaw[] => {
 
   return allRoutes;
 };
+
+// // 通过path路径去获取路由的id
+// export const getRouteId = (menus: any[], path: string) => {
+//   const allRoutes = [];
+
+// };

@@ -355,7 +355,7 @@ const handleDeleteClick = (item: any) => {
   padding: 10px;
 
   .options {
-    position: sticky;
+    // position: sticky;
     top: 0;
     z-index: 99;
     background-color: white;

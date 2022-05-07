@@ -1,6 +1,9 @@
 <template>
   <div class="hotGoods">
-    <hot-goods-search :searchConfig="hotGoodsSearchConfig"></hot-goods-search>
+    <hot-goods-search
+      @query-click="handleQueryClick"
+      :searchConfig="hotGoodsSearchConfig"
+    ></hot-goods-search>
     <hot-goods-chart :config="hotGoodsConfig"></hot-goods-chart>
     <hot-goods-table :data="data"></hot-goods-table>
   </div>
@@ -28,6 +31,11 @@ const getHotGoodsData = async () => {
   data.value = res?.data?.[0]?.data;
 };
 
+const handleQueryClick = (formData: any) => {
+  tableConfig.begdate = formData.date[0];
+  tableConfig.enddate = formData.date[1];
+  getHotGoodsData();
+};
 getHotGoodsData();
 </script>
 
