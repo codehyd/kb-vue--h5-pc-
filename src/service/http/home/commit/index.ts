@@ -229,4 +229,11 @@ export const httpGetSaleCheckData = (params: any) => {
   });
 };
 
+// 销售对账单打印
+export const httpGetSaleCheckPrint = (params: any) => {
+  return kbBaseRequest.request({
+    url: "/gorptsalestatement",
+    params,
+  });
+};
 export * from "./type";

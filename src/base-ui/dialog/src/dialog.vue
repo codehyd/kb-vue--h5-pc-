@@ -20,6 +20,7 @@
           </slot>
           <span class="icons">
             <kb-icon
+              v-if="isFullscreenIcon"
               @click="handleFullscreenClick"
               style="margin-right: 5px"
               :name="fullscreen ? 'icon-tuichuquanping' : 'icon-quanping'"
@@ -53,6 +54,7 @@ const props = withDefaults(
     draggable?: boolean;
     destroyOnClose?: boolean;
     isBeforeClose?: boolean;
+    isFullscreenIcon?: boolean;
   }>(),
   {
     title: "",
@@ -62,6 +64,7 @@ const props = withDefaults(
     draggable: false,
     destroyOnClose: true,
     isBeforeClose: false,
+    isFullscreenIcon: true,
   }
 );
 

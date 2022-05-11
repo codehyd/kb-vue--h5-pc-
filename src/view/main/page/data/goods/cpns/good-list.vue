@@ -1,15 +1,6 @@
 <template>
   <div class="good-list card">
-    <div class="options">
-      <el-button @click="handleToggleClick">切换显示样式</el-button>
-      <el-button @click="handleNewAddGoods">新增商品资料</el-button>
-    </div>
-    <el-tabs
-      @tab-add="handleTabAddClick"
-      v-model="currentName"
-      class="demo-tabs"
-      @tab-click="handleClick"
-    >
+    <el-tabs v-model="currentName" class="demo-tabs" @tab-click="handleClick">
       <template v-for="item in goodListConfig.classList" :key="item.fclassid">
         <el-tab-pane :label="item.name" :name="item.name"></el-tab-pane>
       </template>
@@ -42,12 +33,7 @@ const props = withDefaults(
   {}
 );
 
-const emit = defineEmits([
-  "change-tabs",
-  "change-page",
-  "new-goods",
-  "edit-good",
-]);
+const emit = defineEmits(["change-tabs", "change-page", "edit-good"]);
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
 const currentFlag = ref<"list" | "table">("table");
@@ -72,7 +58,6 @@ const handleToggleClick = () => {
 };
 
 const handleClick = (params: any) => {
-  // const { props } = params;
   currentName.value = params.props.name;
   currentId.value =
     props.goodListConfig?.classList?.find(
@@ -87,14 +72,6 @@ const handleClick = (params: any) => {
 
 const handlePageChange = (val: number) => {
   emit("change-page", val);
-};
-
-const handleNewAddGoods = () => {
-  emit("new-goods");
-};
-
-const handleTabAddClick = () => {
-  console.log(123);
 };
 
 const handleEditGood = async (data: any) => {
@@ -119,12 +96,8 @@ const handleDbClick = async (params: any) => {
 
 defineExpose({
   addGoods,
+  handleToggleClick,
 });
 </script>
 
-<style scoped>
-.options {
-  display: flex;
-  justify-content: flex-end;
-}
-</style>
+<style scoped></style>

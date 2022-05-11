@@ -3,6 +3,7 @@
     <kb-dialog v-model:show="isShowPanel">
       <header class="bildHeader">
         <h2>{{ clientInfo.fbillno }}</h2>
+        <!-- status -->
         <div class="billStatus">
           <template
             v-for="(item, index) in tableConfig.status"
@@ -14,8 +15,9 @@
                   ? item.successType
                   : item.failType
               "
-              >{{ clientInfo[item.field] }}</el-tag
             >
+              {{ clientInfo[item.field] }}
+            </el-tag>
             <el-divider
               v-if="index != tableConfig.status.length - 1"
               direction="vertical"

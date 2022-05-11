@@ -3,6 +3,7 @@ import { App } from "vue";
 import "element-plus/dist/index.css";
 
 import {
+  ElAlert,
   ElAside,
   ElAvatar,
   ElBreadcrumb,
@@ -15,6 +16,8 @@ import {
   ElCol,
   ElContainer,
   ElDatePicker,
+  ElDescriptions,
+  ElDescriptionsItem,
   ElDialog,
   ElDivider,
   ElDrawer,
@@ -100,6 +103,9 @@ const components = [
   ElInputNumber,
   ElPageHeader,
   ElPagination,
+  ElDescriptions,
+  ElDescriptionsItem,
+  ElAlert,
 ];
 
 export default function (app: App): void {

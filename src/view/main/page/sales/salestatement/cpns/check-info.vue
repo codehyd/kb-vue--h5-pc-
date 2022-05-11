@@ -38,15 +38,28 @@
         </div>
       </el-col>
     </el-row>
-    <page-table
-      @page-change="handlePageChange"
-      :tableConfig="tableConfig"
-    ></page-table>
+
+    <div class="card">
+      <div class="options">
+        <el-button disabled @click="handleBtnFlagClick('share')">
+          分享
+        </el-button>
+        <el-button @click="handleBtnFlagClick('printpng')">预览png</el-button>
+        <el-button @click="handleBtnFlagClick('printpdf')">打印预览</el-button>
+      </div>
+
+      <page-table
+        @db-click="handleDbClick"
+        @page-change="handlePageChange"
+        :tableConfig="tableConfig"
+      >
+      </page-table>
+    </div>
 
     <page-bild-detail-table
       ref="pageBildDetailTableRef"
       :tableConfig="detailTableConfig"
-      :clientConfig="clientConfig"
+      :billtypeid="billtype"
     ></page-bild-detail-table>
   </div>
 </template>
@@ -54,12 +67,19 @@
 <script setup lang="ts">
 import format from "@/utils/format";
 import KbIcon from "@/base-ui/icon";
-import PageTable, { PageBildDetailTable } from "@/components/page-table";
+import PageTable, { IDetailTableConfig } from "@/components/page-table";
+import PageBildDetailTable from "@/components/bild-query-content/src/cpns/detail-panel.vue";
 
 import {
-  httpGetSaleCheckData,
   httpGetShowTableColumn,
+  httpGetEditTableColumn,
+  httpGetDetailTableData,
+  // httpGetSaleCheckPrint,
 } from "@/service/http/home/commit";
+
+import { detailTableConfig as detailTable103 } from "@/view/main/page/sales/delivery/config/bild-query-content";
+import { detailTableConfig as detailTable105 } from "@/view/main/page/sales/refund/config/bild-query-content";
+// import message from "@/utils/message";
 
 const props = withDefaults(
   defineProps<{
@@ -81,14 +101,16 @@ const colLayout = {
   xl: 6,
 };
 
-const emit = defineEmits(["update:page", "page-change"]);
+const emit = defineEmits(["update:page", "page-change", "flag-click"]);
+
+const pageBildDetailTableRef = ref<InstanceType<typeof PageBildDetailTable>>();
 
 const formatPrice = (price?: number) => {
   if (!price) return 0.0;
   return format.formatMoney(price * 100);
 };
 
-const column = ref([]);
+const column = ref<any[]>([]);
 const tableConfig = computed(() => {
   const res = props.data;
   return {
@@ -97,20 +119,17 @@ const tableConfig = computed(() => {
     data: res?.data?.[0]?.data ?? [],
     loading: true,
     isShowPage: true,
-    totalPage: res?.data?.[0]?.data?.[0].allpages ?? 1,
+    totalPage: res?.data?.[0]?.data?.[0]?.allpages ?? 1,
     page: props.page,
   };
 });
 
-const detailTableConfig = computed(() => {
-  return {
-    keyString: "",
-  };
+const detailTableConfig: IDetailTableConfig = reactive({
+  keyString: "",
+  showAction: false,
 });
 
-const clientConfig = computed(() => {
-  return [];
-});
+const billtype = ref();
 
 httpGetShowTableColumn(1001).then((res) => {
   column.value = res?.data?.[0]?.data ?? [];
@@ -118,6 +137,40 @@ httpGetShowTableColumn(1001).then((res) => {
 
 const handlePageChange = (val: number) => {
   emit("update:page", val);
+};
+
+const handleDbClick = (params: any) => {
+  const { row } = params;
+  console.log(row);
+  getDetailTableData(row);
+  pageBildDetailTableRef.value!.isShowPanel = true;
+};
+
+const getDetailTableData = (row: any) => {
+  billtype.value = row.ftype;
+  httpGetEditTableColumn(row.ftype).then((res) => {
+    detailTableConfig.column = res?.data?.[0]?.data ?? [];
+  });
+  httpGetDetailTableData(row.ftype, {
+    billtypeid: row.ftype,
+    billid: row.finterid,
+  }).then((res) => {
+    detailTableConfig.data = res?.data?.[0]?.data ?? [];
+    detailTableConfig.images = res?.atturlarray ?? [];
+    detailTableConfig.messages = res?.message?.[0]?.data ?? [];
+    // 单据状态
+    detailTableConfig.status =
+      row.ftype == 103 ? detailTable103.status : detailTable105.status;
+    // 单据客户信息
+    detailTableConfig.clientConfig =
+      row.ftype == 103
+        ? detailTable103.clientConfig
+        : detailTable105.clientConfig;
+  });
+};
+
+const handleBtnFlagClick = (type: any) => {
+  emit("flag-click", type);
 };
 </script>
 
@@ -145,6 +198,11 @@ const handlePageChange = (val: number) => {
   flex-direction: column;
   justify-content: space-between;
   font-weight: 600;
+}
+.options {
+  margin: 0 0 10px 0;
+  display: flex;
+  justify-content: flex-end;
 }
 /* 媒体查询 */
 </style>

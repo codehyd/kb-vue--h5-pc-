@@ -37,6 +37,7 @@ const getTaskTokenData = () => {
     tokenData.uid = token?.uid ?? "";
     tokenData.uname = token?.uname ?? "";
     tokenData.upwd = token?.upwd ?? "";
+    tokenData.openid = token?.openid ?? "webopenid";
   }
   return tokenData;
 };

@@ -1,6 +1,6 @@
 <template>
   <!-- <div> -->
-  <kb-dialog title="商品资料" v-model:show="show">
+  <kb-dialog title="商品资料" :width="65" v-model:show="show">
     <page-search
       :defaultValue="defaultData"
       ref="pageSearchRef"
@@ -13,7 +13,7 @@
       </div>
     </template>
     <template #footer>
-      <el-button @click="handleSaveClick">保存提交</el-button>
+      <el-button type="primary" @click="handleSaveClick">保存提交</el-button>
     </template>
   </kb-dialog>
   <!-- </div> -->

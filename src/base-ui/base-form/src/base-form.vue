@@ -1,6 +1,7 @@
 <template>
   <div class="base-form">
     <el-form
+      @submit.native.prevent
       :inline="inline"
       ref="elFormRef"
       :model="modelValue"

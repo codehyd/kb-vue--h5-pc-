@@ -1,6 +1,10 @@
 <template>
   <div class="bar-echart card">
-    <base-echart :options="options"></base-echart>
+    <slot name="left"></slot>
+    <div class="echart">
+      <base-echart :options="options"></base-echart>
+    </div>
+    <slot name="right"></slot>
   </div>
 </template>
 
@@ -123,4 +127,12 @@ const options = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.bar-echart {
+  display: flex;
+  flex-wrap: wrap;
+}
+.echart {
+  flex: 1;
+}
+</style>

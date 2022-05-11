@@ -6,6 +6,9 @@
       @query-click="handleQueryClick"
       :searchFormConfig="formConfig"
     ></page-search>
+    <div class="options">
+      <slot name="options"></slot>
+    </div>
   </div>
 </template>
 
@@ -38,5 +41,9 @@ const handleQueryClick = (formData: any) => {
 <style scoped>
 .good-search {
   margin-bottom: 20px;
+}
+.options {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

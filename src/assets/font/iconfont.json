@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4618029",
+      "name": "销售笔数",
+      "font_class": "xiaoshoubishu",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "8624290",
+      "name": "收款金额",
+      "font_class": "shoukuanjine",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "19760121",
+      "name": "退货笔数",
+      "font_class": "tuihuobishu",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "20217443",
+      "name": "销售利润",
+      "font_class": "xiaoshoulirun",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
       "icon_id": "1490585",
       "name": "货款_1",
       "font_class": "huokuan_",

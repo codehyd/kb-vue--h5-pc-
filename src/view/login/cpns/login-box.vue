@@ -81,12 +81,11 @@ import AuthCode from "./auth-code.vue";
 import WxLogin from "./wx-login.vue";
 import { accountData, rules } from "../config";
 import { softOptions } from "@/config";
-import { httpAccount } from "@/service/http/login";
+import { httpAccount, useWxScanLogin } from "@/service/http/login";
 
 const store = useStore();
 
 const labelWidth = ref("120px");
-
 const token = computed(() => store.state.login.token);
 
 watchEffect(() => {
@@ -117,8 +116,14 @@ const handleThirdWxClick = () => {
   isShowWxScanPanel.value = true;
 };
 
+let openid = "webopenid";
+
 // 账号登录
-const handleLoginClick = () => {
+const handleLoginClick = async (flag?: "wxcsan") => {
+  if (flag == "wxcsan") {
+    const res = await httpAccount({ ...accountData.value, openid });
+    store.dispatch("login/account", res);
+  }
   elFormRef.value?.validate().then(async (valid) => {
     if (valid) {
       // 先判断验证码是否正确
@@ -129,8 +134,9 @@ const handleLoginClick = () => {
         authCodeRef.value?.refreshCode();
         return;
       }
+      // console.log({ ...accountData.value, openid });
       // 发送登录请求
-      const res = await httpAccount(accountData.value);
+      const res = await httpAccount({ ...accountData.value, openid });
       if (res.code >= 1) {
         store.dispatch("login/account", res);
       } else {
@@ -145,6 +151,39 @@ const handleLoginClick = () => {
 };
 
 accountData.value.authCode = "";
+
+// 监听路由
+const route = useRoute();
+
+watch(
+  () => route,
+  (val) => {
+    const appid = (val?.query?.appid ?? "") as string;
+    const code = (val?.query?.code ?? "") as string;
+    const sns = (val?.query?.sns ?? "") as string;
+    if (appid && code && sns) {
+      useWxScanLogin({ appid, code, sns }).then((res) => {
+        openid = res?.openid ?? "webopenid";
+        if (res.code == 2) {
+          message.messageBox("扫码登录结果", res.msg).then((res) => {
+            isShowWxScanPanel.value = false;
+          });
+        } else if (res.code == 1) {
+          accountData.value.csname = res.scname;
+          accountData.value.cnstr = res.scname;
+          accountData.value.sns = res.softname;
+          accountData.value.uname = res.username;
+          accountData.value.upwd = res.userpassword;
+          handleLoginClick("wxcsan");
+        }
+      });
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 </script>
 
 <style lang="less" scoped>

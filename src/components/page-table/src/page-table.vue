@@ -5,8 +5,13 @@
         ref="baseTableRef"
         @menu-click="handleMenuClick"
         @db-click="handleDbClick"
+        @expand="handleExpand"
         v-bind="autoTableConfig"
       >
+        <!-- 条码 -->
+        <template #fcptiaoma="{ row, column }">
+          <kb-barcode card :barcode="row.fcptiaoma"></kb-barcode>
+        </template>
         <!-- 编辑模式 -->
         <template #edit="{ row, column, rowIndex }">
           <edit-table-column
@@ -16,6 +21,17 @@
             v-model="row[column.field]"
             @update:modelValue="handleUpdateModelValue"
           ></edit-table-column>
+        </template>
+        <template #expand="{ row, column, rowIndex }">
+          <div class="expand">
+            <slot
+              name="tableContent"
+              :row="row"
+              :column="column"
+              :rowIndex="rowIndex"
+            >
+            </slot>
+          </div>
         </template>
         <!-- 操作选项 -->
         <template #table-active="{ row, column, rowIndex }">
@@ -38,6 +54,7 @@
         </template>
       </base-table>
     </template>
+
     <template v-else>
       <slot name="list"></slot>
     </template>
@@ -59,6 +76,7 @@
 </template>
 
 <script setup lang="ts">
+import KbBarcode from "@/base-ui/barcode";
 import BaseTable, { ITableConfigType } from "@/base-ui/table";
 import KbDialog from "@/base-ui/dialog";
 import ActiveItem from "./cpns/active-item.vue";
@@ -83,7 +101,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["on-detail", "db-click", "page-change"]);
+const emit = defineEmits(["on-detail", "db-click", "page-change", "expand"]);
 const currentFlag = ref<"list" | "table">("table");
 
 // 操作面板点击事件
@@ -115,6 +133,7 @@ const {
   loadingNewColumn,
   removeSelectData,
   removeAllData,
+  // onCheckPrint,
 } = useMenuHooks(
   props.billtypeid!,
   auditCallback,
@@ -253,6 +272,10 @@ function editFooterMethod() {
   }
 }
 
+const handleExpand = (params: any) => {
+  const { row, expand } = params;
+  emit("expand", row);
+};
 // const handleUpdateModelValue = (val: any, key: string, row: any) => {};
 
 defineExpose({
@@ -267,7 +290,13 @@ defineExpose({
   removeSelectData,
   removeAllData,
   currentFlag,
+  // onCheckPrint,
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.expand {
+  /* display: flex; */
+  margin: 20px;
+}
+</style>

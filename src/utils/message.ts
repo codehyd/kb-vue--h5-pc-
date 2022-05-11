@@ -74,13 +74,15 @@ class message {
     type?: MessageType,
     dangerouslyUseHTMLString?: boolean,
     isShowCancelBtn: boolean = true,
-    isShowClose: boolean = true
+    isShowClose: boolean = true,
+    confirmSuccessText?: string,
+    cancelSuccessText?: string
   ) {
     return new Promise((resolve, reject) => {
       ElMessageBox.confirm(content, title, {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        showCancelButton: isShowCancelBtn,
+        confirmButtonText: confirmSuccessText,
+        cancelButtonText: cancelSuccessText ?? "确定",
+        showCancelButton: isShowCancelBtn ?? "取消",
         showClose: isShowClose,
         dangerouslyUseHTMLString: dangerouslyUseHTMLString ?? false,
         type,

@@ -49,7 +49,7 @@ export default function (mode: ImodeType) {
       store.state.setup.config?.["pc-table"]?.setup?.find(
         (item: any) => item.id == "isOpenVirtualScroll"
       )?.value ?? false;
-    console.log(isOpenVirtualScroll);
+    // console.log(isOpenVirtualScroll);
     return isOpenVirtualScroll
       ? {
           "scroll-x": {

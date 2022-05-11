@@ -4,12 +4,18 @@
       v-model:tj="goodListConfig.tj"
       @update:tj="handleQueryClick"
       :formConfig="goodSearchConfig"
-    ></good-search>
+    >
+      <template #options>
+        <el-button type="info" @click="handleToggleClick">切换样式</el-button>
+        <el-button icon="CirclePlus" @click="handleNewGoods">
+          新增商品
+        </el-button>
+      </template>
+    </good-search>
 
     <good-list
       @change-tabs="handleChangeTabs"
       @change-page="handleChangePage"
-      @new-goods="handleNewGoods"
       @edit-good="handleEditGood"
       :goodListConfig="goodListConfig"
       ref="goodListRef"
@@ -98,7 +104,6 @@ const handleEditGood = async (res: any) => {
 };
 
 const handleQueryClick = (formData: any) => {
-  // goodListConfig.tj = formData.tj;
   goodListConfig.page = 1;
   requestGoodList({
     Classid: goodListConfig.Classid,
@@ -106,13 +111,17 @@ const handleQueryClick = (formData: any) => {
     tj: goodListConfig.tj,
   });
 };
-// console.log(data);
 
 const handleSaveSuccess = (res: any) => {
   const data = res.data[0].data[0];
   goodListConfig.data?.push(data);
   goodListRef.value?.addGoods(data);
-  // console.log(res);
+};
+
+// const currentIcon = ref("Menu");
+const handleToggleClick = () => {
+  goodListRef.value?.handleToggleClick();
+  // currentIcon.value == "Tickets" ? "Menu" : "Tickets";
 };
 </script>
 

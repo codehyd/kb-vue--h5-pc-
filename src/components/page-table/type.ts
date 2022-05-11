@@ -11,7 +11,7 @@ export interface ITableActiveConfigType {
   optionType: string;
 }
 
-export type activeType = "audit" | "print" | "anotherList";
+export type activeType = "audit" | "print" | "anotherList" | "checkPrint";
 export interface IBildActiveType {
   text: string;
   type: activeType;

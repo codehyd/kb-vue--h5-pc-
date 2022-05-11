@@ -49,3 +49,51 @@ export const httpGetStockData = (params: any) => {
     params,
   });
 };
+
+// 获取客户统计的数据
+export const httpGetCustomerCountData = (params: any) => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/gorptsalecustomertotal",
+    params,
+  });
+};
+
+// 获取客户统计的详情
+export const httpGetCustomerCountDetailData = (params: any) => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/gorptsalecustomerdetail",
+    params,
+  });
+};
+
+// 获取商品统计的数据
+export const httpGetGoodsCountData = (params: any) => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/gorptsaleproducttotal",
+    params,
+  });
+};
+
+// 获取商品统计的详情
+export const httpGetGoodsCountDetailData = (params: any) => {
+  return kbBaseRequest.request<IDataType>({
+    url: "/gorptsaleproductdetail",
+    params,
+  });
+};
+
+// 获取业绩排行数据
+export const httpGetAchievementData = (params: any) => {
+  return kbBaseRequest.request<any>({
+    url: "/gorptsaleyewuyuanrank",
+    params,
+  });
+};
+
+// 获取经营看板数据
+export const httpGetOperationsData = (params: any) => {
+  return kbBaseRequest.request<any>({
+    url: "/gorptjingyingkanban",
+    params,
+  });
+};

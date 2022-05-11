@@ -9,29 +9,17 @@ const KbBaseRequest = new baseRequest({
   baseURL: baseUrl,
   interceptors: {
     requestInterceptor: (config) => {
-      // const tokenData: any = {};
-      // const token = local.getCache("token2.x")
-      //   ? base64.decodeToObj(local.getCache("token2.x"))
-      //   : "";
-      // if (token) {
-      //   tokenData.sns = token?.softname ?? "";
-      //   tokenData.csname = token?.csname ?? "";
-      //   tokenData.cnstr = token?.csname ?? "";
-      //   tokenData.uid = token?.uid ?? "";
-      //   tokenData.uname = token?.uname ?? "";
-      //   tokenData.upwd = token?.upwd ?? "";
-      // }
       if (config.method === "get") {
         config.params = {
+          ...getTaskBaseData(),
           ...getTaskTokenData(),
           ...config.params,
-          ...getTaskBaseData(),
         };
       } else if (config.method === "post") {
         config.data = qs.stringify({
+          ...getTaskBaseData(),
           ...getTaskTokenData(),
           ...config.data,
-          ...getTaskBaseData(),
         });
         // config.headers = { "content-type": "multipart/form-data" };
       }

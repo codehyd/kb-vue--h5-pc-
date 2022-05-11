@@ -69,7 +69,7 @@ const selectSoft = ref("");
 // 第二步: 微信扫码
 const wxLoginSrc = ref("");
 const appid = "wxa38fd5a19f010be2";
-let wxRequestUrl = "https://t.dianlan8.com/#/wxlogin?appid=";
+let wxRequestUrl = "https://t.dianlan8.com/#/login?appid=";
 let state = "";
 
 // 监听软件系统变化 切换第二步 并且设置微信登录链接

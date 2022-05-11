@@ -8,16 +8,16 @@
         <div class="aside" :style="{ width: currentFold ? '200px' : '0px' }">
           <page-menus></page-menus>
           <div
-            v-drag
+            v-elDrag="{ x: false, y: true, onclick: handleFoldIconClick }"
             class="flodIcon"
             :style="{ left: foldIcon ? '200px' : '0px' }"
           >
-            <kb-icon
-              @click="handleFoldIconClick"
+            123
+            <!-- <kb-icon
               :name="foldIcon ? 'Fold' : 'Expand'"
               :size="22"
               flag="elIcon"
-            ></kb-icon>
+            ></kb-icon> -->
           </div>
         </div>
 
@@ -51,14 +51,15 @@ const isShowDrawer = ref(false);
 const foldIcon = ref(true);
 
 const handleFoldIconClick = () => {
-  // 获取当前分辨率
-  const width = document.body.clientWidth;
-  if (width >= 992) {
-    currentFold.value = !currentFold.value;
-  } else {
-    isShowDrawer.value = !isShowDrawer.value;
-  }
-  foldIcon.value = !foldIcon.value;
+  console.log(123);
+  // // 获取当前分辨率
+  // const width = document.body.clientWidth;
+  // if (width >= 992) {
+  //   currentFold.value = !currentFold.value;
+  // } else {
+  //   isShowDrawer.value = !isShowDrawer.value;
+  // }
+  // foldIcon.value = !foldIcon.value;
 };
 </script>
 
@@ -74,7 +75,7 @@ const handleFoldIconClick = () => {
 }
 
 .flodIcon {
-  position: absolute;
+  // position: absolute;
   top: 60px;
   left: 200px;
   display: flex;

@@ -11,12 +11,19 @@ const props = withDefaults(
     title?: string;
     xLabels: string[] | any[];
     values: any[];
+    isRadius?: boolean;
   }>(),
   {
     title: "",
+    isRadius: true,
   }
 );
 const options = computed(() => {
+  const series = [...props.values].map((item) => {
+    const newItem = Object.assign({}, item);
+    newItem.smooth = props.isRadius;
+    return newItem;
+  });
   return {
     title: {
       text: props.title,
@@ -54,7 +61,7 @@ const options = computed(() => {
         type: "value",
       },
     ],
-    series: props.values,
+    series,
   };
 });
 </script>

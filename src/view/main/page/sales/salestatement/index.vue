@@ -12,7 +12,15 @@
       @update:page="handlePageChange"
       v-model:data="checkInfoData"
       v-model:page="page"
+      @flag-click="handleFlagClick"
     ></check-info>
+
+    <kb-dialog :top="2" v-model:show="show">
+      <iframe
+        :style="{ height: '85vh', width: '100%' }"
+        :src="printUrl"
+      ></iframe>
+    </kb-dialog>
   </div>
 </template>
 
@@ -23,6 +31,7 @@ import { searchConfig } from "./config/search-config";
 import message from "@/utils/message";
 import { httpGetSalesStatementData } from "@/service/http/home/sales/tatement";
 import CheckInfo from "./cpns/check-info.vue";
+import KbDialog from "@/base-ui/dialog";
 
 const store = useStore();
 const currentInfo = computed(() => store.state.bild.currentInfo);
@@ -32,6 +41,7 @@ const isShowCheckInfoPanel = ref(true);
 const checkInfoData = ref<any>({});
 
 const page = ref(1);
+const flag = ref("");
 
 const handleQueryClick = async (
   formData: any,
@@ -42,8 +52,9 @@ const handleQueryClick = async (
   const csid = currentInfo.value.fitemid;
   const begdate = formData.date[0];
   const enddate = formData.date[1];
-  const flag = "";
+  // const flag = flag.value;
   page.value = 1;
+  flag.value = "";
   editPageCallback && editPageCallback();
   // let page = 1;
 
@@ -51,11 +62,19 @@ const handleQueryClick = async (
     csid,
     begdate,
     enddate,
-    flag,
+    flag: flag.value,
     page: page.value,
   });
-  isShowCheckInfoPanel.value = res.code >= 1 ? true : false;
-  checkInfoData.value = res;
+
+  if (flag.value == "") {
+    isShowCheckInfoPanel.value = res.code >= 1 ? true : false;
+    checkInfoData.value = res;
+  } else if (flag.value == "share") {
+  } else {
+    show.value = res.code >= 1 ? true : false;
+    printUrl.value = res?.url ?? "";
+  }
+
   message.show(res.msg, res.type);
 };
 
@@ -63,6 +82,16 @@ const handlePageChange = async (val: number) => {
   const formData = await pageSearchRef.value?.getFormData();
   handleQueryClick(formData, () => {
     page.value = val;
+  });
+};
+
+const show = ref(false);
+const printUrl = ref("");
+
+const handleFlagClick = async (type: any) => {
+  const formData = await pageSearchRef.value?.getFormData();
+  handleQueryClick(formData, () => {
+    flag.value = type;
   });
 };
 </script>

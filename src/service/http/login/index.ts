@@ -1,6 +1,7 @@
 import kbBaseRequest from "@/service";
 import { IDataType } from "../../type";
 import { ICustormType, ICustormSetup } from "./type";
+import { getTaskBaseData, getTaskTokenData } from "../../request/config";
 
 export const httpAccount = (accountData: any) => {
   const newAccountData = { ...accountData };
@@ -50,4 +51,11 @@ export const httpSetupState = (
   };
   method == "GET" ? (config.params = data) : (config.data = data);
   return kbBaseRequest.request<IDataType>(config);
+};
+
+export const useWxScanLogin = (params: any) => {
+  return kbBaseRequest.request({
+    url: "oauth_callback",
+    params: Object.assign(getTaskBaseData(), params),
+  });
 };

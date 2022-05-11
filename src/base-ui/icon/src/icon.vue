@@ -1,5 +1,5 @@
 <template>
-  <span class="icon" @click.stop="handleIconClick">
+  <span class="icon" @click.prevent.stop="handleIconClick">
     <!-- ui图标库 -->
     <template v-if="flag == 'elIcon'">
       <!-- el-icon  图标 -->

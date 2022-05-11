@@ -63,6 +63,7 @@ export default function (
       message.show(res.msg, res.type);
     }
   }
+
   // 详情
   async function onDetail(row: any) {
     const res = await httpGetDetailBild({

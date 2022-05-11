@@ -23,10 +23,7 @@
             <span class="notInfo" v-if="!modelValue.ftiaoma"> 暂无条码 </span>
           </div>
           <div v-if="modelValue.ftiaoma">
-            <base-barcode
-              :height="40"
-              :barcode="modelValue.ftiaoma"
-            ></base-barcode>
+            <base-barcode :barcode="modelValue.ftiaoma"></base-barcode>
           </div>
         </div>
         <div class="size">

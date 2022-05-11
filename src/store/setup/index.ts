@@ -15,6 +15,9 @@ const setupModule: Module<ISetupState, IRootStore> = {
     changeSetup(state, payload) {
       state.config = payload;
     },
+    changeConfigToClass(state, payload) {
+      state.config[payload.class].setup = payload.config;
+    },
   },
   actions: {
     getCustormSetup({ commit }) {
@@ -31,6 +34,10 @@ const setupModule: Module<ISetupState, IRootStore> = {
           }
         });
       });
+    },
+    // 根据class去修改对应的配置
+    updateConfigToClass({ commit }, payload) {
+      if (!payload.isSaveCloud) return commit("changeConfigToClass", payload);
     },
   },
 };

@@ -122,7 +122,9 @@ const handleToggle = () => {
 };
 
 const handleActiveClick = (type: activeType, rows: any) => {
+  console.log(type);
   const methods = {
+    // checkPrint: () => pageTableRef.value?.onCheckPrint(rows[0]),
     audit: () => pageTableRef.value?.auditFn(rows[0]),
     print: () => pageTableRef.value?.printFn(rows[0]),
     anotherList: () => {

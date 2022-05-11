@@ -13,6 +13,13 @@ export default function () {
   });
 
   const plusFormConfig: IForm = {
+    colLayout: {
+      xl: 6, // >1920px 4个
+      lg: 12,
+      md: 24,
+      sm: 24,
+      xs: 24,
+    },
     formItems: [
       {
         type: "input",

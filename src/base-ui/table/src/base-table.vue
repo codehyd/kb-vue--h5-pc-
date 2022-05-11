@@ -38,6 +38,10 @@
       v-bind="scrollConfig"
       show-footer
       :footer-method="footerMethod"
+      @toggle-row-expand="handleToggleRowExpand"
+      :expand-config="{
+        accordion: true,
+      }"
     >
       <!-- 索引 -->
       <template v-if="showIndex">
@@ -51,6 +55,18 @@
             >
               {{ rowIndex + 1 }}
             </slot>
+          </template>
+        </vxe-column>
+      </template>
+      <template v-if="showExpand">
+        <vxe-column type="expand" width="40">
+          <template #content="{ row, column, rowIndex }">
+            <slot
+              name="expand"
+              :rowIndex="rowIndex"
+              :column="column"
+              :row="row"
+            ></slot>
           </template>
         </vxe-column>
       </template>
@@ -167,6 +183,7 @@ const props = withDefaults(
     showIndex?: boolean;
     showAction?: boolean;
     showSelect?: boolean;
+    showExpand?: boolean;
     activeText?: string;
     menuConfig?: VxeTablePropTypes.MenuConfig;
     veifyConfig?: object;
@@ -185,6 +202,7 @@ const props = withDefaults(
     showIndex: true,
     showAction: true,
     showSelect: false,
+    showExpand: false,
     activeText: "操作",
     menuConfig: () => {
       return {};
@@ -196,7 +214,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["menu-click", "db-click"]);
+const emit = defineEmits(["menu-click", "db-click", "expand"]);
 
 const formatAlign = (align: -1 | 0 | 1) => {
   const aligns = ["left", "center", "right"];
@@ -327,6 +345,10 @@ watchEffect(() => {
     loadTableData(data);
   }
 });
+
+const handleToggleRowExpand = (params: any) => {
+  emit("expand", { row: params.row, expand: params.expanded });
+};
 
 defineExpose({
   remove,

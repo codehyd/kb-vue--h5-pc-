@@ -34,6 +34,10 @@
               当前版本: <el-tag effect="plain" size="small"> v2.0</el-tag>
             </span>
           </div>
+          <div class="quit" @click="handleSetting">
+            <kb-icon flag="elIcon" name="Setting"></kb-icon>
+            进入设置
+          </div>
           <div class="quit" @click="handleQuitClick">
             <kb-icon flag="elIcon" name="Right"></kb-icon>
             退出
@@ -57,6 +61,10 @@ const router = useRouter();
 const handleQuitClick = () => {
   router.replace("/login");
   message.show("退出成功", "success");
+};
+
+const handleSetting = () => {
+  router.replace("/setup");
 };
 </script>
 
