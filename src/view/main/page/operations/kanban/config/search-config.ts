@@ -4,11 +4,6 @@ import dayjs from "dayjs";
 export const searchConfig: IForm = {
   formItems: [
     {
-      field: "tj",
-      label: "检索内容",
-      type: "input",
-    },
-    {
       field: "date",
       label: "时间范围",
       type: "daterange",

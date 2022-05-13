@@ -8,11 +8,11 @@
     />
     <!-- 客户信息 -->
     <div class="current card">
-      <div class="select">客户信息</div>
+      <!-- <div class="select">客户信息</div> -->
       <page-search
         ref="pageSearchRef"
         class="currentPageSearch"
-        :searchFormConfig="formConfig"
+        :searchFormConfig="newFormConfig"
       ></page-search>
     </div>
     <!-- 表格编辑 -->
@@ -63,6 +63,10 @@ const { changeGoodPrice } = useGetUserPrice();
 
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
 const pageSearchRef = ref<InstanceType<typeof PageSearch>>();
+
+const newFormConfig = computed(() => {
+  return { ...props.formConfig, isHideErrorMargin: true };
+});
 
 const handleGoBack = () => {
   const fullData = pageTableRef.value?.getTableData()?.fullData ?? [];
@@ -130,6 +134,7 @@ async function submitContent(currentInfo: any, tableData: any) {
     content,
   });
   if (res.code >= 1) {
+    handleRemoveSelectData();
     message.confirm(
       "保存成功，是否继续添加商品？",
       () => {},

@@ -1,5 +1,6 @@
 import { App } from "vue";
 import { elDrag } from "./drag";
+import { elLoading } from "./loading";
 
 // 实现自定义拖拽的自定义指令
 const drag = {
@@ -85,6 +86,7 @@ const inlineFormCol = {
 export default function (app: App): void {
   app.directive("drag", drag);
   app.directive("elDrag", elDrag);
+  app.directive("elLoading", elLoading);
   app.directive("tabScroll", tabScroll);
   app.directive("inlineFormCol", inlineFormCol);
 }

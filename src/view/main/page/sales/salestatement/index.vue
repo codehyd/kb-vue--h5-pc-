@@ -43,6 +43,12 @@ const checkInfoData = ref<any>({});
 const page = ref(1);
 const flag = ref("");
 
+const count = computed(() => {
+  const config = store.state.setup.config["pc-table"]?.setup ?? [];
+  const count = config?.find((item: any) => item.id == "count")?.value;
+  return count;
+});
+
 const handleQueryClick = async (
   formData: any,
   editPageCallback?: () => void
@@ -64,6 +70,7 @@ const handleQueryClick = async (
     enddate,
     flag: flag.value,
     page: page.value,
+    count: count.value,
   });
 
   if (flag.value == "") {

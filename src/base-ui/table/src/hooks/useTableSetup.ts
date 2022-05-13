@@ -3,7 +3,7 @@ import { useStore } from "@/store";
 
 import { ImodeType } from "../../type";
 
-export default function (mode: ImodeType) {
+export default function (mode: ImodeType, showFooter: boolean) {
   const store = useStore();
 
   // 表格最大的高度
@@ -125,6 +125,7 @@ export default function (mode: ImodeType) {
 
   // 表尾方法
   const footerMethod = (params: any) => {
+    if (!showFooter) return [];
     const { data, columns } = params;
     let sum: [string?, number?] = [];
     if (data.length > 0) {

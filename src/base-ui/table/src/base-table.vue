@@ -198,7 +198,7 @@ const props = withDefaults(
     },
     size: "mini",
     state: "query",
-    showFooter: false,
+    showFooter: true,
     showIndex: true,
     showAction: true,
     showSelect: false,
@@ -233,7 +233,7 @@ const {
   scrollConfig,
   virtualScrollSize,
   footerMethod,
-} = useTableSetup(props.state);
+} = useTableSetup(props.state, props.showFooter);
 
 // 表格行为Hooks
 const {
@@ -257,16 +257,6 @@ const handleCellDbClick: VxeTableEvents.CellDblclick = ({ row, column }) => {
   emit("db-click", { row, column });
 };
 
-// 事件总线 添加新行
-// mitter.on("base-table-add-new-rows", () => {
-//   const newRow = getInitColumn();
-//   const vxeTable = vxeTableRef.value;
-//   if (vxeTable) {
-//     vxeTable?.insertAt(newRow, -1);
-//     message.success("添加成功");
-//   }
-// });
-
 const loadingNewColumn = () => {
   const newRow = getInitColumn();
   const vxeTable = vxeTableRef.value;
@@ -276,24 +266,6 @@ const loadingNewColumn = () => {
   }
 };
 
-// 删除选中行
-// mitter.on("base-table-remove-select-rows", () => {
-//   const vxeTable = vxeTableRef.value;
-//   if (vxeTable) {
-//     const rows = vxeTable.getCheckboxRecords();
-//     if (rows.length == 0) return message.show("暂无选中行");
-//     vxeTable?.remove(rows);
-//   }
-// });
-// 删除全部行 需要先获取全部行数据
-// mitter.on("base-table-remove-all-rows", () => {
-//   const vxeTable = vxeTableRef.value;
-//   if (vxeTable) {
-//     const allRowData = vxeTableRef.value?.getTableData().fullData;
-//     if (allRowData.length == 0) return message.show("暂无删除行");
-//     vxeTable?.remove(allRowData);
-//   }
-// });
 // 加载
 mitter.on("base-table-reload-data", (data: any) => {
   console.log(data);
@@ -307,7 +279,7 @@ onMounted(() => {
         const size = virtualScrollSize.value ?? 1;
         const dataList = [];
         for (let i = 0; i < size; i++) {
-          dataList.push(newRow);
+          dataList.push({ ...newRow, rowid: i });
         }
         loadTableData(dataList);
       },

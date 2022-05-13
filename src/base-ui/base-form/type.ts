@@ -5,7 +5,13 @@ type IFormType =
   | "daterange"
   | "date"
   | "kehu"
+  | "textarea"
   | "number";
+
+interface IInputOptionsType {
+  search: boolean;
+  appendText?: string;
+}
 
 export interface IFormItem {
   field: string;
@@ -21,6 +27,8 @@ export interface IFormItem {
   readonly?: boolean;
   // defaultValue?: any;
   defaultDateValue?: any[];
+  col?: any;
+  inputOptions?: IInputOptionsType;
 }
 
 export interface IForm {
@@ -30,4 +38,5 @@ export interface IForm {
   itemStyle?: any;
   // 行内模式
   inline?: boolean;
+  isHideErrorMargin?: boolean;
 }

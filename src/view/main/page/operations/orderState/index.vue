@@ -1,11 +1,14 @@
 <template>
   <div>
     <page-search
+      class="card"
+      style="margin: 0 0 10px 0"
       @query-click="handleQueryClick"
       :searchFormConfig="searchConfig"
       isShowQuery
     ></page-search>
-    <page-table :tableConfig="tableConfig"></page-table>
+
+    <page-table class="card" :tableConfig="tableConfig"></page-table>
   </div>
 </template>
 

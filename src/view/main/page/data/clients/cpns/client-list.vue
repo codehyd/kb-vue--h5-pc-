@@ -1,9 +1,5 @@
 <template>
   <div class="good-list card">
-    <div class="options">
-      <el-button @click="handleToggleClick">切换显示样式</el-button>
-      <el-button @click="handleNewAddGoods">新增客户资料</el-button>
-    </div>
     <el-tabs v-model="currentName" class="demo-tabs" @tab-click="handleClick">
       <template v-for="item in clientListConfig.classList" :key="item.fclassid">
         <el-tab-pane :label="item.name" :name="item.name"></el-tab-pane>
@@ -98,6 +94,10 @@ const handleDbClick = (params: any) => {
   const { row } = params;
   handleDetailClick(row);
 };
+
+defineExpose({
+  handleToggleClick,
+});
 </script>
 
 <style scoped>

@@ -1,25 +1,23 @@
 <template>
   <div class="edit-table-option">
-    <div class="select">表格基本操作</div>
+    <!-- <div class="select">表格基本操作</div> -->
     <!-- 添加新行 -->
-    <el-button @click="handleAddNewRows">添加新行</el-button>
+    <el-button icon="CirclePlus" @click="handleAddNewRows">新行</el-button>
     <!-- 删除选中 -->
-    <el-button @click="handleRemoveSelect">删除选中</el-button>
+    <el-button icon="CloseBold" @click="handleRemoveSelect">删选</el-button>
     <!-- 删除全部 -->
-    <el-button @click="handleRemoveAll">删除全部</el-button>
+    <el-button icon="Failed" @click="handleRemoveAll">全删</el-button>
     <!-- 缓存操作 -->
-    <el-button @click="handleSaveData">缓存当前数据</el-button>
-    <el-button @click="handleLoadData">加载缓存数据</el-button>
+    <el-button icon="UploadFilled" @click="handleSaveData">缓存</el-button>
+    <el-button icon="List" @click="handleLoadData">加载</el-button>
 
-    <div class="select">单据操作</div>
+    <!-- <div class="select">单据操作</div> -->
     <!-- 添加商品 -->
-    <el-button @click="handdleAddNewGoods">选择商品</el-button>
+    <el-button type="primary" @click="handdleAddNewGoods">选择商品</el-button>
     <!-- 高级选项 -->
-    <el-popover placement="bottom" :width="500" trigger="click">
+    <el-popover placement="top" :width="500" trigger="hover">
       <template #reference>
-        <el-button>
-          高级选项<kb-icon flag="elIcon" name="SetUp"></kb-icon>
-        </el-button>
+        <el-button type="primary"> 条码搜索 </el-button>
       </template>
       <div>
         <span class="select">条码搜索</span>
@@ -91,7 +89,9 @@ const handlerEnter = async () => {
     emit("add-new-goods", { ...res.data[0].data[0], fqty: 1, checked: true });
   }
   barcode.value = "";
-  message.show(res.msg, res.type);
+  if (res.code < 1) {
+    message.show(res.msg, res.type);
+  }
 };
 
 const handleSaveClick = (row: any) => {

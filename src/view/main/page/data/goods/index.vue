@@ -52,6 +52,7 @@ const goodListConfig: IGoodTableConfig = reactive({
   totalPage: 1,
   loading: true,
   flag: "select",
+  showFooter: false,
 });
 
 const images = ref([]);

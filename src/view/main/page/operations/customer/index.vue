@@ -4,7 +4,7 @@
       @query-click="handleQueryClick"
       :searchConfig="customerSearchConfig"
     ></customer-search>
-    <customer-chart :config="customerSearchConfig"></customer-chart>
+    <customer-chart :config="customerConfig"></customer-chart>
     <customer-table :data="data"></customer-table>
   </div>
 </template>

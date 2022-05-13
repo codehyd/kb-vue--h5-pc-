@@ -13,6 +13,7 @@ import {
 import { IDetailTableConfig } from "@/components/page-table";
 
 import mitter from "@/mitt";
+import { useStore } from "@/store";
 
 type callback = () => void;
 import type { IBildQueryTable, IBildQueryDetailTable } from "../../type";
@@ -24,6 +25,8 @@ export default function (
   otherTableConfig?: IBildQueryTable,
   otherDetailTableConfig?: IBildQueryDetailTable
 ) {
+  const store = useStore();
+
   // 查询表格的配置
   const pageTableConfig: ITableConfigType = reactive({
     keyString: "fitemid",
@@ -62,7 +65,9 @@ export default function (
 
   // 获取查询表格的数据
   const getTableData = () => {
-    httpGetTableData(reqData.billtypeid, reqData).then((res) => {
+    const config = store.state.setup.config["pc-table"]?.setup ?? [];
+    const count = config?.find((item: any) => item.id == "count")?.value;
+    httpGetTableData(reqData.billtypeid, { ...reqData, count }).then((res) => {
       pageTableConfig.totalPage = res?.allpages ?? 1;
       pageTableConfig.data = res?.data?.[0]?.data ?? [];
     });

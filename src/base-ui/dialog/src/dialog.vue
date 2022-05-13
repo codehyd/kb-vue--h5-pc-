@@ -12,6 +12,7 @@
       :top="top + 'vh'"
       :fullscreen="fullscreen"
       :show-close="false"
+      @opened="openedFn"
     >
       <template #title>
         <div class="title">
@@ -55,6 +56,7 @@ const props = withDefaults(
     destroyOnClose?: boolean;
     isBeforeClose?: boolean;
     isFullscreenIcon?: boolean;
+    openedFn?: () => void;
   }>(),
   {
     title: "",
@@ -65,6 +67,7 @@ const props = withDefaults(
     destroyOnClose: true,
     isBeforeClose: false,
     isFullscreenIcon: true,
+    openedFn: undefined,
   }
 );
 
@@ -93,6 +96,10 @@ const handleFullscreenClick = () => {
 };
 const handleCloseClick = () => {
   emit("update:show", false);
+};
+
+const openedFn = () => {
+  props.openedFn && props.openedFn();
 };
 </script>
 

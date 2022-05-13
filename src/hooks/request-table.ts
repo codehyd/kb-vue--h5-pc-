@@ -1,3 +1,5 @@
+import { useStore } from "@/store";
+
 import {
   httpGetShowTableColumn,
   httpGetGoodsList,
@@ -21,6 +23,14 @@ export default function (
   requestData: any,
   billtypeid?: IBillid
 ) {
+  const store = useStore();
+
+  const count = computed(() => {
+    const config = store.state.setup.config["pc-table"]?.setup ?? [];
+    const count = config?.find((item: any) => item.id == "count")?.value;
+    return count;
+  });
+
   const column = ref<any[]>([]);
   const data = ref<any[]>([]);
   const totalPage = ref<number>(1);
@@ -62,6 +72,7 @@ export default function (
   function requestStoreInquire(reqData?: any) {
     httpStoreInquire({
       ...(reqData ?? requestData),
+      count: count.value,
     }).then((res) => {
       data.value = res?.data?.[0]?.data ?? [];
       totalPage.value = res?.allpages ?? 1;
@@ -74,6 +85,7 @@ export default function (
       reqData?.billtypeid ?? requestData?.billtypeid ?? showTableId,
       {
         ...(reqData ?? requestData),
+        count: count.value,
       }
     ).then((res) => {
       data.value = res?.data?.[0]?.data ?? [];

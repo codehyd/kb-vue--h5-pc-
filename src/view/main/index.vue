@@ -8,7 +8,11 @@
         <div class="aside" :style="{ width: currentFold ? '200px' : '0px' }">
           <page-menus></page-menus>
           <div
-            v-elDrag="{ x: false, y: true, onclick: handleFoldIconClick }"
+            v-elDrag="{
+              scrollX: true,
+              scrollY: true,
+              onclick: handleFoldIconClick,
+            }"
             class="flodIcon"
             :style="{ left: foldIcon ? '200px' : '0px' }"
           >
@@ -51,15 +55,14 @@ const isShowDrawer = ref(false);
 const foldIcon = ref(true);
 
 const handleFoldIconClick = () => {
-  console.log(123);
-  // // 获取当前分辨率
-  // const width = document.body.clientWidth;
-  // if (width >= 992) {
-  //   currentFold.value = !currentFold.value;
-  // } else {
-  //   isShowDrawer.value = !isShowDrawer.value;
-  // }
-  // foldIcon.value = !foldIcon.value;
+  // 获取当前分辨率
+  const width = document.body.clientWidth;
+  if (width >= 992) {
+    currentFold.value = !currentFold.value;
+  } else {
+    isShowDrawer.value = !isShowDrawer.value;
+  }
+  foldIcon.value = !foldIcon.value;
 };
 </script>
 
@@ -72,10 +75,11 @@ const handleFoldIconClick = () => {
   box-sizing: border-box;
   // 动画0.5s4
   transition: all 0.3s;
+  height: calc(100vh - 60px);
 }
 
 .flodIcon {
-  // position: absolute;
+  position: absolute;
   top: 60px;
   left: 200px;
   display: flex;

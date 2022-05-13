@@ -9,7 +9,7 @@
     >
       <el-row>
         <template v-for="item in formItems" :key="item.label">
-          <el-col v-bind="autoColLayout">
+          <el-col v-bind="formatColBind(item)">
             <el-form-item
               :style="itemStyle"
               v-if="!item.isHidden"
@@ -18,20 +18,32 @@
               :prop="item.field"
               :show-message="isShowAuthMessage"
               :class="{
-                isShowMessage: !isShowAuthMessage,
+                isShowMessage: !isShowAuthMessage && isHideErrorMargin,
               }"
             >
               <!-- input输入框 -->
               <template
-                v-if="item.type === 'input' || item.type === 'password'"
+                v-if="
+                  item.type === 'input' ||
+                  item.type === 'password' ||
+                  item.type == 'textarea'
+                "
               >
                 <el-input
+                  :type="item.type"
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
                   v-model.trim="modelValue[`${item.field}`]"
+                  @keyup.enter.native="handleSearchClick"
                   @update:modelValue="handleValueChange($event, item.field)"
-                />
+                >
+                  <template #append v-if="item.inputOptions?.search">
+                    <el-button @click="handleSearchClick" icon="search">
+                      {{ item.inputOptions?.appendText ?? "搜索" }}
+                    </el-button>
+                  </template>
+                </el-input>
               </template>
               <template v-else-if="item.type === 'number'">
                 <el-input-number
@@ -114,10 +126,12 @@ const props = withDefaults(
     colLayout?: any;
     inline?: boolean;
     itemStyle?: object;
+    isHideErrorMargin?: boolean;
   }>(),
   {
     labelWidth: "100px",
     inline: false,
+    isHideErrorMargin: false,
     formItems: () => {
       return [];
     },
@@ -136,7 +150,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits(["update:modelValue", "kehu-click"]);
+const emit = defineEmits(["update:modelValue", "kehu-click", "search-click"]);
 
 // console.log(props);
 const { isShowAuthMessage } = useFormSetup();
@@ -156,6 +170,15 @@ const handleValueChange = (value: any, field: string) => {
   emit("update:modelValue", { ...props.modelValue, [field]: value });
 };
 
+const formatColBind = (item: any) => {
+  if (item.col) return item.col;
+  return props.colLayout;
+};
+
+const handleSearchClick = () => {
+  emit("search-click");
+};
+
 defineExpose({
   validateForm,
 });
@@ -169,6 +192,6 @@ defineExpose({
   }
 }
 .isShowMessage {
-  margin: 0;
+  margin: 0 0 -1px 0;
 }
 </style>

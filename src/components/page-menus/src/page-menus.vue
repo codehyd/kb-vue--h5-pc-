@@ -82,7 +82,7 @@ const handleOpen = (params: any) => {
 <style lang="less" scoped>
 .page-menus {
   overflow: hidden;
-  height: calc(100vh - 60px);
+  height: 100%;
   background: #3b4368;
   overflow-y: auto;
   .el-menu {

@@ -105,10 +105,13 @@ export default function () {
         ],
       },
       {
-        type: "input",
+        type: "textarea",
         field: "fmemo",
         label: "备注",
         placeholder: "请输入备注",
+        col: {
+          span: 24,
+        },
       },
     ],
   };

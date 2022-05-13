@@ -31,7 +31,9 @@
             <div class="item">
               <i class="icon-xiaoshoujine fontIcon"></i>
               <div class="item-content">
-                <div class="item-value">{{ salesData.fsale_amount }}</div>
+                <div class="item-value price">
+                  ¥{{ salesData.fsale_amount }}
+                </div>
                 <div class="item-title">销售金额</div>
               </div>
             </div>
@@ -40,7 +42,9 @@
             <div class="item">
               <i class="icon-tuihuojine fontIcon"></i>
               <div class="item-content">
-                <div class="item-value">{{ salesData.ftuihuo_amount }}</div>
+                <div class="item-value price">
+                  ¥{{ salesData.ftuihuo_amount }}
+                </div>
                 <div class="item-title">退货金额</div>
               </div>
             </div>
@@ -49,7 +53,9 @@
             <div class="item">
               <i class="icon-bimianshoufei fontIcon"></i>
               <div class="item-content">
-                <div class="item-value">{{ salesData.fmianshou_amount }}</div>
+                <div class="item-value price">
+                  ¥{{ salesData.fmianshou_amount }}
+                </div>
                 <div class="item-title">免收金额</div>
               </div>
             </div>
@@ -58,7 +64,7 @@
             <div class="item">
               <i class="icon-lirunshuai fontIcon"></i>
               <div class="item-content">
-                <div class="item-value">{{ salesData.flirunlv }}</div>
+                <div class="item-value">{{ salesData.flirunlv }}%</div>
                 <div class="item-title">利润率</div>
               </div>
             </div>
@@ -147,5 +153,9 @@ const colStyle = { xs: 24, sm: 12, md: 12, lg: 6, xl: 6 };
       }
     }
   }
+}
+
+.price {
+  color: red;
 }
 </style>

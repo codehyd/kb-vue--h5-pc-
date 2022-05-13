@@ -12,6 +12,10 @@
         <template #fcptiaoma="{ row, column }">
           <kb-barcode card :barcode="row.fcptiaoma"></kb-barcode>
         </template>
+        <!-- 条码 2-->
+        <template #ftiaoma="{ row, column }">
+          <kb-barcode card :barcode="row.ftiaoma"></kb-barcode>
+        </template>
         <!-- 编辑模式 -->
         <template #edit="{ row, column, rowIndex }">
           <edit-table-column
@@ -151,18 +155,20 @@ const showPrintPanel = ref(false);
 const printUrl = ref("");
 
 function printCallback(params: any) {
+  printUrl.value = params.url;
+  showPrintPanel.value = true;
   // 弹出提示框 是否新网页打开
-  message.confirm(
-    "是否在新网页打开打印预览",
-    () => {
-      // 新网页打开链接
-      window.open(params.url, "_blank");
-    },
-    () => {
-      printUrl.value = params.url;
-      showPrintPanel.value = true;
-    }
-  );
+  // message.confirm(
+  //   "是否在新网页打开打印预览",
+  //   () => {
+  //     // 新网页打开链接
+  //     window.open(params.url, "_blank");
+  //   },
+  //   () => {
+  //     printUrl.value = params.url;
+  //     showPrintPanel.value = true;
+  //   }
+  // );
 }
 
 // 详情回调

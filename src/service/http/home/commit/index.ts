@@ -236,4 +236,18 @@ export const httpGetSaleCheckPrint = (params: any) => {
     params,
   });
 };
+
+export const httpAccountToken = () => {
+  return kbBaseRequest.request({
+    url: "kbgetwxgzhaccesstoken4kb",
+  });
+};
+
+export function httpWeixinAccountMessage(data: any) {
+  return kbBaseRequest.request({
+    url: "kbsendwxtz",
+    data,
+    method: "POST",
+  });
+}
 export * from "./type";

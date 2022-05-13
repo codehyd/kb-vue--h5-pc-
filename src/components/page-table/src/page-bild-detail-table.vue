@@ -179,17 +179,19 @@ const handleMessageAddClick = () => {
 
 const handleMessageClick = (item: any) => {
   if (item.furl) {
-    message.confirm(
-      "是否在新网页打开打印预览",
-      () => {
-        // 新网页打开链接
-        window.open(item.furl, "_blank");
-      },
-      () => {
-        messageSigShow.value = true;
-        messageSigurl.value = item.furl;
-      }
-    );
+    messageSigShow.value = true;
+    messageSigurl.value = item.furl;
+    // message.confirm(
+    //   "是否在新网页打开打印预览",
+    //   () => {
+    //     // 新网页打开链接
+    //     window.open(item.furl, "_blank");
+    //   },
+    //   () => {
+    //     messageSigShow.value = true;
+    //     messageSigurl.value = item.furl;
+    //   }
+    // );
   }
 };
 

@@ -1,7 +1,11 @@
 <template>
   <div class="good-list-item">
+    <kb-loading v-if="loading"></kb-loading>
     <el-row :gutter="20">
-      <template v-for="(item, index) in data" :key="'good' + item.fmodelid">
+      <template
+        v-for="(item, index) in newGoodList"
+        :key="'good' + item.fmodelid"
+      >
         <el-col v-bind="colLayout">
           <el-card class="goodItem" shadow="hover">
             <template #header>
@@ -26,28 +30,28 @@
               </div>
               <div class="content">
                 <div>
-                  <span class="label">产品名称:</span>
+                  <span class="label">产品名称: </span>
                   <span :class="{ noInfo: !item.fxinghao }">
                     {{ item.fxinghao || "暂无产品名称信息" }}</span
                   >
                 </div>
                 <div>
                   <span class="label">品牌: </span>
-                  <span :class="{ noInfo: !item.fname }">{{
-                    item.fname || "暂无品牌信息"
-                  }}</span>
+                  <span :class="{ noInfo: !item.fname }">
+                    {{ item.fname || "暂无品牌信息" }}
+                  </span>
                 </div>
                 <div>
                   <span class="label">规格: </span>
-                  <span :class="{ noInfo: !item.fguige }">{{
-                    item.fguige || "暂无规格信息"
-                  }}</span>
+                  <span :class="{ noInfo: !item.fguige }">
+                    {{ item.fguige || "暂无规格信息" }}
+                  </span>
                 </div>
                 <div>
-                  <span class="label">编码:</span>
+                  <span class="label">编码: </span>
                   <span :class="{ noInfo: !item.fbianma }">
-                    {{ item.fbianma || "暂无规格信息" }}</span
-                  >
+                    {{ item.fbianma || "暂无规格信息" }}
+                  </span>
                 </div>
                 <div class="row">
                   <div>
@@ -74,7 +78,7 @@
 
 <script setup lang="ts">
 import TopTipContent from "@/components/top-tip-content";
-import mitter from "@/mitt";
+import KbLoading from "@/base-ui/loading";
 const props = withDefaults(
   defineProps<{
     data: any;
@@ -101,11 +105,29 @@ const handlerBtnClick = (item: any, index: number) => {
   // mitter.emit("edit-good", { item, index });
   emit("edit-good", { item, index });
 };
+
+const newGoodList = ref<any[]>([]);
+const loading = ref(true);
+
+watchEffect(() => {
+  loading.value = true;
+  const newData = [...(props.data ?? [])];
+  // 1秒后渲染数据
+  setTimeout(() => {
+    nextTick(() => {
+      newGoodList.value = newData;
+      loading.value = false;
+    });
+  }, 1500);
+
+  // newGoodList.value = newData;
+});
 </script>
 
 <style scoped lang="less">
 .good-list-item {
   font-size: 12px;
+  padding: 20px 0;
 }
 .goodItem {
   width: 100%;

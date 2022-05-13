@@ -1,5 +1,5 @@
 <template>
-  <div class="hotGoods-searach">
+  <div class="hotGoods-searach card">
     <page-search
       @query-click="handleQueryClick"
       :searchFormConfig="searchConfig"
@@ -24,4 +24,8 @@ const handleQueryClick = (formData: any) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.hotGoods-searach {
+  margin: 0 0 10px 0;
+}
+</style>

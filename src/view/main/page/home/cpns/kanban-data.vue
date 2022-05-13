@@ -1,5 +1,5 @@
 <template>
-  <div class="kanban-data card">
+  <div class="kanban-data card" v-if="isShowKanbanDataPanel">
     <el-radio-group
       class="options"
       v-model="options"
@@ -22,13 +22,20 @@ import { optionConfig } from "../config/kanban-data-config";
 
 const store = useStore();
 store.dispatch("home/getKanbanData");
+
+const kanbanData = computed(() => store.state.home.kanbanData);
+const isShowKanbanDataPanel = computed(() =>
+  store.state.home.kanbanData.code >= 1 ? true : false
+);
+
 // 折线图配置
 const lineChartOption = computed(() => {
-  const kanbanData = store.state.home.kanbanData;
-  const values = kanbanData.series ?? [];
+  // const kanbanData = store.state.home.kanbanData;
+  isShowKanbanDataPanel.value;
+  const values = kanbanData.value?.series ?? [];
   return {
     title: "日趋势销售图",
-    xLabels: kanbanData.xaxis4x ?? [],
+    xLabels: kanbanData.value?.xaxis4x ?? [],
     values: values.map((item: any) => {
       const newItem = Object.assign({}, item);
       newItem.smooth = true;

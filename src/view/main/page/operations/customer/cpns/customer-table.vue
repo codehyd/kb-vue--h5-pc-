@@ -68,4 +68,8 @@ const tableConfig = computed(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.card {
+  margin: 10px 0 0 0;
+}
+</style>

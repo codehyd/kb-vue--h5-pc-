@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" style="margin: 10px 0 0 0">
     <page-table :tableConfig="tableConfig"></page-table>
   </div>
 </template>

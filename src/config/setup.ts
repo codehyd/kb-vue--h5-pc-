@@ -1,11 +1,11 @@
 // setup设置
-type classType = "pc-table" | "pc-form";
-type formType = "input" | "number" | "switch";
+type classType = "pc-table" | "pc-form" | "pc-wechat";
+type formType = "input" | "number" | "switch" | "checkbox";
 
 interface ISetupOptionType {
   id: string | number;
   label: string;
-  value: string | number | boolean;
+  value: string | number | boolean | any;
   type: formType;
   help?: string;
   field: string;
@@ -73,7 +73,7 @@ export const setupOptions: ISetupType[] = [
       {
         id: "virtualScrollSize",
         label: "编辑表格占位行",
-        value: 1,
+        value: 10,
         type: "number",
         help: "开启性能优化表格渲染后编辑表格需要设置占位行的个数 否则性能优化失败",
         field: "virtualScrollSize",
@@ -81,7 +81,7 @@ export const setupOptions: ISetupType[] = [
       {
         id: "count",
         label: "分页数量",
-        value: 20,
+        value: 50,
         type: "number",
         help: "查询表格分页显示的数量",
         field: "count",
@@ -102,6 +102,34 @@ export const setupOptions: ISetupType[] = [
         type: "switch",
         help: "表单默认显示错误校验信息",
         field: "isShowAuthMessage",
+      },
+    ],
+  },
+  {
+    label: "微信通知",
+    class: "pc-wechat",
+    setup: [
+      {
+        id: "openWeChatMessage",
+        label: "单据开启微信通知",
+        value: [],
+        type: "checkbox",
+        help: "单据详情内开启微信通知功能",
+        field: "openWeChatMessage",
+        otherOptions: {
+          list: [
+            {
+              label: "销售送货",
+              id: 103,
+              disabled: false,
+            },
+            {
+              label: "销售订单",
+              id: 102,
+              disabled: true,
+            },
+          ],
+        },
       },
     ],
   },

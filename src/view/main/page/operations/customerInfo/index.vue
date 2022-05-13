@@ -1,17 +1,21 @@
 <template>
   <div>
     <page-search
+      class="card"
+      style="margin: 0 0 10px 0"
       isShowQuery
       @query-click="handleQueryClick"
       :searchFormConfig="searchConfig"
     ></page-search>
 
-    <page-table :tableConfig="tableConfig" @expand="handleExpand">
-      <template #tableContent="{ row }">
-        <h2>{{ row.fkhname }}</h2>
-        <page-table :tableConfig="detailTableConfig"></page-table>
-      </template>
-    </page-table>
+    <div class="card">
+      <page-table :tableConfig="tableConfig" @expand="handleExpand">
+        <template #tableContent="{ row }">
+          <h2>{{ row.fkhname }}</h2>
+          <page-table :tableConfig="detailTableConfig"></page-table>
+        </template>
+      </page-table>
+    </div>
   </div>
 </template>
 
@@ -37,6 +41,7 @@ const handleQueryClick = (formData: any) => {
   requestData.tj = formData.tj;
   requestData.begdate = formData.date[0];
   requestData.enddate = formData.date[1];
+  getTableData();
 };
 
 const tableConfig: ITableConfigType = reactive({
@@ -71,6 +76,7 @@ const tableConfig: ITableConfigType = reactive({
   ],
   showAction: false,
   showExpand: true,
+  loading: true,
 });
 
 const detailTableConfig: ITableConfigType = reactive({

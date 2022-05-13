@@ -3,6 +3,7 @@
     <base-form
       ref="baseFormRef"
       @kehu-click="handleKehuClick"
+      @search-click="handleQueryClick"
       v-model="formData"
       v-bind="searchFormConfig"
     >
@@ -22,11 +23,17 @@
 
     <!-- 选择客户 -->
     <template v-if="isExistClient && isShowClientPanelShow">
-      <kb-dialog title="选择客户/供应商" v-model:show="isShowClientPanelShow">
+      <kb-dialog
+        :top="2"
+        :openedFn="handleOpenedFn"
+        title="选择客户/供应商"
+        v-model:show="isShowClientPanelShow"
+      >
         <!-- input -->
         <el-input
           @keyup.enter.native="handleSearchClick"
           class="kehu-panel-input"
+          ref="elInputRef"
           v-model="clientTableConfig.tj"
         >
           <template #append>
@@ -45,6 +52,7 @@
         <!-- table -->
         <page-table
           @page-change="handlePageChange"
+          @db-click="handleDbClick"
           :table-config="clientTableConfig"
         >
           <template #checked="{ row }">
@@ -63,6 +71,7 @@ import BaseForm, { IForm } from "@/base-ui/base-form";
 import KbDialog from "@/base-ui/dialog";
 import PageTable, { IClientTableConfig } from "@/components/page-table";
 import { useStore } from "@/store";
+import { ElInput } from "element-plus";
 
 import {
   httpGetClientClassList,
@@ -82,6 +91,8 @@ const props = withDefaults(
   }
 );
 const emit = defineEmits(["query-click"]);
+
+const elInputRef = ref<InstanceType<typeof ElInput>>();
 
 const store = useStore();
 
@@ -160,12 +171,19 @@ async function requestClientConfig() {
   clientTableConfig.totalPage = totalPage ?? 1;
 }
 
+const count = computed(() => {
+  const config = store.state.setup.config["pc-table"]?.setup ?? [];
+  const count = config?.find((item: any) => item.id == "count")?.value;
+  return count;
+});
+
 async function requestClientList() {
   const res = await httpGetClientList({
     flag: "select",
     parentid: clientTableConfig.parentid,
     page: clientTableConfig.page,
     tj: clientTableConfig.tj,
+    count: count.value,
   });
   // console.log(res);
   return {
@@ -203,6 +221,11 @@ const handleSelectClient = (row: any) => {
   }
 
   message.success("选择客户成功");
+  isShowClientPanelShow.value = false;
+};
+
+const handleDbClick = (params: any) => {
+  handleSelectClient(params.row);
 };
 
 const getFormData = async () => {
@@ -226,6 +249,10 @@ const handlePageChange = async (val: number) => {
   clientTableConfig.totalPage = totalPage ?? 1;
 };
 
+const handleOpenedFn = () => {
+  elInputRef.value?.focus();
+};
+
 defineExpose({
   getFormData,
 });
@@ -234,6 +261,8 @@ defineExpose({
 <style lang="less" scoped>
 .selectText {
   cursor: pointer;
+  text-decoration: underline;
+  color: #00a0e9;
 }
 
 .kehu-panel-input {

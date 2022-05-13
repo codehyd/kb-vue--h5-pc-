@@ -42,14 +42,24 @@
               <template v-if="item.type == 'switch'">
                 <el-switch v-model="item.value"></el-switch>
               </template>
+              <!-- checkbox -->
+              <template v-if="item.type == 'checkbox'">
+                <el-checkbox-group v-model="item.value">
+                  <el-checkbox
+                    v-for="(checkItem, index) in item.otherOptions.list"
+                    :key="index"
+                    :label="checkItem.label"
+                    :disabled="checkItem.disabled"
+                    size="large"
+                  />
+                </el-checkbox-group>
+              </template>
             </el-form-item>
           </template>
         </el-form>
         <div class="options">
-          <el-button @click="handleSaveClick(false)">本次保存</el-button>
-          <el-button disabled @click="handleSaveClick(true)">
-            保存到云端
-          </el-button>
+          <!-- <el-button @click="handleSaveClick(false)">本次保存</el-button> -->
+          <el-button @click="handleSaveClick(true)"> 保存到云端 </el-button>
         </div>
       </div>
     </kb-dialog>

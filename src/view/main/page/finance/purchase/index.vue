@@ -1,19 +1,23 @@
 <template>
   <div>
     <page-search
+      class="card"
+      style="margin: 0 0 10px 0"
       @query-click="handleQueryClick"
       isShowQuery
       :searchFormConfig="searchConfig"
     ></page-search>
 
-    <div class="options">
-      <el-button @click="handleNewClick">新增采购付款单</el-button>
+    <div class="card">
+      <div class="options">
+        <el-button @click="handleNewClick">新增采购付款单</el-button>
+      </div>
+      <page-table
+        @page-change="handlePageChange"
+        :billtypeid="113"
+        :tableConfig="pageTableConfig"
+      ></page-table>
     </div>
-    <page-table
-      @page-change="handlePageChange"
-      :billtypeid="113"
-      :tableConfig="pageTableConfig"
-    ></page-table>
 
     <kb-dialog v-model:show="isShowPanel" title="新增 采购付款单">
       <page-search

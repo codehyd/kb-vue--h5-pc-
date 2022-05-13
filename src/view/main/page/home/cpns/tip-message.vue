@@ -26,14 +26,32 @@
         </div>
       </template>
       <div class="content">
-        <vxe-list height="430" :data="billList">
+        <template v-if="billList.length == 0">
+          <div class="empty">
+            <el-empty description="暂无数据" />
+          </div>
+        </template>
+        <vxe-list v-else height="430" :data="newBillList">
           <template #default="{ items }">
             <div
               class="listItem"
               v-for="(item, index) in items"
               :key="index + ' ' + item.finterid"
-              @click="handleListClick(items)"
+              @click="handleListClick(item)"
             >
+              <template v-if="item.show">
+                <div class="mask">
+                  <div class="mask-content">
+                    <div class="item">
+                      <div class="item-content" @click.stop="hanlePrint(item)">
+                        <kb-icon name="Printer" flag="elIcon"></kb-icon>
+                        <span>打印预览</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="mask-bg"></div>
+                </div>
+              </template>
               <div class="title">
                 <b class="select">{{ item.fbillname }}</b>
                 <span>{{ item.fbillstatus }}</span>
@@ -45,47 +63,38 @@
               </div>
             </div>
           </template>
-          <!-- <template #default="{ items }">
-            <div class="listItem" @click="handleListClick(items)">
-              <div class="title">
-                <b class="select">{{ items.fbillname }}</b>
-                <span>{{ items.fbillstatus }}</span>
-              </div>
-              <div class="info">
-                <div>{{ items.fkhname }}</div>
-                <div>{{ items.fbillno }}</div>
-                <div>{{ items.fdate }}</div>
-              </div>
-            </div>
-          </template> -->
         </vxe-list>
-
-        <!-- <template
-          v-for="(item, index) in billList"
-          :key="index + ' ' + item.finterid"
-        >
-        </template> -->
-        <template v-if="billList.length == 0">
-          <div class="empty">
-            <el-empty description="暂无数据" />
-          </div>
-        </template>
       </div>
     </kb-card>
+    <page-print ref="pagePrintRef" :url="url"></page-print>
   </div>
 </template>
 
 <script setup lang="ts">
+import KbIcon from "@/base-ui/icon";
 import KbCard from "@/components/card";
+import PagePrint from "@/components/page-print";
 import { activeList, IActiveListType } from "../config/billlist-config";
 import { useStore } from "@/store";
+import { httpPrintBild } from "@/service/http/home/commit";
+import message from "@/utils/message";
 
 const store = useStore();
+const pagePrintRef = ref<InstanceType<typeof PagePrint>>();
 
 const activeText = ref(activeList[0].text);
 
 store.dispatch("home/getUserBillList", activeList[0].flag);
 const billList = computed(() => store.state.home.billList);
+const newBillList = ref<any[]>([]);
+
+watchEffect(() => {
+  newBillList.value = billList.value.map((item: any) => {
+    const newItem = Object.assign({}, item);
+    newItem.show = false;
+    return newItem;
+  });
+});
 
 const handleItemClick = (item: IActiveListType) => {
   activeText.value = item.text;
@@ -93,8 +102,23 @@ const handleItemClick = (item: IActiveListType) => {
 };
 
 const handleListClick = (item: any) => {
-  console.log(item);
+  item.show = !item.show;
 };
+
+const hanlePrint = async (item: any) => {
+  const res = await httpPrintBild({
+    billid: item.finterid,
+    billtypeid: item.ftype,
+  });
+  if (res.code >= 1) {
+    url.value = res.url;
+    pagePrintRef.value!.show = true;
+  } else {
+    message.show(res.msg, res.type);
+  }
+};
+
+const url = ref("");
 </script>
 
 <style lang="less" scoped>
@@ -116,17 +140,63 @@ const handleListClick = (item: any) => {
   height: 100%;
   overflow-y: auto;
   .listItem {
+    position: relative;
     width: 100%;
     border-bottom: 1px solid #eee;
     padding: 10px;
     padding-left: 20px;
     box-sizing: border-box;
+    height: 100%;
     cursor: pointer;
     .title {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    .mask,
+    .mask-bg,
+    .mask-content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      .mask-bg {
+        background: #00000080;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+      }
+      .mask-content {
+        // 恢复cursor默认值
+        cursor: default;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: white;
+        z-index: 1;
+        .item {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          overflow: hidden;
+          .item-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            cursor: pointer;
+            span {
+              margin: 5px 0 0 0;
+            }
+          }
+        }
+      }
     }
   }
 }

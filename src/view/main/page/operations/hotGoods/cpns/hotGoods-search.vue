@@ -1,5 +1,5 @@
 <template>
-  <div class="hotGoods-searach">
+  <div class="hotGoods-searach card" style="margin: 0 0 10px 0">
     <page-search
       @query-click="handleQueryClick"
       :searchFormConfig="searchConfig"

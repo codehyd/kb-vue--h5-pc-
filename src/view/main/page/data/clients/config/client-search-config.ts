@@ -5,6 +5,13 @@ export const clientSearchConfig: IForm = {
       field: "tj",
       label: "检索内容",
       type: "input",
+      col: {
+        span: 24,
+      },
+      inputOptions: {
+        search: true,
+        appendText: "查询",
+      },
     },
   ],
 };

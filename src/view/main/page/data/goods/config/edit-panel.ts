@@ -112,10 +112,17 @@ export default function () {
         ],
       },
       {
-        type: "input",
+        type: "textarea",
         field: "fmemo",
         label: "备注",
         placeholder: "请输入备注",
+        col: {
+          xl: 24, // >1920px 4个
+          lg: 24,
+          md: 24,
+          sm: 24,
+          xs: 24,
+        },
       },
     ],
   };

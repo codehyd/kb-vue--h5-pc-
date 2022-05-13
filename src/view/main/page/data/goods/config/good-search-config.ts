@@ -5,6 +5,13 @@ export const goodSearchConfig: IForm = {
       field: "tj",
       label: "检索内容",
       type: "input",
+      inputOptions: {
+        search: true,
+        appendText: "查询",
+      },
+      col: {
+        span: 24,
+      },
     },
   ],
 };

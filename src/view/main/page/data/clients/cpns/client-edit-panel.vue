@@ -30,6 +30,7 @@ const show = ref(false);
 let id = ref(0);
 const handleSaveClick = async () => {
   const formData = await pageSearchRef.value!.getFormData();
+  if (!formData) return;
   httpAddUser({ id: id.value, content: formData }).then((res) => {
     message.show(res.msg, res.type);
     if (res.code >= 1) {

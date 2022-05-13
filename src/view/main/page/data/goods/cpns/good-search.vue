@@ -2,7 +2,6 @@
   <div class="good-search card">
     <page-search
       ref="pageFormRef"
-      isShowQuery
       @query-click="handleQueryClick"
       :searchFormConfig="formConfig"
     ></page-search>

@@ -1,5 +1,5 @@
 <template>
-  <div class="inquire-search card">
+  <div class="inquire-search card" style="margin: 0 0 10px 0">
     <page-search :searchFormConfig="searchConfig" isShowQuery></page-search>
   </div>
 </template>

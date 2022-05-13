@@ -4,14 +4,21 @@
       v-model:tj="clientListConfig.tj"
       @update:tj="handleUpdateTj"
       :formConfig="clientSearchConfig"
-    ></client-search>
+    >
+      <template #options>
+        <el-button type="info" @click="handleToggleClick">切换样式</el-button>
+        <el-button icon="CirclePlus" @click="handleNewClient">
+          新增商品
+        </el-button>
+      </template>
+    </client-search>
 
     <client-list
       @change-tabs="handleChangeTabs"
       @change-page="handleChangePage"
-      @new-client="handleNewClient"
       @edit-client="handleEditClient"
       :clientListConfig="clientListConfig"
+      ref="clientListRef"
     ></client-list>
 
     <client-edit-panel
@@ -31,6 +38,7 @@ import { httpGetClientClassList } from "@/service/http/home/commit";
 import ClientEditPanel from "./cpns/client-edit-panel.vue";
 
 const clientEditPanelRef = ref<InstanceType<typeof ClientEditPanel>>();
+const clientListRef = ref<InstanceType<typeof ClientList>>();
 
 const clientListConfig: IClientTableConfig = reactive({
   keyString: "",
@@ -90,6 +98,11 @@ const handleEditClient = (res: any) => {
   clientEditPanelRef.value!.show = true;
   clientEditPanelRef.value!.defaultData = data;
   clientEditPanelRef.value!.id = data.fitemid;
+};
+
+const handleToggleClick = () => {
+  clientListRef.value?.handleToggleClick();
+  // currentIcon.value == "Tickets" ? "Menu" : "Tickets";
 };
 </script>
 

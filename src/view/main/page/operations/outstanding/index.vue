@@ -1,6 +1,8 @@
 <template>
   <div>
     <page-search
+      class="card"
+      style="margin: 0 0 10px 0"
       isShowQuery
       @query-click="handleQueryClick"
       :searchFormConfig="searchConfig"
@@ -12,7 +14,11 @@
       </template>
     </bar-charts>
 
-    <page-table :tableConfig="tableConfig"></page-table>
+    <page-table
+      class="card"
+      style="margin: 10px 0 0 0"
+      :tableConfig="tableConfig"
+    ></page-table>
   </div>
 </template>
 
@@ -35,6 +41,7 @@ const handleQueryClick = (formData: any) => {
   requestData.tj = formData.tj;
   requestData.begdate = formData.date[0];
   requestData.enddate = formData.date[1];
+  getRankingData();
 };
 
 const xLabels = ref([]);
