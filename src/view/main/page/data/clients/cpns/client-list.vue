@@ -7,15 +7,16 @@
     </el-tabs>
 
     <page-table
+      cardPanel
       @db-click="handleDbClick"
       ref="pageTableRef"
       @page-change="handlePageChange"
       :tableConfig="clientListConfig"
     >
-      <template #list>
+      <template #list="{ data }">
         <client-list-item
           @detail-click="handleDetailClick"
-          :data="clientListConfig.data"
+          :data="data"
         ></client-list-item>
       </template>
     </page-table>
@@ -26,6 +27,7 @@
 import PageTable, { IClientTableConfig } from "@/components/page-table";
 import ClientListItem from "./client-list-item.vue";
 import { httpGetUserInfo } from "@/service/http/home/data";
+import message from "@/utils/message";
 
 const props = withDefaults(
   defineProps<{
@@ -86,6 +88,8 @@ const handleDetailClick = async (data: any, index?: number) => {
   const res = await httpGetUserInfo({ id: data.fitemid });
   if (res.code >= 1) {
     emit("edit-client", res);
+  } else {
+    message.show(res.msg, res.type);
   }
 };
 const handleDbClick = (params: any) => {

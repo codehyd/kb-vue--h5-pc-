@@ -85,6 +85,8 @@ const handleNewClick = () => {
 
 const handleNewPanelQueryClick = async () => {
   const formData = (await pageSearchRef.value?.getFormData()) ?? {};
+  return;
+  console.log(formData);
   // if (!formData.fcsname) return message.show("请选择客户");
   // const fcsid = store.state.bild.currentInfo.fitemid;
   const content = base64.objToEncode({ ...formData });

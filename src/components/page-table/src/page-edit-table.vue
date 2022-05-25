@@ -13,6 +13,7 @@
         ref="pageSearchRef"
         class="currentPageSearch"
         :searchFormConfig="newFormConfig"
+        :defaultValue="defaultValue"
       ></page-search>
     </div>
     <!-- 表格编辑 -->
@@ -27,7 +28,7 @@
         @remove-all-data="handleRemoveAllData"
       ></edit-table-option>
       <!-- <span class="select">商品信息</span> -->
-      <page-table ref="pageTableRef" :tableConfig="tableConfig"></page-table>
+      <page-table ref="pageTableRef" :tableConfig="newTableConfig"></page-table>
     </div>
   </div>
 </template>
@@ -42,8 +43,9 @@ import message from "@/utils/message";
 import { httpPostSave } from "@/service/http/home/commit";
 import { useStore } from "@/store";
 import base64 from "@/utils/base64";
-import mitter from "@/mitt";
 import useGetUserPrice from "@/hooks/useGetUserPrice";
+import { getDay } from "@/utils/timer";
+import useEditHooks from "./hooks/useEditHooks";
 
 const props = withDefaults(
   defineProps<{
@@ -58,8 +60,14 @@ const props = withDefaults(
 const emit = defineEmits(["goBack"]);
 
 const store = useStore();
+const isRedo = computed(() => {
+  const config = store.state.setup.config["pc-table"]?.setup ?? [];
+  const redo = config.find((item: any) => item.id == "billingRedo");
+  return redo?.value ?? true;
+});
 
 const { changeGoodPrice } = useGetUserPrice();
+const { changeAmount } = useEditHooks();
 
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
 const pageSearchRef = ref<InstanceType<typeof PageSearch>>();
@@ -70,7 +78,8 @@ const newFormConfig = computed(() => {
 
 const handleGoBack = () => {
   const fullData = pageTableRef.value?.getTableData()?.fullData ?? [];
-  if (fullData.length > 0) {
+  const isGoodId = fullData.some((item) => item.fmodelid);
+  if (isGoodId) {
     return message.confirm(
       "当前还有商品信息还未保存提交 是否缓存当前数据",
       () => {
@@ -87,21 +96,71 @@ const handleGoBack = () => {
 };
 
 const handleAddNewGoods = async (row: any) => {
+  const { fullData } = pageTableRef.value?.getTableData() ?? {};
   const initColumn = pageTableRef.value?.getInitColumn() ?? {};
   const getPriceGoodRow = (await changeGoodPrice(row)) ?? {};
-  const refRowData = Object.assign(initColumn, getPriceGoodRow);
+  // 获取当前时间戳
+  const nowTime = +new Date();
+  const refRowData = Object.assign(initColumn, getPriceGoodRow, {
+    rowId: nowTime,
+  });
 
-  // // 先判断是否有空行
-  const { fullData } = pageTableRef.value?.getTableData() ?? {};
-  // 判断fullData的数组中是否有fmodelid字段 如果没有的话则拿到索引
-  const index = fullData?.findIndex((item: any) => !item.fmodelid);
-  if (index == -1) {
-    pageTableRef.value?.insert(refRowData);
+  // 判断fullData数据的fmodelid是否存在 如果不存在则在不存在的行插入 如果存在则在下一行插入
+  const fidx = fullData?.findIndex((item) => !item.fmodelid);
+  console.log(fidx);
+  if (fidx === -1) {
+    fullData?.push(refRowData);
   } else {
-    const newRow = [...(fullData ?? [])];
-    newRow.splice(index!, 1, refRowData);
-    pageTableRef.value?.reloadData(newRow);
+    fullData?.splice(fidx!, 1, changeAmount(refRowData).newRow);
   }
+
+  pageTableRef.value?.reloadData(fullData);
+
+  // changeAmount(refRowData,refRowData);
+
+  // 先判断是否有空行
+
+  // 判断fullData的数组中是否有fmodelid字段 如果没有的话则拿到索引
+  // const index = fullData?.findIndex((item: any) => !item.fmodelid);
+  // 判断重复
+  // const fidx = fullData?.findIndex(
+  //   (item: any) => item.fmodelid == refRowData.fmodelid
+  // );
+
+  // const newRow = [...(fullData ?? [])];
+
+  // if (index == -1) {
+  //   console.log(index);
+  //   if (fidx == -1) {
+  //     console.log(1);
+  //     pageTableRef.value?.insert(changeAmount(refRowData).newRow);
+  //   } else {
+  //     console.log(2);
+  //     const fqty = newRow[fidx!].fqty + 1;
+  //     refRowData.fqty = fqty;
+  //     newRow.splice(fidx!, 1, changeAmount(refRowData).newRow);
+  //     pageTableRef.value?.reloadData(newRow);
+  //   }
+  // } else {
+  //   if (isRedo.value) {
+  //     console.log(3);
+  //     newRow.splice(index!, 1, changeAmount(refRowData).newRow);
+  //     pageTableRef.value?.reloadData(newRow);
+  //   } else {
+  //     if (fidx == -1) {
+  //       console.log(4);
+  //       newRow.splice(index!, 1, changeAmount(refRowData).newRow);
+  //       pageTableRef.value?.reloadData(newRow);
+  //     } else {
+  //       console.log(5);
+  //       const fqty = newRow[fidx!].fqty + 1;
+  //       refRowData.fqty = fqty;
+  //       newRow.splice(fidx!, 1, changeAmount(refRowData).newRow);
+  //       pageTableRef.value?.reloadData(newRow);
+  //     }
+  //   }
+  // }
+
   message.success("添加成功");
 };
 
@@ -110,15 +169,36 @@ const handleSaveBildClick = async () => {
   // 先校验表单
   const formData = await pageSearchRef.value?.getFormData();
   if (formData) {
-    // 校验表格 true代表校验选中的行
-    const tableData: any = await pageTableRef.value?.validate(true);
-    if (tableData?.data) {
-      // 获取表格数据后提交 post
-      submitContent(
-        formData,
-        tableData.data.filter((item: any) => item.checked)
-      );
+    // 获取表格数据
+    const tableData = pageTableRef.value?.getTableData()?.fullData ?? [];
+    // 获取勾选的数据且需要有商品id
+    const findCheckOrId = tableData?.filter(
+      (item: any) => item.fmodelid && item.checked
+    );
+    if (findCheckOrId.length == 0) return message.error("请选择商品");
+
+    const validateTable: any = await pageTableRef.value?.validate(
+      false,
+      findCheckOrId
+    );
+    // console.log(validateTable?.valitable);
+    if (validateTable?.valitable) {
+      submitContent(formData, findCheckOrId);
     }
+
+    // if (validateTable?.valitable) {
+    //   pageTableRef.value?.reloadData(
+    //     tableData
+    //       ?.filter((item: any) => !item.fmodelid && !item.checked)
+    //       .map((item) => {
+    //         const newItem = Object.assign({}, item);
+    //         newItem.checked = false;
+    //         return newItem;
+    //       })
+    //   );
+    // 获取表格数据后提交 post
+    // submitContent(formData, findCheckOrId);
+    // }
   }
 };
 
@@ -134,17 +214,20 @@ async function submitContent(currentInfo: any, tableData: any) {
     content,
   });
   if (res.code >= 1) {
-    handleRemoveSelectData();
+    // handleRemoveSelectData();
+    pageTableRef.value?.removeSelectData(tableData);
     message.confirm(
-      "保存成功，是否继续添加商品？",
-      () => {},
+      "保存成功，是否继续开新单？",
+      () => {
+        console.log(1312);
+      },
       () => {
         handleGoBack();
       }
     );
 
     // 删除打钩的数据
-    mitter.emit("base-table-remove-select-rows");
+    // mitter.emit("base-table-remove-select-rows");
   }
 
   message.show(
@@ -175,6 +258,41 @@ const handleSaveLocalData = () => {
   store.commit("bild/changeBildData", fullData);
   message.show("缓存成功", "success");
 };
+
+const storeDefaultValue = computed(() => {
+  const stock =
+    store.state.setup.config["pc-table"].setup?.find(
+      (item: any) => item.id == "defaultStore"
+    )?.value ?? "";
+  return stock;
+});
+
+const defaultValue = {
+  fstock: storeDefaultValue.value,
+  fdate: getDay(),
+};
+
+const newTableConfig = computed(() => {
+  const tableConfig: ITableConfigType = {
+    ...props.tableConfig,
+    menuConfig: {
+      body: {
+        options: [
+          [
+            {
+              code: "editDelete",
+              name: "删除当前行",
+              visible: true,
+              disabled: false,
+            },
+          ],
+        ],
+      },
+    },
+    showSelect: false,
+  };
+  return tableConfig;
+});
 </script>
 
 <style lang="less" scoped>

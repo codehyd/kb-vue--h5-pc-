@@ -1,6 +1,6 @@
 <template>
   <div class="page-header">
-    <div class="logo">
+    <div class="logo" @click="handleLogoClick">
       <img :src="logoSrc" alt="" />
     </div>
 
@@ -9,11 +9,20 @@
         <nav-header></nav-header>
       </div>
       <div class="right">
+        <!-- <el-switch
+          @change="handleSwitchChange"
+          style="margin: 0 10px"
+          v-model="dark"
+          inline-prompt
+          active-text="暗"
+          inactive-text="明"
+        /> -->
         <kb-icon
           @click="handleNavSetting"
           name="setting"
-          :size="18"
+          :size="20"
           flag="elIcon"
+          color="#999"
         ></kb-icon>
         <avatar-wrap style="margin: 0 0 0 10px"></avatar-wrap>
       </div>
@@ -32,9 +41,32 @@ const router = useRouter();
 
 const logoSrc = ref("https://www.757abc.com/wxmp/img/weblogo.png");
 
+onMounted(() => {
+  toggleSrc();
+  // 监听分辨率变化
+  window.addEventListener("resize", () => {
+    toggleSrc();
+  });
+  function toggleSrc() {
+    const width = document.body.clientWidth;
+    logoSrc.value =
+      width >= 1024
+        ? "https://www.757abc.com/wxmp/img/weblogo.png"
+        : "https://www.757abc.com/wxmp/img/weblogo2.png";
+  }
+});
+
 const handleNavSetting = () => {
   router.push("/setup");
 };
+const handleLogoClick = () => {
+  router.push("/main");
+};
+
+// const dark = ref(false);
+// const handleSwitchChange = (val: boolean) => {
+//   document.body.style.setProperty("--headerBgColor", !val ? "white" : "#000");
+// };
 </script>
 
 <style lang="less" scoped>

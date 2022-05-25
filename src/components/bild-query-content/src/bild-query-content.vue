@@ -14,6 +14,7 @@
         <el-button @click="handleToggle" icon="plus" round>开单</el-button>
       </div>
       <page-table
+        @on-detail="handleDetail"
         ref="pageTableRef"
         @db-click="handleDbClick"
         @page-change="handlePageChange"
@@ -74,14 +75,19 @@ const store = useStore();
 const detailPanelRef = ref<InstanceType<typeof DetailPanel>>();
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
-const { pageTableConfig, getTableData, detailTableConfig, handleDbClick } =
-  useTableHooks(
-    props.data,
-    props.showColumnBilltypeid,
-    openDetailFn,
-    props.tableConfig,
-    props.detailTablConfig
-  );
+const {
+  pageTableConfig,
+  getTableData,
+  detailTableConfig,
+  handleDbClick,
+  requestDetailHeader,
+} = useTableHooks(
+  props.data,
+  props.showColumnBilltypeid,
+  openDetailFn,
+  props.tableConfig,
+  props.detailTablConfig
+);
 
 // 点击查询
 const handleQueryClick = (data: any) => {
@@ -141,6 +147,14 @@ const newTableConfig = computed(() => {
     ...props.tableConfig,
   };
 });
+
+const handleDetail = async (params: any) => {
+  detailTableConfig.column = await requestDetailHeader();
+  detailTableConfig.data = params.data[0].data;
+  detailTableConfig.images = params.atturlarray;
+  detailTableConfig.messages = params.message[0].data;
+  openDetailFn();
+};
 
 // 导出方法
 defineExpose({

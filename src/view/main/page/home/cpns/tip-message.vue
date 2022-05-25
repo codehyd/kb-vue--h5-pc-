@@ -1,9 +1,9 @@
 <template>
   <div class="tip-message">
-    <kb-card :height="500">
+    <kb-card :height="470">
       <template #title>
         <div class="title-content">
-          <div class="title">{{ activeText }}...</div>
+          <div class="title">单据操作日志</div>
           <div class="actions">
             <el-dropdown @command="handleItemClick">
               <span class="el-dropdown-link">
@@ -31,7 +31,7 @@
             <el-empty description="暂无数据" />
           </div>
         </template>
-        <vxe-list v-else height="430" :data="newBillList">
+        <vxe-list v-else height="400" :data="newBillList">
           <template #default="{ items }">
             <div
               class="listItem"
@@ -46,6 +46,20 @@
                       <div class="item-content" @click.stop="hanlePrint(item)">
                         <kb-icon name="Printer" flag="elIcon"></kb-icon>
                         <span>打印预览</span>
+                      </div>
+                    </div>
+                    <div
+                      class="item"
+                      v-if="
+                        item.ftype !== 104 &&
+                        item.ftype !== 113 &&
+                        item.ftype !== 150 &&
+                        item.ftype !== 151
+                      "
+                    >
+                      <div class="item-content" @click.stop="detailClick(item)">
+                        <kb-icon name="list" flag="elIcon"></kb-icon>
+                        <span>单据详情</span>
                       </div>
                     </div>
                   </div>
@@ -67,6 +81,13 @@
       </div>
     </kb-card>
     <page-print ref="pagePrintRef" :url="url"></page-print>
+
+    <detail-panel
+      @active-click="handleActiveClick"
+      :tableConfig="detailTableConfig"
+      :billtypeid="billtypeid"
+      ref="detailPanelRef"
+    ></detail-panel>
   </div>
 </template>
 
@@ -78,9 +99,10 @@ import { activeList, IActiveListType } from "../config/billlist-config";
 import { useStore } from "@/store";
 import { httpPrintBild } from "@/service/http/home/commit";
 import message from "@/utils/message";
+import useDetail from "@/hooks/useDetail";
+import DetailPanel from "@/components/bild-query-content/src/cpns/detail-panel.vue";
 
 const store = useStore();
-const pagePrintRef = ref<InstanceType<typeof PagePrint>>();
 
 const activeText = ref(activeList[0].text);
 
@@ -102,8 +124,18 @@ const handleItemClick = (item: IActiveListType) => {
 };
 
 const handleListClick = (item: any) => {
+  // 获取当前点击的索引
   item.show = !item.show;
 };
+const {
+  detailClick,
+  billtypeid,
+  detailTableConfig,
+  detailPanelRef,
+  handleActiveClick,
+  pagePrintRef,
+  url,
+} = useDetail();
 
 const hanlePrint = async (item: any) => {
   const res = await httpPrintBild({
@@ -118,12 +150,13 @@ const hanlePrint = async (item: any) => {
   }
 };
 
-const url = ref("");
+// const url = ref("");
 </script>
 
 <style lang="less" scoped>
 .tip-message {
-  height: 500px;
+  // height: 450px;
+  margin: 10px 0 0 0;
 }
 .title-content {
   display: flex;

@@ -79,10 +79,12 @@
                 <el-date-picker
                   :type="item.type"
                   style="width: 100%"
+                  :class="item.type == 'date' ? 'date' : ''"
                   v-bind="item.otherOptions"
                   v-model="modelValue[`${item.field}`]"
                   @update:modelValue="handleValueChange($event, item.field)"
                   :shortcuts="item.type === 'daterange' ? dateShortcuts : []"
+                  unlink-panels
                 ></el-date-picker>
               </template>
               <!-- kehu 客户选择 -->
@@ -193,5 +195,9 @@ defineExpose({
 }
 .isShowMessage {
   margin: 0 0 -1px 0;
+}
+
+:deep(.date .el-input__inner) {
+  padding-left: 30px !important;
 }
 </style>

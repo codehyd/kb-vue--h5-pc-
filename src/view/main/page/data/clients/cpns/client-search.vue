@@ -1,10 +1,6 @@
 <template>
   <div class="good-search card">
-    <page-search
-      @query-click="handleQueryClick"
-      isShowQuery
-      :searchFormConfig="formConfig"
-    >
+    <page-search @query-click="handleQueryClick" :searchFormConfig="formConfig">
     </page-search>
     <div class="options">
       <slot name="options"></slot>

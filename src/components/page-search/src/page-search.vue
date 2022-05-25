@@ -6,10 +6,12 @@
       @search-click="handleQueryClick"
       v-model="formData"
       v-bind="searchFormConfig"
+      @update:modelValue="handleModelValue"
     >
       <template #option>
         <slot name="option">
           <el-button
+            class="queryBtn"
             v-if="isShowQuery"
             @click="handleQueryClick"
             style="margin: 0 0 0 20px"
@@ -72,6 +74,7 @@ import KbDialog from "@/base-ui/dialog";
 import PageTable, { IClientTableConfig } from "@/components/page-table";
 import { useStore } from "@/store";
 import { ElInput } from "element-plus";
+import dayjs from "dayjs";
 
 import {
   httpGetClientClassList,
@@ -90,7 +93,7 @@ const props = withDefaults(
     isShowQuery: false,
   }
 );
-const emit = defineEmits(["query-click"]);
+const emit = defineEmits(["query-click", "select-client", "change-data"]);
 
 const elInputRef = ref<InstanceType<typeof ElInput>>();
 
@@ -99,9 +102,10 @@ const store = useStore();
 const baseFormRef = ref<InstanceType<typeof BaseForm>>();
 
 const formItems = props.searchFormConfig?.formItems ?? [];
-// console.log(12, formItems);
 const formOriginData: any = {};
 for (const item of formItems) {
+  // console.log(item);
+
   // 先判断是否有defaultValue 如果有则赋值 没有则根据type赋值
   if (props.defaultValue) {
     // console.log(props.defaultValue);
@@ -110,16 +114,13 @@ for (const item of formItems) {
         ? Number(props.defaultValue[item.field] ?? 0)
         : props.defaultValue[item.field] ?? "";
     continue;
-    // formOriginData[item.name] = item.defaultValue;
   }
   if (item.defaultDateValue) {
     formOriginData[item.field] = item.defaultDateValue;
-  } else {
-    if (item.type == "number") {
-      formOriginData[item.field] = 0;
-    } else {
-      formOriginData[item.field] = "";
-    }
+  }
+
+  if (item.type == "date") {
+    formOriginData[item.field] = dayjs().format("YYYY-MM-DD");
   }
 }
 const formData = ref(formOriginData);
@@ -219,19 +220,28 @@ const handleSelectClient = (row: any) => {
       formData.value[item.field] = row.fcsname;
     }
   }
-
   message.success("选择客户成功");
   isShowClientPanelShow.value = false;
+  emit("select-client", row);
 };
 
 const handleDbClick = (params: any) => {
   handleSelectClient(params.row);
 };
 
+const formatFormData = () => {
+  const formItem = props.searchFormConfig?.formItems ?? [];
+  const oraginData: any = {};
+  for (const item of formItem) {
+    oraginData[item.field] = "";
+  }
+  return oraginData;
+};
+
 const getFormData = async () => {
   const isValid = await baseFormRef.value?.validateForm();
   if (isValid) {
-    return formData.value;
+    return Object.assign(formatFormData(), formData.value);
   } else {
     message.show("需要输入必填带星号的信息");
   }
@@ -239,7 +249,7 @@ const getFormData = async () => {
 
 const handleQueryClick = () => {
   // 获取数据
-  emit("query-click", formData.value);
+  emit("query-click", Object.assign(formatFormData(), formData.value));
 };
 
 const handlePageChange = async (val: number) => {
@@ -253,8 +263,14 @@ const handleOpenedFn = () => {
   elInputRef.value?.focus();
 };
 
+const handleModelValue = (formData: any) => {
+  emit("change-data", formData);
+  // console.log(formData);
+};
+
 defineExpose({
   getFormData,
+  formData,
 });
 </script>
 
@@ -269,5 +285,12 @@ defineExpose({
   border: 1px solid #dcdfe6;
   border-radius: 4px;
   margin: 0 0 10px 0;
+}
+
+// 媒体查询 1200px以下
+@media screen and (max-width: 1200px) {
+  .queryBtn {
+    width: 100%;
+  }
 }
 </style>

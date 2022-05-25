@@ -106,6 +106,7 @@ const handleUpdateFile = async (files: any, index: number) => {
   });
   if (res.code >= 1) {
     mitter.emit("update-image", res.atturlarray);
+    mitter.emit("page-update-image", res.atturlarray);
   }
   message.show(res.msg, res.type);
 };
@@ -119,6 +120,7 @@ const handleMessageAddClick = () => {
     });
     if (res.code >= 1) {
       mitter.emit("update-message", res.data[0].data);
+      mitter.emit("page-update-message", res.data[0].data);
     }
     message.show(res.msg, res.type);
   });
@@ -129,6 +131,9 @@ const messageSigShow = ref(false);
 const messageSigurl = ref("");
 const handleMessageClick = (item: any) => {
   if (item.furl) {
+    messageSigShow.value = true;
+    messageSigurl.value = item.furl;
+    return;
     message.confirm(
       "是否在新网页打开打印预览",
       () => {

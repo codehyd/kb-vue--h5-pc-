@@ -2,11 +2,22 @@
   <div v-if="show" class="page-goods-table">
     <kb-dialog :top="2" appendToBody v-model:show="show" title="商品信息">
       <!-- 输入框 -->
-      <el-input v-model="goodTableConfig.tj">
+      <el-input
+        @keyup.enter.native="handleSearchClick"
+        v-model="goodTableConfig.tj"
+      >
         <template #append>
-          <span class="searchInput">搜索</span>
+          <el-button @click="handleSearchClick" icon="Search" />
         </template>
       </el-input>
+
+      <div class="tip">
+        <div class="tipText">
+          <kb-icon name="InfoFilled" flag="elIcon"></kb-icon>
+          商品图片将在宫格样式中显示
+        </div>
+        <el-button @click="handleToggleStyle">切换显示样式</el-button>
+      </div>
       <!-- tabs -->
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <template
@@ -16,26 +27,33 @@
           <el-tab-pane :label="item.name" :name="item.name"></el-tab-pane>
         </template>
       </el-tabs>
-      <span class="tip">
-        <kb-icon name="InfoFilled" flag="elIcon"></kb-icon>
-        商品图片将在双击时显示
-      </span>
+
       <!-- 表格信息 -->
       <page-table
+        cardPanel
         @page-change="handlePageChange"
         @db-click="handleDbClick"
         :table-config="goodTableConfig"
+        ref="pageTableRef"
       >
         <template #checked="{ row }">
           <span @click="handleSelectClick(row)" class="selectText">添加</span>
         </template>
+
+        <template #list="{ data }">
+          <good-list-item
+            @edit-good="handleAddGoodItem"
+            card-text="添加"
+            :data="data"
+          ></good-list-item>
+        </template>
       </page-table>
     </kb-dialog>
-    <good-detail
+    <!-- <good-detail
       ref="goodDetailRef"
       v-model="currentGood"
       @save-click="handleSaveClick"
-    ></good-detail>
+    ></good-detail> -->
   </div>
 </template>
 
@@ -43,6 +61,7 @@
 import KbDialog from "@/base-ui/dialog";
 import GoodDetail from "./cpns/good-detail.vue";
 import KbIcon from "@/base-ui/icon";
+import GoodListItem from "@/view/main/page/data/goods/cpns/good-list-item.vue";
 import {
   httpGetGoodsClassList,
   httpGetGoodsList,
@@ -53,6 +72,7 @@ import PageTable, { IGoodTableConfig } from "..";
 const emit = defineEmits(["save-click"]);
 
 const goodDetailRef = ref<InstanceType<typeof GoodDetail>>();
+const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
 const show = ref(false);
 
@@ -83,11 +103,12 @@ const handleClick = async (payload: any) => {
 const currentGood = ref<any>({});
 
 const handleDbClick = ({ row }: any) => {
-  currentGood.value = { ...row, fqty: 1, checked: true };
-  const goodDetail = goodDetailRef.value;
-  if (goodDetail) {
-    goodDetail.show = true;
-  }
+  handleSelectClick(row);
+  // currentGood.value = { ...row, fqty: 1, checked: true };
+  // const goodDetail = goodDetailRef.value;
+  // if (goodDetail) {
+  //   goodDetail.show = true;
+  // }
 };
 
 const handleSelectClick = (row: any) => {
@@ -116,7 +137,6 @@ const requestBeRelatedToGoods = () => {
 
 async function getGoodList() {
   const res = await httpGetGoodsList({
-    flag: "select",
     page: goodTableConfig.page,
     Classid: goodTableConfig.Classid,
     tj: goodTableConfig.tj,
@@ -136,6 +156,23 @@ const handleSaveClick = (row: any) => {
   emit("save-click", row);
 };
 
+const handleSearchClick = async () => {
+  goodTableConfig.page = 1;
+  const { data, allPage } = await getGoodList();
+  goodTableConfig.data = data ?? [];
+  goodTableConfig.totalPage = allPage ?? 1;
+};
+
+const handleAddGoodItem = (params: any) => {
+  const { item } = params;
+  handleSelectClick(item);
+};
+
+const handleToggleStyle = () => {
+  pageTableRef.value!.currentFlag =
+    pageTableRef.value?.currentFlag === "table" ? "list" : "table";
+};
+
 requestBeRelatedToGoods();
 
 defineExpose({
@@ -146,10 +183,17 @@ defineExpose({
 <style scoped>
 .selectText {
   cursor: pointer;
+  color: #0094ff;
+  text-decoration: underline;
 }
 .tip {
   display: flex;
   align-items: center;
   margin: 10px 0;
+  justify-content: space-between;
+}
+.tipText {
+  display: flex;
+  align-items: center;
 }
 </style>

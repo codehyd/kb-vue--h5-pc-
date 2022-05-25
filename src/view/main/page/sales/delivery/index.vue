@@ -61,7 +61,7 @@ const handleQueryClick = (formData: any) => {
   requestData.tj = formData.tj;
   requestData.begdate = formData.begdate;
   requestData.enddate = formData.enddate;
-  requestData.page = 1;
+  requestData.page = formData.page ?? 1;
   bildQueryContentRef.value?.getTableData();
 };
 

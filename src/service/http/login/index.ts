@@ -2,8 +2,12 @@ import kbBaseRequest from "@/service";
 import { IDataType } from "../../type";
 import { ICustormType, ICustormSetup } from "./type";
 import { getTaskBaseData, getTaskTokenData } from "../../request/config";
+import local from "@/utils/local";
 
 export const httpAccount = (accountData: any) => {
+  // 清除所有缓存
+  local.clearCache();
+
   const newAccountData = { ...accountData };
   newAccountData.csname = accountData.cnstr;
 

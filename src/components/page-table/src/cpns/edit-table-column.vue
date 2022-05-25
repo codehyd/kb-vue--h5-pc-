@@ -83,7 +83,9 @@ const props = withDefaults(
     modelValue: any;
     row: any;
     column: any;
+    index: number;
     editFooterMethod: () => void;
+    addBianmaMethod: (row: any, isRedo: boolean, index: number) => void;
   }>(),
   {}
 );
@@ -91,6 +93,11 @@ const props = withDefaults(
 const emit = defineEmits(["update:modelValue"]);
 
 const store = useStore();
+const isRedo = computed(() => {
+  const config = store.state.setup.config["pc-table"]?.setup ?? [];
+  const redo = config.find((item: any) => item.id == "billingRedo");
+  return redo?.value ?? true;
+});
 
 const { changeGoodPrice } = useGetUserPrice();
 
@@ -153,10 +160,15 @@ const handlerEnterInput = async (
     const res = await httpGetGoodsInfoByCode(val);
 
     if (res.code >= 1) {
-      const newRow = await changeGoodPrice(res.data[0].data[0]);
-      newRow.fqty = 1;
-      // newRow.checked = "checked" in newRow ? newRow.checked : true;
-      row = Object.assign(row, changeAmount(newRow).newRow);
+      let newRow = await changeGoodPrice(res.data[0].data[0]);
+      if (isRedo.value) {
+        newRow.fqty = 1;
+        row = Object.assign(row, changeAmount(newRow).newRow);
+      } else {
+        props.addBianmaMethod &&
+          props.addBianmaMethod(newRow, isRedo.value, props.index);
+      }
+
       props.editFooterMethod && props.editFooterMethod();
     } else {
       message
@@ -171,6 +183,7 @@ const handlerEnterInput = async (
         })
         .catch(() => {
           row["fcpbianma"] = "";
+          row["fmodelid"] = "";
           props.editFooterMethod && props.editFooterMethod();
         });
     }

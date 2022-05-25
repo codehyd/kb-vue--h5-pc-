@@ -11,8 +11,6 @@
       show-footer-overflow
       highlight-hover-row
       :loading="isLoading"
-      header-align="center"
-      footer-align="center"
       :menu-config="menuConfig"
       @menu-click="handleMenuClick"
       @cell-dblclick="handleCellDbClick"
@@ -70,8 +68,8 @@
           </template>
         </vxe-column>
       </template>
-      <!-- 编辑模式下必须有的单选框 -->
-      <template v-if="state == 'edit' || showSelect">
+      <!-- 单选 -->
+      <template v-if="showSelect">
         <vxe-column fixed="left" type="checkbox" :width="80" align="center">
           <template #checkbox="{ row, column, rowIndex }">
             <slot
@@ -87,7 +85,7 @@
       </template>
       <!-- 表格列内容 -->
       <template
-        v-for="(item, index) in column"
+        v-for="(item, index) in autoColumn"
         :key="keyString ? item[keyString] : index"
       >
         <vxe-column
@@ -99,15 +97,11 @@
           :title="item.fshowname"
           :params="item"
           :edit-render="columnEditRender(item)"
+          header-align="center"
         >
           <!-- 默认模式 -->
           <template #default="{ row, column, rowIndex }">
-            <slot
-              :name="column.field"
-              :row="row"
-              :column="column"
-              :rowIndex="rowIndex"
-            >
+            <slot :row="row" :column="column" :rowIndex="rowIndex">
               <span>{{ row[column.field] == 0 ? "" : row[column.field] }}</span>
             </slot>
           </template>
@@ -122,6 +116,7 @@
       <!-- 右边操作选项 -->
       <template v-if="showAction">
         <vxe-column
+          fixed="right"
           :width="!isAutoColumnWidth ? 60 : 0"
           :min-width="isAutoColumnWidth ? 60 : 0"
           resizable
@@ -131,6 +126,7 @@
           <!-- 默认模式 -->
           <template #default="{ row, column, rowIndex }">
             <el-popover
+              trigger="click"
               :width="300"
               placement="top"
               popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
@@ -216,6 +212,10 @@ const props = withDefaults(
 
 const emit = defineEmits(["menu-click", "db-click", "expand"]);
 
+const autoColumn = computed(() =>
+  props.column.filter((item) => item?.fwidth > 0)
+);
+
 const formatAlign = (align: -1 | 0 | 1) => {
   const aligns = ["left", "center", "right"];
   return aligns[align + 1] ?? "center";
@@ -233,7 +233,7 @@ const {
   scrollConfig,
   virtualScrollSize,
   footerMethod,
-} = useTableSetup(props.state, props.showFooter);
+} = useTableSetup(props.state, props.showFooter, props.showExpand);
 
 // 表格行为Hooks
 const {

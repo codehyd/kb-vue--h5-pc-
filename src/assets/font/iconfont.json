@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "27726276",
+      "name": "收费工作台_今日实收金额",
+      "font_class": "shoufeigongzuotai_jinrishishoujine",
+      "unicode": "e6f3",
+      "unicode_decimal": 59123
+    },
+    {
       "icon_id": "4618029",
       "name": "销售笔数",
       "font_class": "xiaoshoubishu",

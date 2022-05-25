@@ -2,14 +2,31 @@
   <div class="edit-table-option">
     <!-- <div class="select">表格基本操作</div> -->
     <!-- 添加新行 -->
-    <el-button icon="CirclePlus" @click="handleAddNewRows">新行</el-button>
+    <el-tooltip effect="dark" content="添加新行" placement="top">
+      <el-button icon="CirclePlus" @click="handleAddNewRows">新行</el-button>
+    </el-tooltip>
+
     <!-- 删除选中 -->
-    <el-button icon="CloseBold" @click="handleRemoveSelect">删选</el-button>
+    <!-- <el-tooltip effect="dark" content="删除选中的表格行" placement="top">
+      <el-button icon="CloseBold" @click="handleRemoveSelect">删选</el-button>
+    </el-tooltip> -->
+
     <!-- 删除全部 -->
-    <el-button icon="Failed" @click="handleRemoveAll">全删</el-button>
+    <el-tooltip effect="dark" content="删除全部数据" placement="top">
+      <el-button icon="Failed" @click="handleRemoveAll">全删</el-button>
+    </el-tooltip>
     <!-- 缓存操作 -->
-    <el-button icon="UploadFilled" @click="handleSaveData">缓存</el-button>
-    <el-button icon="List" @click="handleLoadData">加载</el-button>
+    <el-tooltip
+      effect="dark"
+      content="缓存当前的数据 以便下次开单"
+      placement="top"
+    >
+      <el-button icon="UploadFilled" @click="handleSaveData">缓存</el-button>
+    </el-tooltip>
+
+    <el-tooltip effect="dark" content="加载上次缓存的数据" placement="top">
+      <el-button icon="List" @click="handleLoadData">加载</el-button>
+    </el-tooltip>
 
     <!-- <div class="select">单据操作</div> -->
     <!-- 添加商品 -->
@@ -95,7 +112,9 @@ const handlerEnter = async () => {
 };
 
 const handleSaveClick = (row: any) => {
-  emit("add-new-goods", row);
+  // 删除row._X_ROW_KEY字段
+  delete row._X_ROW_KEY;
+  emit("add-new-goods", { ...row, fqty: 1, checked: true });
 };
 
 const handleAddNewRows = () => {
@@ -109,7 +128,10 @@ const handleRemoveSelect = () => {
 };
 
 const handleRemoveAll = () => {
-  emit("remove-all-data");
+  message.confirm("是否全部删除所有数据", () => {
+    emit("remove-all-data");
+  });
+  //
   // mitter.emit("base-table-remove-all-rows");
 };
 const handleSaveBildClick = () => {
@@ -120,13 +142,17 @@ const handleLoadData = () => {
   if (data.length == 0) {
     return message.show("没有缓存数据");
   }
-  emit("reloadData", data);
+  message.confirm("是否加载上一次缓存的数据", () => {
+    emit("reloadData", data);
+  });
 
   // emit('add-new-goods', data);
 };
 
 const handleSaveData = () => {
-  emit("save-local-data");
+  message.confirm("是否缓存当前所有数据,以便下一次开单使用", () => {
+    emit("save-local-data");
+  });
 };
 </script>
 

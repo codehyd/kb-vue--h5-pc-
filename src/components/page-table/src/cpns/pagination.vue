@@ -1,6 +1,6 @@
 <template>
   <div class="pagination">
-    <span>每页显示{{ count }}条数据</span>
+    <span v-if="showCount">每页显示{{ count }}条数据</span>
     <el-pagination
       :current-page="currentPageModelValue"
       :page-count="totalPage"
@@ -44,6 +44,16 @@ const count = computed(() => {
 const handleCurrentPage = (val: number) => {
   emit("page-change", val);
 };
+
+const showCount = ref(true);
+
+onMounted(() => {
+  // 窗口<768px时，隐藏每页显示条数
+  window.addEventListener("resize", () => {
+    showCount.value = window.innerWidth > 768 ? true : false;
+  });
+  showCount.value = window.innerWidth > 768 ? true : false;
+});
 </script>
 
 <style scoped>

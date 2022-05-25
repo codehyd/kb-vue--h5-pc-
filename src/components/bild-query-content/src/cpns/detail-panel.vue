@@ -115,10 +115,11 @@ const route = useRoute();
 
 const bildTitle = computed(() => {
   let title = route.meta?.title;
+  let configTitle = props.tableConfig?.title;
   if (title == "销售对账") {
     title = clientInfo.value.fbillname;
   }
-  return title + "单据详情";
+  return (configTitle ?? title) + "单据详情";
 });
 
 const showWeChat = computed(() => {
@@ -131,9 +132,9 @@ const showWeChat = computed(() => {
 
   const checkWeChatList: any = [];
   for (const item of currentValue) {
-    console.log(allList);
+    // console.log(allList);
     const find = allList.find((findItem: any) => findItem.label == item);
-    console.log(find);
+    // console.log(find);
     if (!find.disabled) {
       checkWeChatList.push(find);
     }
@@ -157,6 +158,8 @@ defineExpose({
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* flex-wrap: wrap; */
+  /* margin-bottom: 10px; */
 }
 
 .footer {

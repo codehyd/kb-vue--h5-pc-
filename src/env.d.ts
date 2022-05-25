@@ -11,5 +11,9 @@ declare module "*.vue" {
 declare module "@/base-ui/icon";
 declare module "@/base-ui/wx-scan-login";
 declare module "@/base-ui/echarts";
+declare module "vue-drag-resize";
+declare module "nprogress";
+
+declare module "js-base64";
 
 declare module "qs";

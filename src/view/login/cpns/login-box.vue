@@ -2,12 +2,7 @@
   <div class="login-box">
     <div class="title" :style="{ 'padding-left': labelWidth }">
       <h3>Welcome</h3>
-      <h3>
-        欢迎使用 开博生意管家
-        <a target="_blank" class="beian" href="https://beian.miit.gov.cn/">
-          粤ICP备13070897号
-        </a>
-      </h3>
+      <h3>欢迎使用 开博生意管家</h3>
     </div>
     <!-- 账号登录 -->
     <el-form
@@ -23,7 +18,7 @@
         <el-input v-model="accountData.uname" />
       </el-form-item>
       <el-form-item prop="upwd" label="用户密码">
-        <el-input v-model="accountData.upwd" />
+        <el-input show-password v-model="accountData.upwd" />
       </el-form-item>
       <el-form-item required prop="sns" label="软件系统">
         <el-select
@@ -37,7 +32,17 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          />
+          >
+            <span style="float: left">{{ item.label }}</span>
+            <span
+              style="
+                float: right;
+                color: var(--el-text-color-secondary);
+                font-size: 13px;
+              "
+              >{{ item.value }}</span
+            >
+          </el-option>
         </el-select>
       </el-form-item>
       <el-form-item required prop="authCode" label="验证码">
@@ -49,7 +54,7 @@
       </el-form-item>
     </el-form>
     <!-- 微信登录 -->
-    <wx-login v-model:show="isShowWxScanPanel"></wx-login>
+    <wx-login ref="wxLoginRef" v-model:show="isShowWxScanPanel"></wx-login>
     <div class="operation" :style="{ 'padding-left': labelWidth }">
       <el-divider>第三方登录</el-divider>
       <div class="third-icons">
@@ -88,6 +93,8 @@ const store = useStore();
 const labelWidth = ref("120px");
 const token = computed(() => store.state.login.token);
 
+const wxLoginRef = ref<InstanceType<typeof WxLogin>>();
+
 watchEffect(() => {
   if (token.value) {
     accountData.value.csname = token.value.csname;
@@ -113,6 +120,8 @@ const isShowWxScanPanel = ref(false);
 
 // 第三方登录 (微信)
 const handleThirdWxClick = () => {
+  const sns = store.state.login.token?.softname;
+  wxLoginRef.value!.selectSoft = sns;
   isShowWxScanPanel.value = true;
 };
 

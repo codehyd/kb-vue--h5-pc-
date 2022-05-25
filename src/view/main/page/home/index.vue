@@ -6,18 +6,10 @@
     <el-row :gutter="10" class="custormRow">
       <el-col class="custormListCol" v-bind="custormColLeft">
         <custorm-list></custorm-list>
+        <tip-message></tip-message>
       </el-col>
       <el-col v-bind="custormColRight">
         <todo-list></todo-list>
-      </el-col>
-    </el-row>
-    <!-- commit -->
-    <el-row :gutter="10" class="custormRow">
-      <el-col class="custormListCol" v-bind="commitColLeft">
-        <tip-message></tip-message>
-      </el-col>
-      <el-col v-bind="commitColRight">
-        <notice></notice>
       </el-col>
     </el-row>
   </div>
@@ -39,21 +31,6 @@ const custormColLeft = {
   xl: 15,
 };
 const custormColRight = {
-  xs: 24,
-  sm: 24,
-  md: 24,
-  lg: 9,
-  xl: 9,
-};
-
-const commitColLeft = {
-  xs: 24,
-  sm: 24,
-  md: 24,
-  lg: 15,
-  xl: 15,
-};
-const commitColRight = {
   xs: 24,
   sm: 24,
   md: 24,

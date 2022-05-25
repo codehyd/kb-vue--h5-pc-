@@ -5,7 +5,7 @@ import { useStore } from "@/store";
 export default function () {
   const store = useStore();
   const dropDownList: any = computed(() => store.state?.selectOptions ?? []);
-  const bildFormConfig: IForm = {
+  const bildFormConfig: IForm = reactive({
     formItems: [
       {
         type: "kehu",
@@ -61,13 +61,13 @@ export default function () {
         type: "select", //选择
         field: "fyewuyuan",
         label: "业务员",
-        options: dropDownList.value?.arryewuyuan ?? [],
+        // options: dropDownList.value?.arryewuyuan ?? [],
       },
       {
         type: "select", //选择
         field: "fstock",
         label: "仓库",
-        options: dropDownList.value?.arrstock ?? [],
+        // options: dropDownList.value?.arrstock ?? [],
 
         rules: [
           {
@@ -89,7 +89,12 @@ export default function () {
         label: "备注",
       },
     ],
-  };
+  });
+
+  watchEffect(() => {
+    bildFormConfig.formItems[6].options = dropDownList.value?.arryewuyuan ?? [];
+    bildFormConfig.formItems[7].options = dropDownList.value?.arrstock ?? [];
+  });
 
   return {
     bildFormConfig,

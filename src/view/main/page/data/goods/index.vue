@@ -30,6 +30,7 @@
 </template>
 
 <script setup lang="ts">
+import mitter from "@/mitt";
 import GoodSearch from "./cpns/good-search.vue";
 import { goodSearchConfig } from "./config/good-search-config";
 import GoodList from "./cpns/good-list.vue";
@@ -119,11 +120,13 @@ const handleSaveSuccess = (res: any) => {
   goodListRef.value?.addGoods(data);
 };
 
-// const currentIcon = ref("Menu");
 const handleToggleClick = () => {
   goodListRef.value?.handleToggleClick();
-  // currentIcon.value == "Tickets" ? "Menu" : "Tickets";
 };
+
+mitter.on("add-good", () => {
+  handleNewGoods();
+});
 </script>
 
 <style scoped></style>

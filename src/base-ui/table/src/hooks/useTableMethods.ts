@@ -34,22 +34,26 @@ export default function () {
   const getTableData = () => vxeTableRef.value?.getTableData();
 
   // 完整校验
-  const fullValiTable = async (isSelect: boolean = false) => {
+  const fullValiTable = async (isSelect: boolean = false, rows?: any) => {
+    // console.log(rows);
     const { fullData } = getTableData();
-    const newData = isSelect
-      ? fullData.filter((item) => item.checked)
-      : fullData;
-    return vxeTableRef.value?.fullValidate(newData);
+    if (isSelect) {
+      const newData = isSelect
+        ? fullData.filter((item) => item.checked)
+        : fullData;
+      return vxeTableRef.value?.fullValidate(newData);
+    }
+    return vxeTableRef.value?.fullValidate(rows);
   };
 
   const updateFooter = () => vxeTableRef.value?.updateFooter();
 
-  const removeSelectData = () => {
+  const removeSelectData = (rows?: any) => {
     const vxeTable = vxeTableRef.value;
     if (vxeTable) {
-      const rows = vxeTable.getCheckboxRecords();
-      if (rows.length == 0) return message.show("暂无选中行");
-      vxeTable?.remove(rows);
+      const selectRows = vxeTable.getCheckboxRecords();
+      if (rows.length > 0) return vxeTable?.remove(rows);
+      if (selectRows.length == 0) return message.show("暂无选中行");
     }
   };
 

@@ -4,15 +4,15 @@ import { watchEffect, computed, ref } from "vue";
 export default function () {
   const store = useStore();
   const dropList = computed(() => store.state.selectOptions);
-  const unit = ref([]);
-  const classList = ref([]);
+  // const unit = ref([]);
+  // const classList = ref([]);
 
-  watchEffect(() => {
-    unit.value = dropList.value?.arrunit ?? [];
-    classList.value = dropList.value?.arrcpfirstclass ?? [];
-  });
+  // watchEffect(() => {
+  //   unit.value = dropList.value?.arrunit ?? [];
+  //   classList.value = dropList.value?.arrcpfirstclass ?? [];
+  // });
 
-  const plusFormConfig: IForm = {
+  const plusFormConfig: IForm = reactive({
     colLayout: {
       xl: 6, // >1920px 4个
       lg: 12,
@@ -125,7 +125,13 @@ export default function () {
         },
       },
     ],
-  };
+  });
+
+  watchEffect(() => {
+    plusFormConfig.formItems[1].options = dropList.value?.arrunit ?? [];
+    plusFormConfig.formItems[2].options = dropList.value?.arrcpfirstclass ?? [];
+  });
+
   return {
     plusFormConfig,
   };

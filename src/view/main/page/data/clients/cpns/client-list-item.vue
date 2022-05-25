@@ -71,12 +71,20 @@
         </el-col>
       </template>
     </el-row>
+    <template v-if="data.length == 0 && !loading">
+      <el-empty description="暂无内容">
+        <el-button @click="handleBtenClick" type="primary">
+          添加客户
+        </el-button>
+      </el-empty>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import KbLoading from "@/base-ui/loading";
 import TopTipContent from "@/components/top-tip-content";
+import mitter from "@/mitt";
 const props = withDefaults(
   defineProps<{
     data: any;
@@ -110,9 +118,16 @@ watchEffect(() => {
     });
   }, 1500);
 });
+
+const handleBtenClick = () => {
+  mitter.emit("add-client");
+};
 </script>
 
 <style scoped lang="less">
+.client-list-item {
+  min-height: 50px;
+}
 .clientItem {
   width: 100%;
   margin: 0 0 20px 0;

@@ -53,6 +53,11 @@
         @page-change="handlePageChange"
         :tableConfig="tableConfig"
       >
+        <template #fsalestyle="{ row, column }">
+          <span :style="{ color: row.fsalestyle == '退货' ? 'red' : '' }">
+            {{ row.fsalestyle }}
+          </span>
+        </template>
       </page-table>
     </div>
 
@@ -121,6 +126,7 @@ const tableConfig = computed(() => {
     isShowPage: true,
     totalPage: res?.data?.[0]?.data?.[0]?.allpages ?? 1,
     page: props.page,
+    showAction: false,
   };
 });
 

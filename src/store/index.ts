@@ -17,6 +17,8 @@ import local from "@/utils/local";
 import { getMenu } from "@/utils/mapMenus";
 import message from "@/utils/message";
 
+import { setupOptions } from "@/config/setup";
+
 const store = createStore<IRootStore>({
   state: () => {
     return {
@@ -27,6 +29,15 @@ const store = createStore<IRootStore>({
   },
   mutations: {
     changeSelectOptions(state, payload: any) {
+      const store = payload.arrstock ?? [];
+      const index = setupOptions[0].setup.findIndex(
+        (item) => item.id == "defaultStore"
+      );
+      // const isHasStore = setupOptions[0].setup[1];
+      if (index > -1) {
+        setupOptions[0].setup[index].otherOptions.list = store;
+      }
+
       state.selectOptions = payload;
     },
     changeAuthCode(state, authCode: number | string) {

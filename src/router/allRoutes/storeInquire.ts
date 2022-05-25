@@ -8,7 +8,8 @@ export default {
   component: inquire,
   children: [],
   meta: {
-    title: "存货查询",
+    // title: "存货查询",
+    title: "库存查询",
     // id: 2
   },
 };

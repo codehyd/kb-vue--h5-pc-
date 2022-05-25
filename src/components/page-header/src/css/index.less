@@ -1,16 +1,23 @@
 .page-header {
+  color: white;
   display: flex;
   align-items: center;
   height: 100%;
-  box-shadow: 0 1px 1px #f0f1f2;
+  box-shadow: 0 1px 1px rgb(0 0 0 / 12%);
+  // background: var(--headerBgColor);
+  background: #eaf2fd;
+
+  // 背景渐变 #1471df #3f9dfd
+  // background: linear-gradient(to right, #1471df, #3f9dfd);
 
   .logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 200px;
-    width: 200px;
+    // min-width: 200px;
+    // width: 200px;
     height: 100%;
+    cursor: pointer;
     // background-color: #3b4368;
   }
 
@@ -31,3 +38,11 @@
     }
   }
 }
+
+// 媒体查询1024以下
+// @media screen and (max-width: 1024px) {
+//   .logo {
+//     min-width: 60px;
+//     width: 60px;
+//   }
+// }

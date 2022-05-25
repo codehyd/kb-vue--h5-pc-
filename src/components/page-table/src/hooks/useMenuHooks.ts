@@ -3,7 +3,7 @@ import BaseTable from "@/base-ui/table";
 import {
   httpAuditBild,
   httpPrintBild,
-  httpGetDetailBild,
+  httpGetDetailTableData,
   httpDeleteBild,
   IBillid,
 } from "@/service/http/home/commit";
@@ -19,18 +19,22 @@ export default function (
   deleteCallback?: callback,
   payCallback?: callback
 ) {
+  const router = useRouter();
+
   const store = useStore();
   const baseTableRef = ref<InstanceType<typeof BaseTable>>();
 
   const handleMenuClick: VxeTableEvents.MenuClick = (params) => {
     const { menu, row, column } = params;
-    console.log(row);
+    if (!row) return;
     const menuAction = {
       audit: () => onAudit(row),
       print: () => onPrint(row),
       detail: () => onDetail(row),
       delete: () => onDelete(row),
-      pay: onPay,
+      editDelete: () => onEditDelete(row),
+      pay: () => onPay(row),
+      payment: () => onPayment(row),
     };
 
     menuAction[menu.code!] && menuAction[menu.code!](row, column);
@@ -66,7 +70,7 @@ export default function (
 
   // 详情
   async function onDetail(row: any) {
-    const res = await httpGetDetailBild({
+    const res = await httpGetDetailTableData(billtypeid, {
       billid: row.finterid,
       billtypeid: billtypeid,
     });
@@ -92,10 +96,32 @@ export default function (
       }
     );
   }
+  // 删除
+  function onEditDelete(row: any) {
+    baseTableRef.value?.remove(row);
+    message.success("删除成功");
+  }
 
   // 收款
-  function onPay() {
-    console.log(15);
+  function onPay(row: any) {
+    router.push({
+      name: "financeCollections",
+      params: {
+        // url需要转化url格式
+        row: encodeURIComponent(JSON.stringify(row)),
+      },
+    });
+  }
+
+  // 付款
+  function onPayment(row: any) {
+    router.push({
+      name: "financePurchase",
+      params: {
+        // url需要转化url格式
+        row: encodeURIComponent(JSON.stringify(row)),
+      },
+    });
   }
 
   // --------------------------------------
@@ -133,10 +159,10 @@ export default function (
     }
   };
 
-  const removeSelectData = () => {
+  const removeSelectData = (rows?: any) => {
     const baseTable = baseTableRef.value;
     if (baseTable) {
-      return baseTable.removeSelectData();
+      return baseTable.removeSelectData(rows);
     }
   };
 
@@ -154,6 +180,7 @@ export default function (
     onDetail,
     onDelete,
     onPay,
+    onPayment,
     baseTableRef,
     getTableData,
     reloadData,

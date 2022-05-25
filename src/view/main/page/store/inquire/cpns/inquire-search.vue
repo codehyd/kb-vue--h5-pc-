@@ -1,6 +1,10 @@
 <template>
   <div class="inquire-search card" style="margin: 0 0 10px 0">
-    <page-search :searchFormConfig="searchConfig" isShowQuery></page-search>
+    <page-search
+      @query-click="handleQueryClick"
+      :searchFormConfig="searchConfig"
+      isShowQuery
+    ></page-search>
   </div>
 </template>
 
@@ -14,6 +18,12 @@ const props = withDefaults(
   }>(),
   {}
 );
+
+const emit = defineEmits(["query-click"]);
+
+const handleQueryClick = (formData: any) => {
+  emit("query-click", formData);
+};
 </script>
 
 <style scoped></style>

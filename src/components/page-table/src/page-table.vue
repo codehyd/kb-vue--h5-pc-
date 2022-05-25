@@ -1,6 +1,6 @@
 <template>
   <div class="page-table">
-    <template v-if="currentFlag == 'table'">
+    <template v-if="currentFlag == 'table' || !cardPanel">
       <base-table
         ref="baseTableRef"
         @menu-click="handleMenuClick"
@@ -8,22 +8,25 @@
         @expand="handleExpand"
         v-bind="autoTableConfig"
       >
-        <!-- 条码 -->
-        <template #fcptiaoma="{ row, column }">
-          <kb-barcode card :barcode="row.fcptiaoma"></kb-barcode>
-        </template>
-        <!-- 条码 2-->
-        <template #ftiaoma="{ row, column }">
-          <kb-barcode card :barcode="row.ftiaoma"></kb-barcode>
+        <template #default="{ row, column }">
+          <slot :name="column.field" :column="column" :row="row">
+            <template
+              v-if="column.field == 'fcptiaoma' || column.field == 'ftiaoma'"
+            >
+              <kb-barcode card :barcode="row[column.field]"></kb-barcode>
+            </template>
+          </slot>
         </template>
         <!-- 编辑模式 -->
         <template #edit="{ row, column, rowIndex }">
           <edit-table-column
             :editFooterMethod="editFooterMethod"
+            :addBianmaMethod="addBianmaMethod"
             :column="column"
             :row="row"
             v-model="row[column.field]"
             @update:modelValue="handleUpdateModelValue"
+            :index="rowIndex"
           ></edit-table-column>
         </template>
         <template #expand="{ row, column, rowIndex }">
@@ -41,7 +44,7 @@
         <template #table-active="{ row, column, rowIndex }">
           <div class="tableActive">
             <template
-              v-for="(item, indexx) in tableConfig.tableActiveConfig"
+              v-for="(item, index) in tableConfig.tableActiveConfig"
               :key="item.optionType"
             >
               <active-item
@@ -51,6 +54,7 @@
             </template>
           </div>
         </template>
+        <!-- checked -->
         <template #checked="{ row, column, rowIndex }">
           <slot name="checked" :row="row" :column="column" :rowIndex="rowIndex">
             <el-checkbox v-model="row.checked" size="large" />
@@ -60,7 +64,7 @@
     </template>
 
     <template v-else>
-      <slot name="list"></slot>
+      <slot name="list" :data="tableConfig.data"></slot>
     </template>
     <template v-if="tableConfig.isShowPage">
       <pagination
@@ -80,6 +84,8 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from "@/store";
+
 import KbBarcode from "@/base-ui/barcode";
 import BaseTable, { ITableConfigType } from "@/base-ui/table";
 import KbDialog from "@/base-ui/dialog";
@@ -90,22 +96,32 @@ import useEditHooks from "./hooks/useEditHooks";
 import message from "@/utils/message";
 import EditTableColumn from "./cpns/edit-table-column.vue";
 import Pagination from "./cpns/pagination.vue";
-import mitter from "@/mitt";
 import { IBillid } from "@/service/http/home/commit";
 
 const props = withDefaults(
   defineProps<{
     tableConfig: ITableConfigType;
     billtypeid?: IBillid;
+    cardPanel?: boolean;
 
     // tableActiveConfig?: ITableActiveConfigType[];
   }>(),
   {
+    cardPanel: false,
     // tableActiveConfig: () => [],
   }
 );
 
 const emit = defineEmits(["on-detail", "db-click", "page-change", "expand"]);
+
+const store = useStore();
+const isShowCardPanel = computed(() => {
+  const config = store.state.setup?.config["pc-goods"]?.setup ?? [];
+  const isCard =
+    config.find((item: any) => item.id === "goodCardPanel")?.value ?? true;
+  return isCard;
+});
+
 const currentFlag = ref<"list" | "table">("table");
 
 // 操作面板点击事件
@@ -117,6 +133,8 @@ const handleMenuItemClick = (config: any, row: any, column: any) => {
     detail: () => onDetail(row),
     audit: () => onAudit(row),
     delete: () => onDelete(row),
+    pay: () => onPay(row),
+    payment: () => onPayment(row),
   };
   options[menuType] && options[menuType]();
 };
@@ -131,6 +149,8 @@ const {
   onAudit,
   onDetail,
   onDelete,
+  onPay,
+  onPayment,
   getTableData,
   reloadData,
   getInitColumn,
@@ -173,8 +193,8 @@ function printCallback(params: any) {
 
 // 详情回调
 function detailCallback(params: any) {
-  // emit("on-detail", params);
-  mitter.emit("menu-detail-click", params);
+  emit("on-detail", params);
+  // mitter.emit("menu-detail-click", params);
 }
 
 // 删除回调
@@ -245,9 +265,9 @@ const insert = (row: any, index: number = -1) => {
 };
 
 // 校验数据
-const validate = (isSelect: boolean) => {
+const validate = (isSelect: boolean, rows?: any) => {
   return new Promise((resolve) => {
-    baseTableRef.value?.fullValiTable(isSelect).then((res) => {
+    baseTableRef.value?.fullValiTable(isSelect, rows).then((res) => {
       if (res) {
         message.show("校验表格失败 请输入表格必填信息");
         resolve({
@@ -268,7 +288,7 @@ const handlePageChange = (val: number) => {
   emit("page-change", val);
 };
 
-const { handleUpdateModelValue } = useEditHooks(editFooterMethod);
+const { handleUpdateModelValue, changeAmount } = useEditHooks(editFooterMethod);
 
 // 修改footer
 function editFooterMethod() {
@@ -282,6 +302,52 @@ const handleExpand = (params: any) => {
   const { row, expand } = params;
   emit("expand", row);
 };
+
+const addBianmaMethod = (row: any, isRedo: boolean, index: number) => {
+  const fullData = [...(baseTableRef.value?.getTableData().fullData ?? [])];
+  // fidx == -1 则是新增
+  const fidx = fullData.findIndex(
+    (item: any) => item.fmodelid === row.fmodelid
+  );
+  if (fidx == -1) {
+    const idx = fullData.findIndex((item) => !item.fmodelid);
+    console.log(fidx, index, idx, 1111111111);
+    row.fqty = 1;
+    const newRow = { ...changeAmount(row).newRow };
+    fullData[idx] = newRow;
+    // console.log(fullData[idx]);
+    // fullData[index] = getInitColumn();
+    baseTableRef.value?.loadTableData(fullData, true);
+  } else {
+    console.log(fidx, index, 222222222222222);
+
+    if (fullData[index].fmodelid) {
+      return message.confirm(
+        "该行已拥有产品编码，是否覆盖？",
+        () => {
+          fullData[index].fqty = 1;
+          fullData[index] = { ...changeAmount(row).newRow };
+          baseTableRef.value?.loadTableData(fullData, true);
+        },
+        () => {
+          if (isRedo) {
+            fullData[index] = { ...changeAmount(row).newRow };
+            baseTableRef.value?.loadTableData(fullData, true);
+          }
+        }
+      );
+    }
+    fullData[fidx].fqty++;
+    const newRow = { ...changeAmount(fullData[fidx]).newRow };
+    fullData[fidx] = newRow;
+    fullData[index] = getInitColumn();
+    baseTableRef.value?.loadTableData(fullData, true);
+  }
+};
+
+watchEffect(() => {
+  currentFlag.value = isShowCardPanel.value ? "list" : "table";
+});
 // const handleUpdateModelValue = (val: any, key: string, row: any) => {};
 
 defineExpose({

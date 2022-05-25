@@ -3,6 +3,7 @@
     <el-tabs v-model="activeName" type="card" class="demo-tabs">
       <el-tab-pane label="用户信息" name="first">
         <user-wrap></user-wrap>
+        <notice-list></notice-list>
         <faq-wrap></faq-wrap>
       </el-tab-pane>
       <el-tab-pane label="配置信息" name="second">
@@ -16,6 +17,7 @@
 import UserWrap from "./user-wrap.vue";
 import FaqWrap from "./faq-wrap.vue";
 import SetWrap from "./set-wrap.vue";
+import NoticeList from "./notice-list.vue";
 
 const activeName = ref("first");
 </script>

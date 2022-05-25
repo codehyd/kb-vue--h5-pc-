@@ -31,6 +31,7 @@ export interface IDetailTableConfig extends ITableConfigType {
   clientConfig?: IPageDesciptionType[];
   status?: IBildStatusType[];
   active?: IBildActiveType[];
+  title?: string;
 }
 
 export interface IEditTableConfig extends ITableConfigType {

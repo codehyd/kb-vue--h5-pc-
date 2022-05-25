@@ -27,7 +27,7 @@
         </el-empty>
       </template>
       <template v-for="item in todoList" :key="item.fid">
-        <div @click.stop="handleDetailClick(item)" class="item">
+        <div @click="handleDetailClick(item)" class="item">
           <div>
             <kb-icon flag="elIcon" name="list" color="#ccc" />
           </div>
@@ -88,12 +88,9 @@
               </el-tag>
               <div class="options">
                 <!-- 编辑  -->
-                <kb-icon
-                  @click="handleEditClick(item)"
-                  name="edit"
-                  flag="elIcon"
-                  type="button"
-                ></kb-icon>
+                <div @click.stop="handleEditClick(item)">
+                  <kb-icon name="edit" flag="elIcon" type="button"></kb-icon>
+                </div>
                 <!-- 确认 -->
                 <kb-icon
                   @click="handleConfirmClick(item)"
@@ -234,6 +231,7 @@ let todoId = 0;
 
 // 添加事项
 const handleAddNewTodo = () => {
+  todoItemDetailData.value = {};
   const index = createTodoFormConfig.value.formItems.findIndex(
     (item) => item.field == "touser"
   );
@@ -350,8 +348,7 @@ const handleDeleteClick = (item: any) => {
 
 <style lang="less" scoped>
 .todo-list {
-  height: 350px;
-
+  height: 833px;
   padding: 10px;
 
   .options {

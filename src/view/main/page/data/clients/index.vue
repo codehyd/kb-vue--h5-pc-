@@ -8,7 +8,7 @@
       <template #options>
         <el-button type="info" @click="handleToggleClick">切换样式</el-button>
         <el-button icon="CirclePlus" @click="handleNewClient">
-          新增商品
+          新增客户
         </el-button>
       </template>
     </client-search>
@@ -29,6 +29,7 @@
 </template>
 
 <script setup lang="ts">
+import mitter from "@/mitt";
 import ClientSearch from "./cpns/client-search.vue";
 import { clientSearchConfig } from "./config/client-search-config";
 import ClientList from "./cpns/client-list.vue";
@@ -104,6 +105,10 @@ const handleToggleClick = () => {
   clientListRef.value?.handleToggleClick();
   // currentIcon.value == "Tickets" ? "Menu" : "Tickets";
 };
+
+mitter.on("add-client", () => {
+  handleNewClient();
+});
 </script>
 
 <style scoped></style>

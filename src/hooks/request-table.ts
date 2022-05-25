@@ -4,7 +4,7 @@ import {
   httpGetShowTableColumn,
   httpGetGoodsList,
   IBillid,
-  IGoodListType,
+  // IGoodListType,
   httpGetClientList,
   httpStoreInquire,
   httpGetTableData,
@@ -53,6 +53,7 @@ export default function (
   function requestGoodList(reqData?: any) {
     httpGetGoodsList({
       ...(reqData ?? requestData),
+      count: count.value,
     }).then((res) => {
       data.value = res?.data?.[0]?.data ?? [];
       totalPage.value = res?.allpages ?? 1;
@@ -63,6 +64,7 @@ export default function (
   function requestClientList(reqData?: any) {
     httpGetClientList({
       ...(reqData ?? requestData),
+      count: count.value,
     }).then((res) => {
       data.value = res?.data?.[0]?.data ?? [];
       totalPage.value = res?.allpages ?? 1;
@@ -100,5 +102,6 @@ export default function (
     requestGoodList,
     requestClientList,
     requestBildInfo,
+    requestStoreInquire,
   };
 }

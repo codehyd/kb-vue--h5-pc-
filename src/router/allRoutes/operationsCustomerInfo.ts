@@ -8,7 +8,7 @@ export default {
   component: customerInfo,
   children: [],
   meta: {
-    title: "客户贡献",
+    title: "客户统计",
     // id: 103,
   },
 };

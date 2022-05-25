@@ -1,5 +1,8 @@
 <template>
   <div class="login">
+    <a target="_blank" class="beian" href="https://beian.miit.gov.cn/">
+      粤ICP备13070897号
+    </a>
     <div class="login-wrap">
       <div class="login-wrap-image">
         <img src="https://v.dianlan8.com/img/login.c0627fcb.webp" alt="" />

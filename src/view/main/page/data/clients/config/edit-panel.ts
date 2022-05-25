@@ -4,15 +4,8 @@ import { watchEffect, computed, ref } from "vue";
 export default function () {
   const store = useStore();
   const dropList = computed(() => store.state.selectOptions);
-  const yewuyuanArray = ref([]);
-  const classList = ref([]);
 
-  watchEffect(() => {
-    yewuyuanArray.value = dropList.value?.arryewuyuan ?? [];
-    classList.value = dropList.value?.arrcsfirstclass ?? [];
-  });
-
-  const plusFormConfig: IForm = {
+  const plusFormConfig: IForm = reactive({
     formItems: [
       {
         type: "input",
@@ -44,7 +37,6 @@ export default function () {
         field: "ffirstclassname",
         label: "客户分类",
         placeholder: "请选择客户分类",
-        options: classList.value,
         rules: [
           {
             required: true,
@@ -89,10 +81,9 @@ export default function () {
         field: "fyewuyuan",
         label: "业务员",
         placeholder: "请选择业务员",
-        options: yewuyuanArray.value,
       },
       {
-        type: "input",
+        type: "number",
         field: "findex",
         label: "排序顺序",
         placeholder: "请输入排序顺序 越小越靠前",
@@ -114,7 +105,13 @@ export default function () {
         },
       },
     ],
-  };
+  });
+
+  watchEffect(() => {
+    plusFormConfig.formItems[2].options = dropList.value?.arrcsfirstclass ?? [];
+    plusFormConfig.formItems[8].options = dropList.value?.arryewuyuan ?? [];
+  });
+
   return {
     plusFormConfig,
   };

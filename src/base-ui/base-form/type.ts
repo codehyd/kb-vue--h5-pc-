@@ -26,7 +26,7 @@ export interface IFormItem {
   isHidden?: boolean;
   readonly?: boolean;
   // defaultValue?: any;
-  defaultDateValue?: any[];
+  defaultDateValue?: any[] | string;
   col?: any;
   inputOptions?: IInputOptionsType;
 }

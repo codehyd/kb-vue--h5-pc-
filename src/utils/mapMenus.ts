@@ -22,6 +22,46 @@ export const getMenuByParent = (menus: any[]) => {
       find.children.push(menuItem);
     }
   });
+  // menuList排序 根据menuTitle 1.销售管理 2.采购管理 3. 仓库管理 4.财务管理 5.经营报表 6.基础资料
+  menuList.sort((a, b) => {
+    if (a.menuTitle === "销售管理") {
+      return -1;
+    }
+    if (b.menuTitle === "销售管理") {
+      return 1;
+    }
+    if (a.menuTitle === "采购管理") {
+      return -1;
+    }
+    if (b.menuTitle === "采购管理") {
+      return 1;
+    }
+    if (a.menuTitle === "仓库管理") {
+      return -1;
+    }
+    if (b.menuTitle === "仓库管理") {
+      return 1;
+    }
+    if (a.menuTitle === "财务管理") {
+      return -1;
+    }
+    if (b.menuTitle === "财务管理") {
+      return 1;
+    }
+    if (a.menuTitle === "经营报表") {
+      return -1;
+    }
+    if (b.menuTitle === "经营报表") {
+      return 1;
+    }
+    if (a.menuTitle === "基础资料") {
+      return -1;
+    }
+    if (b.menuTitle === "基础资料") {
+      return 1;
+    }
+    return 0;
+  });
   console.log(menuList);
 
   return menuList;

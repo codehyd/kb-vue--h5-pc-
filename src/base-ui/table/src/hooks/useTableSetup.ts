@@ -3,7 +3,11 @@ import { useStore } from "@/store";
 
 import { ImodeType } from "../../type";
 
-export default function (mode: ImodeType, showFooter: boolean) {
+export default function (
+  mode: ImodeType,
+  showFooter: boolean,
+  showExpand: boolean
+) {
   const store = useStore();
 
   // 表格最大的高度
@@ -50,23 +54,24 @@ export default function (mode: ImodeType, showFooter: boolean) {
         (item: any) => item.id == "isOpenVirtualScroll"
       )?.value ?? false;
     // console.log(isOpenVirtualScroll);
-    return isOpenVirtualScroll
-      ? {
-          "scroll-x": {
-            gt: 0,
-          },
-          "scroll-y": {
-            gt: 0,
-          },
-        }
-      : {
-          "scroll-x": {
-            enabled: false,
-          },
-          "scroll-y": {
-            enabled: false,
-          },
-        };
+    const isScrollConfig = {
+      "scroll-x": {
+        gt: 0,
+      },
+      "scroll-y": {
+        gt: 0,
+      },
+    };
+    const noScrollConfig = {
+      "scroll-x": {
+        enabled: false,
+      },
+      "scroll-y": {
+        enabled: false,
+      },
+    };
+    if (showExpand) return noScrollConfig;
+    return isOpenVirtualScroll ? isScrollConfig : noScrollConfig;
   });
 
   // 编辑表格占位行
@@ -130,13 +135,17 @@ export default function (mode: ImodeType, showFooter: boolean) {
     let sum: [string?, number?] = [];
     if (data.length > 0) {
       columns.forEach((item: any, index: number) => {
-        const isSumColumn = item.params?.fdatatype === "decimal" ? true : false;
+        const isSumColumn =
+          item.params?.fdatatype === "decimal" && item.params?.fwidth > 0
+            ? true
+            : false;
         if (!isSumColumn) {
           sum[index] = "";
         } else {
           const key = item.params?.ffieldname;
+          // console.log(key);
           const total = data
-            .map((item: any) => Number(item[key]))
+            .map((item: any) => Number(item[key ?? 0]))
             .reduce((init: number, item: number) => init + item, 0);
           sum[index] = total.toFixed(2);
         }

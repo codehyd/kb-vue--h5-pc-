@@ -24,6 +24,9 @@
               {{ userInfo.chinesename }}
             </el-tag>
             <el-tag effect="light"> {{ userInfo.csmininame }}</el-tag>
+            <el-tag style="margin: 10px 0 0 0" effect="light">
+              {{ userInfo.softname }}</el-tag
+            >
           </div>
           <div class="select">公司信息</div>
           <div style="margin-left: 15px">

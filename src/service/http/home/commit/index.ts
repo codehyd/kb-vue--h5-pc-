@@ -250,4 +250,28 @@ export function httpWeixinAccountMessage(data: any) {
     method: "POST",
   });
 }
+
+// 获取收款单据价格
+export const httpGetReceiptPrice = (params: any) => {
+  return kbBaseRequest.request({
+    url: "/gogetkhonebalance",
+    params,
+  });
+};
+
+// 获取采购单据价格
+export const httpGetPurchasePrice = (params: any) => {
+  return kbBaseRequest.request({
+    url: "/gogetgysonebalance",
+    params,
+  });
+};
+
+// 获取收款单据
+export const httpGetReceiptList = (params: any) => {
+  return kbBaseRequest.request({
+    url: "/gogetbill_list_havebalance",
+    params,
+  });
+};
 export * from "./type";

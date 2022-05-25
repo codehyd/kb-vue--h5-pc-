@@ -14,7 +14,7 @@
         <el-row :gutter="20">
           <template v-for="item in userMenus">
             <el-col v-bind="colStyle">
-              <div class="item">
+              <div @click="handleMenuItemClick(item)" class="item">
                 <img :src="item.icon" alt="" />
                 <span>{{ item.title }}</span>
               </div>
@@ -83,6 +83,8 @@ import KbCard from "@/components/card";
 import KbDialog from "@/base-ui/dialog";
 import { useStore } from "@/store";
 import message from "@/utils/message";
+
+const router = useRouter();
 const store = useStore();
 const userMenus = computed(() => store.state.custormList);
 
@@ -160,6 +162,10 @@ const handleClone = (done?: any) => {
   if (done) {
     done && done();
   }
+};
+
+const handleMenuItemClick = (item: any) => {
+  router.push("/main" + item.path);
 };
 </script>
 

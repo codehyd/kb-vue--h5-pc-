@@ -29,33 +29,25 @@
             </label>
           </div>
 
-          <img class="image" :src="item" />
+          <img @click.stop class="image" :src="item" />
         </div>
       </template>
     </div>
 
     <div v-if="isShowPrePanel" @click="isShowPrePanel = false" class="pre-wrap">
-      <div class="markIcon close">
-        <kb-icon
-          @click="handleClose"
-          name="close"
-          flag="elIcon"
-          color="white"
-          :size="25"
-        ></kb-icon>
+      <div class="markIcon close" @click.stop="handleClose">
+        <kb-icon name="close" flag="elIcon" color="white" :size="25"></kb-icon>
       </div>
-      <div class="markIcon left">
+      <div class="markIcon left" @click.stop="handleTogglePreImage(-1)">
         <kb-icon
-          @click="handleTogglePreImage(-1)"
           name="ArrowLeft"
           flag="elIcon"
           color="white"
           :size="25"
         ></kb-icon>
       </div>
-      <div class="markIcon right">
+      <div class="markIcon right" @click.stop="handleTogglePreImage(+1)">
         <kb-icon
-          @click="handleTogglePreImage(+1)"
           name="ArrowRight"
           flag="elIcon"
           color="white"
@@ -63,40 +55,39 @@
         ></kb-icon>
       </div>
       <div class="pre-image-wrap">
-        <img class="pre-image" :src="currentPreImage" :style="preImageStyle" />
+        <img
+          @click.stop
+          class="pre-image"
+          :src="currentPreImage"
+          :style="preImageStyle"
+        />
       </div>
 
-      <div class="actionBar">
-        <kb-icon
-          @click="handleBlowUp"
-          name="icon-fangda"
-          color="white"
-          :size="25"
-        ></kb-icon>
-        <kb-icon
-          @click="handleBlowDown"
-          name="icon-suoxiao"
-          color="white"
-          :size="25"
-        ></kb-icon>
-        <kb-icon
-          @click="handleRestore"
-          name="icon-huanyuanhuabu"
-          color="white"
-          :size="25"
-        ></kb-icon>
-        <kb-icon
-          @click="handleRotate(-90)"
-          name="icon-nishizhenxuanzhuan"
-          color="white"
-          :size="25"
-        ></kb-icon>
-        <kb-icon
-          @click="handleRotate(90)"
-          name="icon-shunshizhenxuanzhuan"
-          color="white"
-          :size="25"
-        ></kb-icon>
+      <div @click.stop class="actionBar">
+        <div @click.stop="handleBlowUp">
+          <kb-icon name="icon-fangda" color="white" :size="25"></kb-icon>
+        </div>
+        <div @click.stop="handleBlowDown">
+          <kb-icon name="icon-suoxiao" color="white" :size="25"></kb-icon>
+        </div>
+        <div @click.stop="handleRestore">
+          <kb-icon name="icon-huanyuanhuabu" color="white" :size="25"></kb-icon>
+        </div>
+
+        <div @click.stop="handleRotate(-90)">
+          <kb-icon
+            name="icon-nishizhenxuanzhuan"
+            color="white"
+            :size="25"
+          ></kb-icon>
+        </div>
+        <div @click.stop="handleRotate(90)">
+          <kb-icon
+            name="icon-shunshizhenxuanzhuan"
+            color="white"
+            :size="25"
+          ></kb-icon>
+        </div>
       </div>
     </div>
   </div>

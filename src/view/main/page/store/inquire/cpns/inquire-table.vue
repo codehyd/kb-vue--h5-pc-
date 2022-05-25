@@ -5,7 +5,10 @@
         <el-tab-pane :label="item.name" :name="item.name"></el-tab-pane>
       </template>
     </el-tabs>
-    <page-table :tableConfig="tableConfig"></page-table>
+    <page-table
+      @page-change="handlePageChange"
+      :tableConfig="tableConfig"
+    ></page-table>
   </div>
 </template>
 
@@ -20,6 +23,8 @@ const props = withDefaults(
   {}
 );
 
+const emit = defineEmits(["tab-click", "page-change"]);
+
 const activeName = ref("");
 const classList = ref<any[]>([]);
 httpGetGoodsClassList().then((res) => {
@@ -28,7 +33,15 @@ httpGetGoodsClassList().then((res) => {
 });
 
 const handleClick = (tab: any, event: Event) => {
-  console.log(tab, event);
+  // const name = tab.props.name;
+  emit(
+    "tab-click",
+    classList.value?.find((item) => item.name === tab.props.name)?.fclassid ?? 0
+  );
+};
+
+const handlePageChange = (val: number) => {
+  emit("page-change", val);
 };
 </script>
 

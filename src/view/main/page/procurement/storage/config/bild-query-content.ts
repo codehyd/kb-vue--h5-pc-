@@ -42,6 +42,7 @@ export const tableConfig: IBildQueryTable = {
           { code: "detail", name: "详情", visible: true, disabled: false },
           { code: "audit", name: "审核", visible: true, disabled: false },
           { code: "delete", name: "删除", visible: true, disabled: false },
+          { code: "payment", name: "付款", visible: true, disabled: false },
         ],
       ],
     },
@@ -66,6 +67,11 @@ export const tableConfig: IBildQueryTable = {
       type: "text",
       text: "删除",
       optionType: "delete",
+    },
+    {
+      type: "text",
+      text: "付款",
+      optionType: "payment",
     },
   ],
 };

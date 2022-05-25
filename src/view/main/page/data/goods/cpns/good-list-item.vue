@@ -15,7 +15,7 @@
                   :title="mapCardTitle(item)"
                 ></top-tip-content>
                 <el-button type="text" @click="handlerBtnClick(item, index)">
-                  查看详情
+                  {{ cardText }}
                 </el-button>
               </div>
             </template>
@@ -50,15 +50,26 @@
                 <div>
                   <span class="label">编码: </span>
                   <span :class="{ noInfo: !item.fbianma }">
-                    {{ item.fbianma || "暂无规格信息" }}
+                    {{ item.fbianma || "暂无编码信息" }}
                   </span>
+                </div>
+                <div>
+                  <span class="label">条码: </span>
+                  <kb-barcode
+                    v-if="!loading"
+                    :barcode="item.ftiaoma"
+                    card
+                  ></kb-barcode>
+                  <!-- <span :class="{ noInfo: !item.ftiaoma }">
+                    {{ item.ftiaoma || "暂无条码信息" }}
+                  </span> -->
                 </div>
                 <div class="row">
                   <div>
                     <span class="label">面价: </span>
-                    <span style="color: red; font-weight: 600"
-                      >¥{{ item.ffactoryprice }}</span
-                    >
+                    <span style="color: red; font-weight: 600">
+                      ¥{{ item.ffactoryprice }}
+                    </span>
                   </div>
                   <div>
                     <span class="label">存货: </span>{{ item.fstockqty }}
@@ -73,17 +84,31 @@
         </el-col>
       </template>
     </el-row>
+    <template v-if="data.length == 0 && !loading">
+      <el-empty description="暂无内容">
+        <el-button v-if="datPanel" @click="handleBtnClick" type="primary">
+          添加商品
+        </el-button>
+      </el-empty>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import mitter from "@/mitt";
 import TopTipContent from "@/components/top-tip-content";
 import KbLoading from "@/base-ui/loading";
+import KbBarcode from "@/base-ui/barcode";
 const props = withDefaults(
   defineProps<{
     data: any;
+    cardText?: string;
+    datPanel?: boolean;
   }>(),
-  {}
+  {
+    cardText: "查看详情",
+    datPanel: false,
+  }
 );
 
 const emit = defineEmits(["edit-good"]);
@@ -122,6 +147,10 @@ watchEffect(() => {
 
   // newGoodList.value = newData;
 });
+
+const handleBtnClick = () => {
+  mitter.emit("add-good");
+};
 </script>
 
 <style scoped lang="less">

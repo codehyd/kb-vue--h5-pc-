@@ -2,8 +2,7 @@
   <div class="page-menus">
     <el-menu
       :collapse-transition="false"
-      text-color="#fff"
-      active-text-color="#caaeae"
+      active-text-color="#fff"
       unique-opened
       :background-color="'transparency'"
       class="el-menu-vertical-demo"
@@ -13,13 +12,7 @@
       <template v-for="(menu, index) in menus" :key="menu.parent">
         <el-sub-menu :index="index + ''">
           <template #title>
-            <!-- {{ isFold ? menu.menuTitle : menu.menuTitle[0] }} -->
-            <div
-              :class="activeIndex == index ? 'select' : ''"
-              style="--selectBg: white"
-            >
-              {{ menu.menuTitle }}
-            </div>
+            {{ menu.menuTitle }}
           </template>
           <template v-for="childMenu in menu.children">
             <el-menu-item
@@ -42,7 +35,11 @@ import { getMenuByParent } from "@/utils/mapMenus";
 
 const store = useStore();
 const router = useRouter();
-const menus = computed(() => store.state.login.classMenus);
+const menus = computed(() => {
+  const menus = store.state.login.classMenus;
+  console.log("路由", menus);
+  return menus;
+});
 const allMenus = computed(() => store.state.login.menus);
 
 const menuIndex = ref("");
@@ -63,6 +60,10 @@ const route = useRoute();
 watch(
   () => route,
   (val: any) => {
+    // console.log(val.meta, allMenus.value);
+    menuIndex.value =
+      allMenus.value.find((item: any) => item.title == val.meta.title)?.id +
+        "" ?? "";
     const path = val.fullPath;
 
     defaultActive.value =
@@ -83,10 +84,36 @@ const handleOpen = (params: any) => {
 .page-menus {
   overflow: hidden;
   height: 100%;
-  background: #3b4368;
+  background: #eaf2fd;
+  box-shadow: 2px 0 3px -1px rgb(0 0 0 / 12%);
   overflow-y: auto;
   .el-menu {
     border-right: none;
+  }
+}
+
+:deep(.el-sub-menu__title),
+:deep(.el-menu-item) {
+  padding: 0 0px 0 0;
+  &:hover {
+    background-color: #f7f7f7;
+  }
+}
+
+.avtiveItem {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fafbfd !important;
+  color: #3779e6;
+  border-radius: 30px 0 0 30px;
+  margin: 0 0 0 10px;
+  &::after {
+    content: "";
+    height: 100%;
+    width: 6px;
+    margin-right: 4px;
+    background-color: #0094ff;
+    margin: 0 14px 0 0;
   }
 }
 </style>

@@ -74,30 +74,32 @@ export default function (changeFootMethodCallback?: () => void) {
   };
 
   // 改变金额
-  const changeAmount = (row: any) => {
-    console.log(row);
+  const changeAmount = (row: any, number?: number) => {
     let amount = 0;
     let totalDiscount = 1;
     let totalTjAmount = 0;
     let price = row.fprice;
-    let fqty = row.fqty;
+    let fqty = number ?? row.fqty;
     Object.keys(row).forEach((item) => {
       // 正则匹配item fzhekou+n n为数字可能有多个 也可能没有
       const reg = /^fzhekou(\d+)/;
       if (reg.test(item) || item === "fzhekou") {
-        totalDiscount *= row[item] / 10;
+        totalDiscount *= (row[item] || 10) / 10;
       } else if (item.indexOf("ftjamount") != -1) {
         totalTjAmount += Number(row[item]);
       }
     });
 
     amount = price * fqty * totalDiscount + totalTjAmount;
+
     // console.log(price, fqty, totalDiscount, totalTjAmount);
     row.fweight = row.fqty * row.funitweight;
     row.famount = Math.floor(amount * 100) / 100;
     row.famountbefore = price * fqty + totalTjAmount;
     row.fzhekouamount = row.famountbefore - row.famount;
+    // console.log(row.famountbefore);
     const newRow = { ...row };
+    // console.log(newRow);
 
     changeFootMethodCallback && changeFootMethodCallback();
 
@@ -106,5 +108,6 @@ export default function (changeFootMethodCallback?: () => void) {
 
   return {
     handleUpdateModelValue,
+    changeAmount,
   };
 }

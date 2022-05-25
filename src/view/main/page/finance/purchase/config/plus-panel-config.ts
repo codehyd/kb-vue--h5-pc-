@@ -6,7 +6,7 @@ export default function () {
   const store = useStore();
   const dropDownList: any = computed(() => store.state.selectOptions);
 
-  const bildFormConfig: IForm = {
+  const bildFormConfig: IForm = reactive({
     formItems: [
       {
         type: "kehu",
@@ -24,13 +24,13 @@ export default function () {
         type: "select", //选择
         field: "fjingshou",
         label: "经手人",
-        options: dropDownList.value?.arrjingshouren ?? [],
+        // options: dropDownList.value?.arrjingshouren ?? [],
       },
       {
         type: "select", //选择
         field: "fyewuyuan",
         label: "业务员",
-        options: dropDownList.value?.arryewuyuan ?? [],
+        // options: dropDownList.value?.arryewuyuan ?? [],
       },
       {
         type: "date", //日期选择
@@ -51,26 +51,26 @@ export default function () {
       },
       {
         type: "select", //选择
-        field: "foutstockno",
-        label: "送货单号",
+        field: "finstockno",
+        label: "采购单号",
         options: [],
       },
       {
         type: "select", //选择
         field: "fstyle",
-        label: "收款方式",
-        options: dropDownList.value?.arrshoukuanfangshi ?? [],
+        label: "付款方式",
+        // options: dropDownList.value?.arrshoukuanfangshi ?? [],
       },
       {
         type: "select", //选择
         field: "faccount",
         label: "银行账号",
-        options: dropDownList.value?.arryinhangzhanghao ?? [],
+        // options: dropDownList.value?.arryinhangzhanghao ?? [],
       },
       {
         type: "number",
         field: "famount",
-        label: "收款金额",
+        label: "付款金额",
         // 金额不等于空和不等于0的时候才能提交
         rules: [
           {
@@ -85,7 +85,17 @@ export default function () {
         label: "备注",
       },
     ],
-  };
+  });
+
+  watchEffect(() => {
+    bildFormConfig.formItems[1].options =
+      dropDownList.value?.arrjingshouren ?? [];
+    bildFormConfig.formItems[2].options = dropDownList.value?.arryewuyuan ?? [];
+    bildFormConfig.formItems[5].options =
+      dropDownList.value?.arrshoukuanfangshi ?? [];
+    bildFormConfig.formItems[6].options =
+      dropDownList.value?.arryinhangzhanghao ?? [];
+  });
 
   return {
     bildFormConfig,

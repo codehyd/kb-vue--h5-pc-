@@ -5,7 +5,7 @@
       <bild-query-content
         v-model:data="requestData"
         ref="bildQueryContentRef"
-        :showColumnBilltypeid="1201"
+        :showColumnBilltypeid="1202"
         :searchConfig="searchConfig"
         :tableConfig="tableConfig"
         :detailTablConfig="detailTableConfig"
@@ -53,7 +53,7 @@ const requestData: ITableType = reactive({
   tj: "",
   begdate: dayjs().startOf("month").format("YYYY-MM-DD"),
   enddate: dayjs().endOf("month").format("YYYY-MM-DD"),
-  billtypeid: 111,
+  billtypeid: 112,
 });
 
 // 查询
@@ -61,7 +61,8 @@ const handleQueryClick = (formData: any) => {
   requestData.tj = formData.tj;
   requestData.begdate = formData.begdate;
   requestData.enddate = formData.enddate;
-  requestData.page = 1;
+  // requestData.page = 1;
+  requestData.page = formData.page ?? 1;
   bildQueryContentRef.value?.getTableData();
 };
 

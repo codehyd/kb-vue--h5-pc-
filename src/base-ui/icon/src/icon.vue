@@ -49,7 +49,7 @@ const props = withDefaults(
 
 const emit = defineEmits(["click"]);
 
-const handleIconClick = () => {
+const handleIconClick = (e: Event) => {
   emit("click");
 };
 </script>

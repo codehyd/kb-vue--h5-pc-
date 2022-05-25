@@ -9,7 +9,7 @@
       v-model:show="show"
     >
       <div class="accountPanel">
-        <h4>选择通讯列表</h4>
+        <h4>选择通知人</h4>
         <template v-for="item in addressList" :key="item.fid">
           <el-checkbox
             v-model="item.checked"
@@ -17,7 +17,7 @@
             size="large"
           />
         </template>
-        <h4>权限</h4>
+        <h4>选项</h4>
         <div>
           <template v-for="item in accountConfig" :key="item.title">
             <el-checkbox
@@ -28,7 +28,7 @@
             />
           </template>
         </div>
-        <h4>留言权限</h4>
+        <h4>流程</h4>
         <div>
           <template v-for="item in accountMenuConfig" :key="item.flag">
             <el-radio

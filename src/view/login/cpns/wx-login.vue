@@ -10,12 +10,11 @@
         <el-steps :active="active" finish-status="success">
           <el-step title="选择软件系统" />
           <el-step title="微信扫码登录" />
-          <el-step title="绑定相关信息" />
+          <!-- <el-step title="绑定相关信息" /> -->
         </el-steps>
 
         <template v-if="active >= 0">
           <el-radio
-            @change="handleRadioChange"
             v-for="(item, index) in softOptions"
             :key="item.label"
             v-model="selectSoft"
@@ -73,14 +72,22 @@ let wxRequestUrl = "https://t.dianlan8.com/#/login?appid=";
 let state = "";
 
 // 监听软件系统变化 切换第二步 并且设置微信登录链接
-const handleRadioChange = () => {
+watchEffect(() => {
   if (selectSoft.value) {
-    active.value = 1;
-    wxLoginSrc.value = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&scope=snsapi_login&redirect_uri=${encodeURIComponent(
-      wxRequestUrl + appid + "&sns=" + selectSoft.value
-    )}&state=${state}&login_type=jssdk&style=black&self_redirect=default&href=`;
+    openScan();
   }
-};
+});
+
+function openScan() {
+  active.value = 1;
+  wxLoginSrc.value = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&scope=snsapi_login&redirect_uri=${encodeURIComponent(
+    wxRequestUrl + appid + "&sns=" + selectSoft.value
+  )}&state=${state}&login_type=jssdk&style=black&self_redirect=default&href=`;
+}
+
+defineExpose({
+  selectSoft,
+});
 </script>
 
 <style lang="less" scoped>

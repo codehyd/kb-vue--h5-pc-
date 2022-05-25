@@ -7,15 +7,16 @@
     </el-tabs>
 
     <page-table
+      cardPanel
       ref="pageTableRef"
       @db-click="handleDbClick"
       @page-change="handlePageChange"
       :tableConfig="goodListConfig"
     >
-      <template #list>
+      <template #list="{ data }">
         <good-list-item
           @edit-good="handleEditGood"
-          :data="goodListConfig.data"
+          :data="data"
         ></good-list-item>
       </template>
     </page-table>
@@ -26,6 +27,7 @@
 import PageTable, { IGoodTableConfig } from "@/components/page-table";
 import GoodListItem from "./good-list-item.vue";
 import { httpGetGoodsInfo } from "@/service/http/home/data";
+import message from "@/utils/message";
 const props = withDefaults(
   defineProps<{
     goodListConfig: IGoodTableConfig;
@@ -34,6 +36,13 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(["change-tabs", "change-page", "edit-good"]);
+
+// onMounted(() => {
+//   watchEffect(() => {
+//     pageTableRef.value!.currentFlag = isShowCardPanel.value ? "list" : "table";
+//   });
+// });
+
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
 
 const currentFlag = ref<"list" | "table">("table");
@@ -78,6 +87,8 @@ const handleEditGood = async (data: any) => {
   const res = await httpGetGoodsInfo({ id: data.item.fmodelid });
   if (res.code >= 1) {
     emit("edit-good", res);
+  } else {
+    message.show(res.msg, res.type);
   }
 };
 

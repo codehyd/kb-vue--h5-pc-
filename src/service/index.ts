@@ -2,8 +2,9 @@ import baseRequest from "./request";
 import { baseUrl, getTaskBaseData, getTaskTokenData } from "./request/config";
 
 import qs from "qs";
-import local from "@/utils/local";
-import base64 from "@/utils/base64";
+
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
 const KbBaseRequest = new baseRequest({
   baseURL: baseUrl,
@@ -23,8 +24,12 @@ const KbBaseRequest = new baseRequest({
         });
         // config.headers = { "content-type": "multipart/form-data" };
       }
-
+      NProgress.start();
       return config;
+    },
+    responseInterceptor: (res) => {
+      NProgress.done();
+      return res;
     },
   },
 });

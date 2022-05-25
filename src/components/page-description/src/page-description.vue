@@ -129,12 +129,13 @@ const options = [
     border: 1px solid #ebeef5;
     // margin-left: -1px;
     // margin-top: -1px;
+    margin: 0 0 -1px 0;
   }
   .content {
     position: relative;
     border: 1px solid #ebeef5;
     margin-left: -1px;
-    margin-top: -1px;
+    margin-bottom: -1px;
     padding: 8px 11px;
 
     flex: 1;

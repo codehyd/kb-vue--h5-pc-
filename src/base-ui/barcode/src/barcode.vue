@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="barcode">
     <template v-if="!card">
       <img id="barcode" />
     </template>
@@ -25,7 +25,7 @@
 import JsBarcode from "jsbarcode";
 const props = withDefaults(
   defineProps<{
-    barcode: string;
+    barcode?: string;
     height?: number;
     card: boolean;
   }>(),
@@ -38,8 +38,9 @@ const props = withDefaults(
 const imageElRef = ref<HTMLElement>();
 
 const refBarCode = (id: any) => {
+  if (!props.barcode) return;
   nextTick(() => {
-    JsBarcode(id, props.barcode, {
+    JsBarcode(id, props.barcode!, {
       format: "CODE128",
       lineColor: "#000",
       width: 2,
@@ -60,4 +61,9 @@ watchEffect(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.barcode {
+  display: inline-flex;
+  cursor: pointer;
+}
+</style>

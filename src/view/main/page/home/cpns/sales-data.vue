@@ -25,16 +25,17 @@
           </div>
         </div>
       </template>
+
       <div class="content">
-        <el-row class="elRow" :gutter="20">
+        <el-row class="elRow" :gutter="10">
           <el-col class="elCol" v-bind="colStyle">
             <div class="item">
               <i class="icon-xiaoshoujine fontIcon"></i>
               <div class="item-content">
-                <div class="item-value price">
-                  ¥{{ salesData.fsale_amount }}
+                <div class="item-value price">¥{{ data1 }}</div>
+                <div class="item-title">
+                  销售金额(共{{ salesData.fsale_count }}份单)
                 </div>
-                <div class="item-title">销售金额</div>
               </div>
             </div>
           </el-col>
@@ -42,21 +43,21 @@
             <div class="item">
               <i class="icon-tuihuojine fontIcon"></i>
               <div class="item-content">
-                <div class="item-value price">
-                  ¥{{ salesData.ftuihuo_amount }}
+                <div class="item-value price">¥{{ data2 }}</div>
+                <div class="item-title">
+                  退货金额(共{{ salesData.ftuihuo_count }}份单)
                 </div>
-                <div class="item-title">退货金额</div>
               </div>
             </div>
           </el-col>
           <el-col class="elCol" v-bind="colStyle">
             <div class="item">
-              <i class="icon-bimianshoufei fontIcon"></i>
+              <i class="icon-shoufeigongzuotai_jinrishishoujine fontIcon"></i>
               <div class="item-content">
-                <div class="item-value price">
-                  ¥{{ salesData.fmianshou_amount }}
+                <div class="item-value price">¥{{ data3 }}</div>
+                <div class="item-title">
+                  实收金额(免收额{{ salesData.fmianshou_amount }})
                 </div>
-                <div class="item-title">免收金额</div>
               </div>
             </div>
           </el-col>
@@ -64,8 +65,10 @@
             <div class="item">
               <i class="icon-lirunshuai fontIcon"></i>
               <div class="item-content">
-                <div class="item-value">{{ salesData.flirunlv }}%</div>
-                <div class="item-title">利润率</div>
+                <div class="item-value price">{{ data4 }}</div>
+                <div class="item-title">
+                  利润额(利润率{{ salesData.flirunlv }}%)
+                </div>
               </div>
             </div>
           </el-col>
@@ -79,7 +82,7 @@
 import KbCard from "@/components/card";
 import { IActiveListType, activeList } from "../config/sales-data-config";
 import { useStore } from "@/store";
-
+import format from "@/utils/format";
 const store = useStore();
 
 const activeText = ref(activeList[0].text);
@@ -99,6 +102,26 @@ const handleItemClick = (item: IActiveListType) => {
 };
 
 const colStyle = { xs: 24, sm: 12, md: 12, lg: 6, xl: 6 };
+
+const data1 = computed(() => {
+  let val = salesData.value?.fsale_amount ?? 0;
+  return format.formatMoney(val * 100);
+});
+
+const data2 = computed(() => {
+  let val = salesData.value?.ftuihuo_amount ?? 0;
+  return format.formatMoney(val * 100);
+});
+
+const data3 = computed(() => {
+  let val = salesData.value?.fshoukuan_amount ?? 0;
+  return format.formatMoney(val * 100);
+});
+
+const data4 = computed(() => {
+  let val = salesData.value?.fsale_lirun ?? 0;
+  return format.formatMoney(val * 100);
+});
 
 // const handleListClick = (item: any) => {
 //   console.log(item);

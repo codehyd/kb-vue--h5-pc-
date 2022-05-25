@@ -1,7 +1,14 @@
 <template>
   <div class="inquire">
-    <inquire-search :searchConfig="inquireSearchConfig"></inquire-search>
-    <inquire-table :tableConfig="tableConfig"></inquire-table>
+    <inquire-search
+      @query-click="handleQueryClick"
+      :searchConfig="inquireSearchConfig"
+    ></inquire-search>
+    <inquire-table
+      @tab-click="handleTabClick"
+      :tableConfig="tableConfig"
+      @page-change="handlePageChange"
+    ></inquire-table>
   </div>
 </template>
 
@@ -21,8 +28,9 @@ const tableConfig: IStoreinquireConfig = reactive({
   showAction: false,
   isShowPage: true,
   totalPage: 1,
+  loading: true,
 });
-const { column, data, totalPage } = requestTable(
+const { column, data, totalPage, requestStoreInquire } = requestTable(
   1307,
   "storeInquire",
   tableConfig
@@ -32,6 +40,35 @@ watchEffect(() => {
   tableConfig.data = data.value ?? [];
   tableConfig.totalPage = totalPage.value ?? 1;
 });
+
+const handleQueryClick = (formData: any) => {
+  tableConfig.tj = formData.tj;
+  const data = {
+    tj: formData.tj,
+    classid: tableConfig.classid,
+    page: formData.page ?? tableConfig.page,
+  };
+
+  requestStoreInquire(data);
+};
+
+const handleTabClick = (id: number) => {
+  tableConfig.classid = id;
+  requestStoreInquire({
+    tj: tableConfig.tj,
+    classid: tableConfig.classid,
+    page: tableConfig.page,
+  });
+};
+
+const handlePageChange = (val: number) => {
+  tableConfig.page = val;
+  requestStoreInquire({
+    tj: tableConfig.tj,
+    classid: tableConfig.classid,
+    page: tableConfig.page,
+  });
+};
 </script>
 
 <style scoped></style>

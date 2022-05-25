@@ -58,8 +58,10 @@ export default function (
   // 获取表格的头部数据
   const getShowTableColumn = () => {
     httpGetShowTableColumn(showBilltypeid).then((res) => {
-      pageTableConfig.column = res?.data?.[0]?.data ?? [];
       console.log(res);
+
+      pageTableConfig.column = res?.data?.[0]?.data ?? [];
+      console.log(pageTableConfig.column);
     });
   };
 
@@ -131,5 +133,6 @@ export default function (
     getTableData,
     detailTableConfig,
     handleDbClick,
+    requestDetailHeader,
   };
 }

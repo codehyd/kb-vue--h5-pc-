@@ -6,7 +6,7 @@ export default function () {
   const store = useStore();
   const dropDownList: any = computed(() => store.state.selectOptions);
 
-  const bildFormConfig: IForm = {
+  const bildFormConfig: IForm = reactive({
     formItems: [
       {
         type: "select", //选择
@@ -69,7 +69,16 @@ export default function () {
         label: "备注",
       },
     ],
-  };
+  });
+
+  watchEffect(() => {
+    bildFormConfig.formItems[0].options =
+      dropDownList.value?.arrjingshouren ?? [];
+    bildFormConfig.formItems[2].options =
+      dropDownList.value?.arrzhichuitem ?? [];
+    bildFormConfig.formItems[3].options =
+      dropDownList.value?.arryinhangzhanghao ?? [];
+  });
 
   return {
     bildFormConfig,
