@@ -2,17 +2,35 @@
   <div class="bild-query-content">
     <!-- 检索内容 -->
     <div class="search card">
-      <page-search
-        @query-click="handleQueryClick"
-        v-bind="searchConfig"
-      ></page-search>
+      <page-search ref="pageSearchRef" v-bind="searchConfig">
+        <template #option>
+          <div class="optionBtn">
+            <el-button
+              class="queryBtn"
+              @click="handleQueryClick"
+              style="margin: 0 0 0 20px"
+              icon="search"
+            >
+              查询
+            </el-button>
+            <el-button
+              class="queryBtn"
+              @click="handleToggle"
+              icon="plus"
+              type="primary"
+            >
+              开单
+            </el-button>
+          </div>
+        </template>
+      </page-search>
+      <!-- <div class="options">
+        <el-button @click="handleToggle" icon="plus" round>开单</el-button>
+      </div> -->
     </div>
 
     <!-- 查询表格 -->
     <div class="table card">
-      <div class="options">
-        <el-button @click="handleToggle" icon="plus" round>开单</el-button>
-      </div>
       <page-table
         @on-detail="handleDetail"
         ref="pageTableRef"
@@ -74,6 +92,7 @@ const store = useStore();
 // 组件ref
 const detailPanelRef = ref<InstanceType<typeof DetailPanel>>();
 const pageTableRef = ref<InstanceType<typeof PageTable>>();
+const pageSearchRef = ref<InstanceType<typeof PageSearch>>();
 
 const {
   pageTableConfig,
@@ -90,7 +109,8 @@ const {
 );
 
 // 点击查询
-const handleQueryClick = (data: any) => {
+const handleQueryClick = async () => {
+  const data = await pageSearchRef.value!.getFormData();
   emit("query-click", {
     ...props.data,
     begdate: data.date[0],
@@ -135,6 +155,7 @@ const handleActiveClick = (type: activeType, rows: any) => {
     print: () => pageTableRef.value?.printFn(rows[0]),
     anotherList: () => {
       detailPanelRef.value!.isShowPanel = false;
+      store.commit("bild/changeIsAnother", true);
       emit("another-click", rows);
     },
   };
@@ -170,5 +191,20 @@ defineExpose({
   display: flex;
   justify-content: flex-end;
   margin: 0 0 10px 0;
+}
+
+.optionBtn {
+  display: inline-flex;
+}
+
+@media screen and (max-width: 1200px) {
+  .optionBtn {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .queryBtn {
+    flex: 1;
+  }
 }
 </style>

@@ -60,6 +60,8 @@ const props = withDefaults(
 const emit = defineEmits(["goBack"]);
 
 const store = useStore();
+const isAnother = computed(() => store.state.bild.isAnother);
+
 const isRedo = computed(() => {
   const config = store.state.setup.config["pc-table"]?.setup ?? [];
   const redo = config.find((item: any) => item.id == "billingRedo");
@@ -293,6 +295,16 @@ const newTableConfig = computed(() => {
   };
   return tableConfig;
 });
+
+watchEffect(() => {
+  if (isAnother.value) {
+    message.confirm("是否加载刚刚缓存再来一单的数据", () => {
+      store.commit("bild/changeIsAnother", false);
+      const data = store.state.bild.bildData;
+      handleReloadData(data);
+    });
+  }
+});
 </script>
 
 <style lang="less" scoped>
@@ -317,5 +329,9 @@ const newTableConfig = computed(() => {
 
 .good {
   padding: 10px;
+}
+
+:deep(.el-page-header__left) {
+  color: #0094ff;
 }
 </style>

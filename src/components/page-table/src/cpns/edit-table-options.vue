@@ -154,6 +154,10 @@ const handleSaveData = () => {
     emit("save-local-data");
   });
 };
+
+defineExpose({
+  handleLoadData,
+});
 </script>
 
 <style lang="less" scoped>

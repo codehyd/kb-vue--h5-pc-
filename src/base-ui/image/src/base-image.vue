@@ -64,26 +64,43 @@
       </div>
 
       <div @click.stop class="actionBar">
-        <div @click.stop="handleBlowUp">
-          <kb-icon name="icon-fangda" color="white" :size="25"></kb-icon>
-        </div>
         <div @click.stop="handleBlowDown">
-          <kb-icon name="icon-suoxiao" color="white" :size="25"></kb-icon>
+          <kb-icon
+            name="ZoomOut"
+            flag="elIcon"
+            color="white"
+            :size="25"
+          ></kb-icon>
+        </div>
+        <div @click.stop="handleBlowUp">
+          <kb-icon
+            name="ZoomIn"
+            flag="elIcon"
+            color="white"
+            :size="25"
+          ></kb-icon>
         </div>
         <div @click.stop="handleRestore">
-          <kb-icon name="icon-huanyuanhuabu" color="white" :size="25"></kb-icon>
+          <kb-icon
+            name="FullScreen"
+            flag="elIcon"
+            color="white"
+            :size="25"
+          ></kb-icon>
         </div>
 
         <div @click.stop="handleRotate(-90)">
           <kb-icon
-            name="icon-nishizhenxuanzhuan"
+            name="RefreshLeft"
             color="white"
+            flag="elIcon"
             :size="25"
           ></kb-icon>
         </div>
         <div @click.stop="handleRotate(90)">
           <kb-icon
-            name="icon-shunshizhenxuanzhuan"
+            name="RefreshRight"
+            flag="elIcon"
             color="white"
             :size="25"
           ></kb-icon>

@@ -1,17 +1,35 @@
 <template>
   <div>
     <page-search
+      ref="HeaderpageSearchRef"
       class="card"
       style="margin: 0 0 10px 0"
-      @query-click="handleQueryClick"
       isShowQuery
       :searchFormConfig="searchConfig"
-    ></page-search>
+    >
+      <template #option>
+        <div class="options">
+          <el-button
+            @click="handleQueryClick"
+            class="queryBtn"
+            style="margin: 0 0 0 20px"
+            icon="search"
+          >
+            查询
+          </el-button>
+          <el-button
+            class="queryBtn"
+            @click="handleNewClick"
+            icon="plus"
+            type="primary"
+          >
+            新增
+          </el-button>
+        </div>
+      </template>
+    </page-search>
 
     <div class="card">
-      <div class="options">
-        <el-button @click="handleNewClick">新增费用支出</el-button>
-      </div>
       <page-table
         @page-change="handlePageChange"
         :billtypeid="151"
@@ -46,8 +64,10 @@ import base64 from "@/utils/base64";
 import { httpPostSave } from "@/service/http/home/commit";
 
 const store = useStore();
+
 const { bildFormConfig } = plusPanelConfig();
 const pageSearchRef = ref<InstanceType<typeof PageSearch>>();
+const HeaderpageSearchRef = ref<InstanceType<typeof PageSearch>>();
 
 const { column, data, totalPage, requestBildInfo } = RequestTable(
   151,
@@ -65,7 +85,8 @@ const pageTableConfig = computed(() => {
   };
 });
 
-const handleQueryClick = (formData: any) => {
+const handleQueryClick = async () => {
+  const formData = await HeaderpageSearchRef.value!.getFormData();
   requestData.value.tj = formData.tj;
   requestData.value.page = 1;
   requestData.value.begdate = formData.date[0];
@@ -99,8 +120,16 @@ const handleNewPanelQueryClick = async () => {
 
 <style scoped>
 .options {
-  display: flex;
-  justify-content: flex-end;
-  margin: 10px 0;
+  display: inline-flex;
+}
+@media screen and (max-width: 1200px) {
+  .options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .queryBtn {
+    flex: 1;
+  }
 }
 </style>

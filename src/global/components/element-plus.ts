@@ -14,6 +14,7 @@ import {
   ElCheckboxGroup,
   ElCheckTag,
   ElCol,
+  ElColorPicker,
   ElContainer,
   ElDatePicker,
   ElDescriptions,
@@ -106,6 +107,7 @@ const components = [
   ElDescriptions,
   ElDescriptionsItem,
   ElAlert,
+  ElColorPicker,
 ];
 
 export default function (app: App): void {

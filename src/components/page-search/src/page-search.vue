@@ -288,9 +288,4 @@ defineExpose({
 }
 
 // 媒体查询 1200px以下
-@media screen and (max-width: 1200px) {
-  .queryBtn {
-    width: 100%;
-  }
-}
 </style>

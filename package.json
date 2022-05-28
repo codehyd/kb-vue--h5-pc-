@@ -23,6 +23,7 @@
     "path": "^0.12.7",
     "postcss-px2rem": "^0.3.0",
     "qs": "^6.10.3",
+    "vconsole": "^3.14.6",
     "vue": "^3.2.25",
     "vue-drag-resize": "^1.5.4",
     "vue-router": "^4.0.14",

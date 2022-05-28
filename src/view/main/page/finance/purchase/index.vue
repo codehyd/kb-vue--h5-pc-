@@ -6,12 +6,34 @@
       @query-click="handleQueryClick"
       isShowQuery
       :searchFormConfig="searchConfig"
-    ></page-search>
+      ref="HeaderpageSearchRef"
+    >
+      <template #option>
+        <div class="options">
+          <el-button
+            @click="handleQueryClick"
+            class="queryBtn"
+            style="margin: 0 0 0 20px"
+            icon="search"
+          >
+            查询
+          </el-button>
+          <el-button
+            class="queryBtn"
+            @click="handleNewClick"
+            icon="plus"
+            type="primary"
+          >
+            新增
+          </el-button>
+        </div>
+      </template>
+    </page-search>
 
     <div class="card">
-      <div class="options">
+      <!-- <div class="options">
         <el-button @click="handleNewClick">新增采购付款单</el-button>
-      </div>
+      </div> -->
       <page-table
         @page-change="handlePageChange"
         :billtypeid="113"
@@ -58,6 +80,7 @@ const route = useRoute();
 const store = useStore();
 const { bildFormConfig } = plusPanelConfig();
 const pageSearchRef = ref<InstanceType<typeof PageSearch>>();
+const HeaderpageSearchRef = ref<InstanceType<typeof PageSearch>>();
 
 const { column, data, totalPage, requestBildInfo } = RequestTable(
   113,
@@ -75,7 +98,8 @@ const pageTableConfig = computed(() => {
   };
 });
 
-const handleQueryClick = (formData: any) => {
+const handleQueryClick = async () => {
+  const formData = await HeaderpageSearchRef.value!.getFormData();
   requestData.value.tj = formData.tj;
   requestData.value.page = 1;
   requestData.value.begdate = formData.date[0];
@@ -177,8 +201,16 @@ const handleChangeData = (formData: any) => {
 
 <style scoped>
 .options {
-  display: flex;
-  justify-content: flex-end;
-  margin: 10px 0;
+  display: inline-flex;
+}
+@media screen and (max-width: 1200px) {
+  .options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .queryBtn {
+    flex: 1;
+  }
 }
 </style>

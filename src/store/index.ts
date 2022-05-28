@@ -56,7 +56,7 @@ const store = createStore<IRootStore>({
     async getCustormList({ commit }, payload) {
       const res = await httpGetCustormList();
       const token = base64.decodeToObj(local.getCache("token2.x"));
-      const menus = token.functions[0].data;
+      const menus = token?.functions?.[0]?.data ?? [];
       if (res.content && res.code >= 1) {
         // 1. 如果custormList里有特定的key则赋值 若不是则重新set
         const custormList = base64.decodeToObj(res.content);

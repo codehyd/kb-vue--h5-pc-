@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-header">
+  <div class="nav-header" v-if="isShowClass">
     <el-breadcrumb separator="/">
       <el-breadcrumb-item v-if="navClassName">
         {{ navClassName }}
@@ -39,6 +39,19 @@ watchEffect(() => {
     (item: any) => item.path === routeName
   );
   navRouteName.value = childRoute?.title;
+});
+
+const isShowClass = ref(false);
+
+onMounted(() => {
+  // 获取当前的窗口的宽度
+  const width = window.innerWidth;
+  isShowClass.value = width > 768 ? true : false;
+  // 监听窗口变化
+  window.addEventListener("resize", () => {
+    const width = window.innerWidth;
+    isShowClass.value = width > 768 ? true : false;
+  });
 });
 </script>
 

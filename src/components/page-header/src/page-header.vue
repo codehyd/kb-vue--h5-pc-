@@ -17,6 +17,13 @@
           active-text="暗"
           inactive-text="明"
         /> -->
+
+        <el-tag effect="plain" style="margin: 0 10px 0 0">
+          {{ token.csname }} - {{ token.softname }}
+        </el-tag>
+        <el-tag effect="dark" style="margin: 0 10px 0 0">
+          {{ token.uname }}
+        </el-tag>
         <kb-icon
           @click="handleNavSetting"
           name="setting"
@@ -31,11 +38,14 @@
 </template>
 
 <script setup lang="ts">
+import { useStore } from "@/store";
 import KbIcon from "@/base-ui/icon";
 import AvatarWrap from "./cpns/avatar-wrap.vue";
 import NavHeader from "./cpns/nav-header.vue";
 
 const emit = defineEmits(["menu-click"]);
+
+const store = useStore();
 
 const router = useRouter();
 
@@ -62,6 +72,10 @@ const handleNavSetting = () => {
 const handleLogoClick = () => {
   router.push("/main");
 };
+
+const token = computed(() => store.state.login.token);
+
+// console.log(token.value);
 
 // const dark = ref(false);
 // const handleSwitchChange = (val: boolean) => {

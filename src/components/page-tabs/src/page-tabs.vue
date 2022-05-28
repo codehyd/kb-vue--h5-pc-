@@ -41,7 +41,7 @@ watch(
     const title = val.meta.title;
     const name = val.name;
 
-    console.log(121, val);
+    // console.log(121, val);
 
     if (title && name) {
       // 先判断是否存在
@@ -86,11 +86,20 @@ const handleTabRemove = (name: any) => {
   left: 0;
   background-color: white;
   z-index: 999;
+  margin: 0 0 10px 0;
 }
 .demo-tabs > .el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;
   font-weight: 600;
+}
+
+:deep(.el-tabs .el-tabs__content) {
+  display: none;
+}
+
+:deep(.el-tabs__nav-scroll) {
+  overflow-x: auto;
 }
 </style>

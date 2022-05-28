@@ -18,9 +18,14 @@ import router from "./router";
 // 状态管理
 import store, { refreshWindowSetup } from "./store";
 
+// vconsole
+// import VConsole from "vconsole";
+
 const app = createApp(App);
 app.use(store);
 app.use(globalComponent);
 refreshWindowSetup();
 app.use(router);
 app.mount("#app");
+
+// const vConsole = new VConsole();

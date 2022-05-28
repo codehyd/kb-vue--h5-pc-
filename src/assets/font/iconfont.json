@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3711641",
+      "name": "扫码",
+      "font_class": "saoma",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "8954162",
+      "name": "二维码",
+      "font_class": "erweima",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
       "icon_id": "27726276",
       "name": "收费工作台_今日实收金额",
       "font_class": "shoufeigongzuotai_jinrishishoujine",

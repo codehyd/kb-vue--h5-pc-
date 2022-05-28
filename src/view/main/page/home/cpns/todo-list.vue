@@ -27,7 +27,7 @@
         </el-empty>
       </template>
       <template v-for="item in todoList" :key="item.fid">
-        <div @click="handleDetailClick(item)" class="item">
+        <div @click.stop="handleDetailClick(item)" class="item">
           <div>
             <kb-icon flag="elIcon" name="list" color="#ccc" />
           </div>
@@ -92,29 +92,32 @@
                   <kb-icon name="edit" flag="elIcon" type="button"></kb-icon>
                 </div>
                 <!-- 确认 -->
-                <kb-icon
-                  @click="handleConfirmClick(item)"
-                  name="CircleCheckFilled"
-                  flag="elIcon"
-                  type="button"
-                  buttonType="primary"
-                ></kb-icon>
+                <div @click.stop="handleConfirmClick(item)">
+                  <kb-icon
+                    name="CircleCheckFilled"
+                    flag="elIcon"
+                    type="button"
+                    buttonType="primary"
+                  ></kb-icon>
+                </div>
                 <!-- 完成 -->
-                <kb-icon
-                  @click="handleFinishClick(item)"
-                  name="Check"
-                  flag="elIcon"
-                  type="button"
-                  buttonType="success"
-                ></kb-icon>
+                <div @click.stop="handleFinishClick(item)">
+                  <kb-icon
+                    name="Check"
+                    flag="elIcon"
+                    type="button"
+                    buttonType="success"
+                  ></kb-icon>
+                </div>
                 <!-- 删除 -->
-                <kb-icon
-                  @click="handleDeleteClick(item)"
-                  name="Failed"
-                  flag="elIcon"
-                  type="button"
-                  buttonType="danger"
-                ></kb-icon>
+                <div @click.stop="handleDeleteClick(item)">
+                  <kb-icon
+                    name="Failed"
+                    flag="elIcon"
+                    type="button"
+                    buttonType="danger"
+                  ></kb-icon>
+                </div>
               </div>
             </div>
           </div>
@@ -447,7 +450,7 @@ const handleDeleteClick = (item: any) => {
     padding: 10px 0;
 
     & > span {
-      font-weight: 700;
+      font-weight: bold;
     }
   }
 }

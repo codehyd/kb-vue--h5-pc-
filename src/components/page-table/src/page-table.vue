@@ -15,6 +15,11 @@
             >
               <kb-barcode card :barcode="row[column.field]"></kb-barcode>
             </template>
+            <template v-if="column.field == 'fbillstatus'">
+              <span :style="formatStatusCss(row[column.field])">
+                {{ row[column.field] }}</span
+              >
+            </template>
           </slot>
         </template>
         <!-- 编辑模式 -->
@@ -120,6 +125,13 @@ const isShowCardPanel = computed(() => {
   const isCard =
     config.find((item: any) => item.id === "goodCardPanel")?.value ?? true;
   return isCard;
+});
+
+const statusCss = computed(() => {
+  const config = store.state.setup?.config["pc-table"]?.setup ?? [];
+  const cssList =
+    config.find((item: any) => item.id === "billingStatus")?.value ?? [];
+  return cssList;
 });
 
 const currentFlag = ref<"list" | "table">("table");
@@ -343,6 +355,15 @@ const addBianmaMethod = (row: any, isRedo: boolean, index: number) => {
     fullData[index] = getInitColumn();
     baseTableRef.value?.loadTableData(fullData, true);
   }
+};
+
+const formatStatusCss = (text: string) => {
+  const find = statusCss.value.find((item: any) => item.title == text) ?? {};
+  return {
+    color: find?.color ?? "#000",
+    fontWeight: find?.isBold ? "bold" : "normal",
+    textDecoration: find?.isUnderline ? "underline" : "none",
+  } as any;
 };
 
 watchEffect(() => {

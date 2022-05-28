@@ -65,6 +65,7 @@ const setupModule: Module<ISetupState, IRootStore> = {
     // 根据class去修改对应的配置
     async updateConfigToClass({ commit }, payload) {
       if (!payload.isSaveCloud) return commit("changeConfigToClass", payload);
+      console.log(payload);
       const title = payload.class;
       // 查找mySetupOptions对应的title
       const currentSetupConfig = { ...mySetupOptions[title] };

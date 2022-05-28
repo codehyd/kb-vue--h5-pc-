@@ -1,6 +1,12 @@
 // setup设置
 type classType = "pc-table" | "pc-wechat" | "pc-goods";
-type formType = "input" | "number" | "switch" | "checkbox" | "select";
+type formType =
+  | "input"
+  | "number"
+  | "switch"
+  | "checkbox"
+  | "select"
+  | "status";
 
 // select 的 otherOptions 的list为列表  需要[item]
 // checkbox 的 otherOptions 的list为列表  需要[{label}]
@@ -52,7 +58,7 @@ export const setupOptions: ISetupType[] = [
       },
       {
         id: "editTableMaxHeight",
-        label: "编辑表格最大高度",
+        label: "开单表格最大高度",
         value: 700,
         type: "number",
         help: "开单编辑表格最大高度 默认700px",
@@ -137,6 +143,17 @@ export const setupOptions: ISetupType[] = [
           disabled: true,
         },
       },
+      {
+        id: "billingStatus",
+        label: "单据状态样式设置",
+        value: [],
+        type: "status",
+        help: "自定义单据状态样式设置",
+        field: "billingStatus",
+        // otherOptions: {
+        //   disabled: true,
+        // },
+      },
     ],
   },
   // {
@@ -158,7 +175,7 @@ export const setupOptions: ISetupType[] = [
         label: "单据开启微信通知",
         value: [],
         type: "checkbox",
-        help: "单据详情内开启微信通知功能",
+        help: "单据详情内开启微信通知功能(如果被禁用了这个功能则不会开启)",
         field: "openWeChatMessage",
         otherOptions: {
           list: [

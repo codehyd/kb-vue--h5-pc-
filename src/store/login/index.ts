@@ -39,7 +39,7 @@ const loginModule: Module<ILoginStore, IRootStore> = {
       local.setCache("token2.x", base64.objToEncode(payload));
       commit("changeToken", payload);
 
-      const menus = payload.functions[0].data;
+      const menus = payload?.functions?.[0]?.data ?? [];
       commit("changeMenus", menus);
 
       dispatch("getSelectOptions", null, { root: true });
@@ -55,7 +55,7 @@ const loginModule: Module<ILoginStore, IRootStore> = {
         const payload = base64.decodeToObj(token);
         commit("changeToken", payload);
 
-        const menus = payload.functions[0].data;
+        const menus = payload?.functions?.[0]?.data ?? [];
         commit("changeMenus", menus);
 
         dispatch("getSelectOptions", null, { root: true });

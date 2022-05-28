@@ -8,6 +8,7 @@ const loginModule: Module<IBildStore, IRootStore> = {
     billtypeid: "",
     currentInfo: {},
     bildData: [],
+    isAnother: false,
   },
 
   mutations: {
@@ -21,6 +22,9 @@ const loginModule: Module<IBildStore, IRootStore> = {
     },
     changeBildData(state, bildData: any) {
       state.bildData = bildData;
+    },
+    changeIsAnother(state, isAnother: boolean) {
+      state.isAnother = isAnother;
     },
   },
   actions: {

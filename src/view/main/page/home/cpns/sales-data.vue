@@ -65,10 +65,8 @@
             <div class="item">
               <i class="icon-lirunshuai fontIcon"></i>
               <div class="item-content">
-                <div class="item-value price">{{ data4 }}</div>
-                <div class="item-title">
-                  利润额(利润率{{ salesData.flirunlv }}%)
-                </div>
+                <div class="item-value price">¥{{ data4 }}</div>
+                <div class="item-title">利润额(利润率{{ data5 }}%)</div>
               </div>
             </div>
           </el-col>
@@ -123,9 +121,11 @@ const data4 = computed(() => {
   return format.formatMoney(val * 100);
 });
 
-// const handleListClick = (item: any) => {
-//   console.log(item);
-// };
+const data5 = computed(() => {
+  let val = salesData.value?.flirunlv ?? 0;
+  // 保留最多两位小数
+  return val.toFixed(2);
+});
 </script>
 
 <style lang="less" scoped>

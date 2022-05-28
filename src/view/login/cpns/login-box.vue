@@ -1,5 +1,12 @@
 <template>
   <div class="login-box">
+    <div class="scan-login" @click="handleThirdWxClick">
+      <img src="https://www.757abc.com/wxmp/img/wechatlogin.png" alt="" />
+      <!-- <kb-icon
+        name="icon-saoma"
+        :size="45"
+      ></kb-icon> -->
+    </div>
     <div class="title" :style="{ 'padding-left': labelWidth }">
       <h3>Welcome</h3>
       <h3>欢迎使用 开博生意管家</h3>
@@ -56,14 +63,14 @@
     <!-- 微信登录 -->
     <wx-login ref="wxLoginRef" v-model:show="isShowWxScanPanel"></wx-login>
     <div class="operation" :style="{ 'padding-left': labelWidth }">
-      <el-divider>第三方登录</el-divider>
+      <!-- <el-divider>第三方登录</el-divider>
       <div class="third-icons">
         <kb-icon
           @click="handleThirdWxClick"
           name="icon-weixin"
           :size="28"
         ></kb-icon>
-      </div>
+      </div> -->
 
       <el-button
         @click="handleLoginClick"
@@ -131,7 +138,13 @@ let openid = "webopenid";
 const handleLoginClick = async (flag?: "wxcsan") => {
   if (flag == "wxcsan") {
     const res = await httpAccount({ ...accountData.value, openid });
-    store.dispatch("login/account", res);
+    if (res.code >= 1) {
+      store.dispatch("login/account", res);
+    } else {
+      message.show(res.msg, res.type);
+      isShowWxScanPanel.value = false;
+    }
+    return;
   }
   elFormRef.value?.validate().then(async (valid) => {
     if (valid) {
@@ -151,6 +164,7 @@ const handleLoginClick = async (flag?: "wxcsan") => {
       } else {
         authCodeRef.value?.refreshCode();
         accountData.value.authCode = "";
+        isShowWxScanPanel.value = false;
         message.error(res.msg);
       }
     } else {
@@ -197,4 +211,11 @@ watch(
 
 <style lang="less" scoped>
 @import "../css/login-box.less";
+
+.scan-login {
+  position: absolute;
+  cursor: pointer;
+  right: 0px;
+  top: 0px;
+}
 </style>

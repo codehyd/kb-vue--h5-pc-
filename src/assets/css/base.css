@@ -23,7 +23,8 @@ html {
   /*滚动条里面小方块*/
   border-radius: 12px;
   /* box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); */
-  background: #cccccc;
+  background: #d7d9dd;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar-track {
@@ -32,3 +33,10 @@ html {
   border-radius: 10px;
   /* background: #ededed; */
 }
+
+/* 滚动条悬浮的时候scrollbar-thumb设置背景颜色 #c8c9cc */
+::-webkit-scrollbar-thumb:hover {
+  background: #c8c9cc;
+}
+
+/* 滚动条添加经过的样式 */
