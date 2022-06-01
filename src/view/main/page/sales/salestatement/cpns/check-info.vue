@@ -210,5 +210,10 @@ const handleBtnFlagClick = (type: any) => {
   display: flex;
   justify-content: flex-end;
 }
-/* 媒体查询 */
+/* 媒体查询 小于1200 */
+@media screen and (max-width: 1200px) {
+  .item {
+    margin: 0 0 10px;
+  }
+}
 </style>

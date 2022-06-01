@@ -7,9 +7,17 @@ export default function (changeFootMethodCallback?: () => void) {
     () => store.state.selectOptions?.paras?.["0"]?.fvalue ?? 1
   );
 
+  // mutl配置
+  const mutiConfig = computed(() => {
+    const config = store.state.login.token;
+    return config?.multi_specifications;
+  });
+
   const { changeGoodPrice } = useGetUserPrice();
 
   const handleUpdateModelValue = (val: any, key: string, row: any) => {
+    console.log(key, val, mutiConfig.value);
+
     // 如果改变推导性数量
     const ftdqty = key.indexOf("ftdqty") != -1;
     if (ftdqty) {
@@ -69,8 +77,10 @@ export default function (changeFootMethodCallback?: () => void) {
   };
 
   const changePrice = async (row: any) => {
-    const newRow = await changeGoodPrice(row);
-    changeAmount(newRow);
+    if (mutiConfig.value == "1") {
+      const newRow = await changeGoodPrice(row);
+      changeAmount(newRow);
+    }
   };
 
   // 改变金额
