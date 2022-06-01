@@ -89,7 +89,7 @@ const store = useStore();
 const userMenus = computed(() => store.state.custormList);
 
 const colStyle = {
-  xs: 24,
+  xs: 12,
   sm: 12,
   md: 8,
   lg: 6,

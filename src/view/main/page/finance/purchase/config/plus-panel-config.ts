@@ -11,7 +11,7 @@ export default function () {
       {
         type: "kehu",
         field: "fcsname",
-        label: "客户",
+        label: "供应商",
         rules: [
           {
             required: true,
@@ -50,6 +50,18 @@ export default function () {
         ],
       },
       {
+        type: "number",
+        field: "famount",
+        label: "付款金额",
+        // 金额不等于空和不等于0的时候才能提交
+        rules: [
+          {
+            required: true,
+            message: "收款金额不能为空",
+          },
+        ],
+      },
+      {
         type: "select", //选择
         field: "finstockno",
         label: "采购单号",
@@ -67,22 +79,14 @@ export default function () {
         label: "银行账号",
         // options: dropDownList.value?.arryinhangzhanghao ?? [],
       },
-      {
-        type: "number",
-        field: "famount",
-        label: "付款金额",
-        // 金额不等于空和不等于0的时候才能提交
-        rules: [
-          {
-            required: true,
-            message: "收款金额不能为空",
-          },
-        ],
-      },
+
       {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          span: 24,
+        },
       },
     ],
   });

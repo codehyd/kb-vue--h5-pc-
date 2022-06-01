@@ -89,11 +89,17 @@ const formatCount = (count: number) => {
 
 <style scoped lang="less">
 .statistics {
-  display: flex;
+  display: inline-flex;
+  justify-content: space-between;
+  overflow: hidden;
+  overflow-x: auto;
+  width: 100%;
+  white-space: nowrap;
 
   div {
     flex: 1;
-    display: flex;
+    min-width: 200px;
+    display: inline-block;
     justify-content: center;
     flex-direction: column;
     padding: 20px;
@@ -103,7 +109,8 @@ const formatCount = (count: number) => {
     transition: all 0.6s;
     // box-shadow: none !important;
     border: 1px solid #e9e9e9;
-    background-size: cover;
+    // background-size: cover;
+    overflow: hidden;
     &:hover {
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
     }

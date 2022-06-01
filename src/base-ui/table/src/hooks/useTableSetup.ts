@@ -89,6 +89,7 @@ export default function (
     return {
       trigger: "click",
       mode: "cell",
+      showIcon: false,
       activeMethod: (params: any) => isCellEdit(params),
     };
   };

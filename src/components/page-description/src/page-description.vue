@@ -1,7 +1,11 @@
 <template>
   <div class="page-descriptions">
     <el-row>
-      <el-col v-for="item in config" :key="item.field" v-bind="colLayStyle">
+      <el-col
+        v-for="item in config"
+        :key="item.field"
+        v-bind="autoColStyle(item)"
+      >
         <div class="dataList">
           <div class="label">{{ item.label }}</div>
           <div class="content">
@@ -41,6 +45,7 @@ const props = withDefaults(
     data?: object;
     config?: IPageDesciptionType[];
     edit?: boolean;
+    // col?: any;
   }>(),
   {
     edit: false,
@@ -52,12 +57,15 @@ const props = withDefaults(
     config: () => {
       return [] as IPageDesciptionType[];
     },
+    // col: () => {
+    //   return {};
+    // },
   }
 );
 
 const emit = defineEmits(["update:data"]);
 
-const size = "small";
+// const size = "small";
 
 const currentData = ref<any>({});
 const oraginData: any = {};
@@ -84,30 +92,10 @@ const formatContent = (value: string | number, keys?: string[]) => {
   return value ?? "";
 };
 
-const value = ref("");
-
-const options = [
-  {
-    value: "Option1",
-    label: "Option1",
-  },
-  {
-    value: "Option2",
-    label: "Option2",
-  },
-  {
-    value: "Option3",
-    label: "Option3",
-  },
-  {
-    value: "Option4",
-    label: "Option4",
-  },
-  {
-    value: "Option5",
-    label: "Option5",
-  },
-];
+const autoColStyle = (item: any) => {
+  if (item.col) return item.col;
+  return colLayStyle;
+};
 </script>
 
 <style lang="less" scoped>
@@ -129,7 +117,7 @@ const options = [
     border: 1px solid #ebeef5;
     // margin-left: -1px;
     // margin-top: -1px;
-    margin: 0 0 -1px 0;
+    margin: 0 0 -1px -1px;
   }
   .content {
     position: relative;

@@ -2,7 +2,11 @@
   <div class="bild-query-content">
     <!-- 检索内容 -->
     <div class="search card">
-      <page-search ref="pageSearchRef" v-bind="searchConfig">
+      <page-search
+        @query-click="handleQueryClick"
+        ref="pageSearchRef"
+        v-bind="searchConfig"
+      >
         <template #option>
           <div class="optionBtn">
             <el-button
@@ -69,7 +73,7 @@ import useTableHooks from "./hooks/useTableHooks";
 // 详情面板
 import DetailPanel from "./cpns/detail-panel.vue";
 // 客户config的类型
-import { IPageDesciptionType } from "@/components/page-description";
+// import { IPageDesciptionType } from "@/components/page-description";
 // 状态管理
 import { useStore } from "@/store";
 
@@ -163,11 +167,11 @@ const handleActiveClick = (type: activeType, rows: any) => {
   methods[type] && methods[type]();
 };
 
-const newTableConfig = computed(() => {
-  return {
-    ...props.tableConfig,
-  };
-});
+// const newTableConfig = computed(() => {
+//   return {
+//     ...props.tableConfig,
+//   };
+// });
 
 const handleDetail = async (params: any) => {
   detailTableConfig.column = await requestDetailHeader();

@@ -113,6 +113,10 @@ export const detailTableConfig: IBildQueryDetailTable = {
       label: "订单号",
     },
     {
+      field: "fwholebilllreduceamount",
+      label: "整单优惠",
+    },
+    {
       field: "fcontractno",
       label: "合同号",
     },
@@ -127,6 +131,9 @@ export const detailTableConfig: IBildQueryDetailTable = {
     {
       field: "fmemo",
       label: "备注",
+      col: {
+        span: 24,
+      },
     },
   ],
   status: [

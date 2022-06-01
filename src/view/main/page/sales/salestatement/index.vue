@@ -6,13 +6,27 @@
       :searchFormConfig="searchConfig"
       @query-click="handleQueryClick"
       ref="pageSearchRef"
-    ></page-search>
+    >
+      <template #option>
+        <div class="options">
+          <!-- <el-button disabled @click="handleFlagClick('share')">
+            分享
+          </el-button> -->
+          <el-button @click="handleQueryClick('printpng')">查询</el-button>
+          <el-button type="primary" @click="handleFlagClick('printpng')">
+            预览png
+          </el-button>
+          <el-button type="primary" @click="handleFlagClick('printpdf')">
+            打印预览
+          </el-button>
+        </div>
+      </template>
+    </page-search>
 
     <check-info
       @update:page="handlePageChange"
       v-model:data="checkInfoData"
       v-model:page="page"
-      @flag-click="handleFlagClick"
     ></check-info>
 
     <kb-dialog :top="2" v-model:show="show">
@@ -103,4 +117,8 @@ const handleFlagClick = async (type: any) => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.options {
+  margin: 0 0 0 10px;
+}
+</style>

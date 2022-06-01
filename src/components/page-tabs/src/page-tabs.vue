@@ -13,6 +13,7 @@
         <el-tab-pane :label="item.title" :name="item.name"></el-tab-pane>
       </template>
     </el-tabs>
+    <!-- 1231 -->
   </div>
 </template>
 
@@ -81,6 +82,9 @@ const handleTabRemove = (name: any) => {
 
 <style scoped>
 .pageTabs {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
   position: sticky;
   top: 0;
   left: 0;

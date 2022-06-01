@@ -1,11 +1,20 @@
 <template>
   <div class="page-edit-table">
     <!-- 页头 -->
-    <el-page-header
-      style="margin-bottom: 10px"
-      :content="title"
-      @back="handleGoBack"
-    />
+    <div class="header">
+      <el-page-header
+        style="margin-bottom: 10px"
+        :content="title"
+        @back="handleGoBack"
+      />
+
+      <kb-icon
+        flag="elIcon"
+        @click="handleRefClick"
+        name="RefreshLeft"
+        text="重置客户信息"
+      ></kb-icon>
+    </div>
     <!-- 客户信息 -->
     <div class="current card">
       <!-- <div class="select">客户信息</div> -->
@@ -34,6 +43,7 @@
 </template>
 
 <script setup lang="ts">
+import KbIcon from "@/base-ui/icon";
 import PageSearch, { IForm } from "@/components/page-search";
 import PageTable from "@/components/page-table";
 import EditTableOption from "./cpns/edit-table-options.vue";
@@ -173,10 +183,9 @@ const handleSaveBildClick = async () => {
   if (formData) {
     // 获取表格数据
     const tableData = pageTableRef.value?.getTableData()?.fullData ?? [];
+    console.log(tableData);
     // 获取勾选的数据且需要有商品id
-    const findCheckOrId = tableData?.filter(
-      (item: any) => item.fmodelid && item.checked
-    );
+    const findCheckOrId = tableData?.filter((item: any) => item.fmodelid);
     if (findCheckOrId.length == 0) return message.error("请选择商品");
 
     const validateTable: any = await pageTableRef.value?.validate(
@@ -305,6 +314,10 @@ watchEffect(() => {
     });
   }
 });
+
+const handleRefClick = () => {
+  pageSearchRef.value!.refData();
+};
 </script>
 
 <style lang="less" scoped>
@@ -333,5 +346,12 @@ watchEffect(() => {
 
 :deep(.el-page-header__left) {
   color: #0094ff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 10px;
 }
 </style>

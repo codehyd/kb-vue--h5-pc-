@@ -82,6 +82,10 @@ export const detailTableConfig: IBildQueryDetailTable = {
       field: "fkhname",
       label: "供应商",
       icon: "avatar",
+      col: {
+        xl: 12,
+        lg: 8,
+      },
     },
 
     {
@@ -95,6 +99,9 @@ export const detailTableConfig: IBildQueryDetailTable = {
     {
       field: "fmemo",
       label: "备注",
+      col: {
+        span: 24,
+      },
     },
   ],
   status: [

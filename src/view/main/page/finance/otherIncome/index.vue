@@ -41,7 +41,7 @@
       ></page-table>
     </div>
 
-    <kb-dialog v-model:show="isShowPanel" title="新增销售其他收入单">
+    <kb-dialog v-model:show="isShowPanel" title="新增其他收入单">
       <page-search
         ref="pageSearchRef"
         :searchFormConfig="bildFormConfig"
@@ -109,10 +109,9 @@ const handleNewClick = () => {
 
 const handleNewPanelQueryClick = async () => {
   const formData = (await pageSearchRef.value?.getFormData()) ?? {};
-  return;
-  console.log(formData);
-  // if (!formData.fcsname) return message.show("请选择客户");
-  // const fcsid = store.state.bild.currentInfo.fitemid;
+  // 判断formData是否为空对象
+  if (Object.keys(formData).length === 0) return;
+
   const content = base64.objToEncode({ ...formData });
 
   const res = await httpPostSave({ billtypeid: 150, content });

@@ -99,6 +99,9 @@ export const detailTableConfig: IBildQueryDetailTable = {
     {
       field: "fmemo",
       label: "备注",
+      col: {
+        xl: 12,
+      },
     },
   ],
   status: [

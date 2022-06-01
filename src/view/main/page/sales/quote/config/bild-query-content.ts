@@ -5,6 +5,8 @@ import {
   IBildQueryDetailTable,
 } from "@/components/bild-query-content";
 
+// import useResize from "@/hooks/ressize";
+
 export const searchConfig: IBildQueryForm = {
   searchFormConfig: {
     formItems: [
@@ -70,7 +72,7 @@ export const tableConfig: IBildQueryTable = {
   ],
 };
 
-export const detailTableConfig: IBildQueryDetailTable = {
+export const detailTableConfig: IBildQueryDetailTable = reactive({
   clientConfig: [
     {
       field: "fkhname",
@@ -104,16 +106,25 @@ export const detailTableConfig: IBildQueryDetailTable = {
       label: "业务员",
     },
     {
-      field: "fcontractno",
-      label: "合同号",
-    },
-    {
       field: "fauditor",
       label: "审核员",
     },
     {
+      field: "fcontractno",
+      label: "合同号",
+      col: {
+        sm: 24,
+        md: 24,
+        lg: 8,
+        xl: 12,
+      },
+    },
+    {
       field: "fmemo",
       label: "备注",
+      col: {
+        xl: 12,
+      },
     },
   ],
   status: [
@@ -139,4 +150,8 @@ export const detailTableConfig: IBildQueryDetailTable = {
       text: "再来一单",
     },
   ],
-};
+});
+
+// const { changeMountResize } = useResize();
+
+// changeMountResize();

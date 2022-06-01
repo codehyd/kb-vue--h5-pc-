@@ -61,6 +61,11 @@ export default function () {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          sm: 24,
+          lg: 16,
+          xl: 24,
+        },
       },
     ],
   });

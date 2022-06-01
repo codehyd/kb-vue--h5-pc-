@@ -6,6 +6,7 @@ import {
   httpPrintBild,
 } from "@/service/http/home/commit";
 
+//导入全部配置
 import { detailTableConfig as detail103 } from "@/view/main/page/sales/delivery/config/bild-query-content";
 import { detailTableConfig as detail102 } from "@/view/main/page/sales/order/config/bild-query-content";
 import { detailTableConfig as detail101 } from "@/view/main/page/sales/quote/config/bild-query-content";

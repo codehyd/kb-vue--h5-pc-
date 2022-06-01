@@ -243,7 +243,7 @@ const getFormData = async () => {
   if (isValid) {
     return Object.assign(formatFormData(), formData.value);
   } else {
-    message.show("需要输入必填带星号的信息");
+    message.show("带星号*项目必须录入或选择");
   }
 };
 
@@ -268,9 +268,22 @@ const handleModelValue = (formData: any) => {
   // console.log(formData);
 };
 
+const refData = () => {
+  const formItem = props.searchFormConfig?.formItems ?? [];
+  const oraginData: any = {};
+  for (const item of formItem) {
+    if (item.type == "kehu") {
+      store.commit("bild/changeCurrentInfo", {});
+    }
+    oraginData[item.field] = item.type == "number" ? 0 : "";
+  }
+  formData.value = Object.assign(oraginData, props.defaultValue ?? {});
+};
+
 defineExpose({
   getFormData,
   formData,
+  refData,
 });
 </script>
 
@@ -288,4 +301,10 @@ defineExpose({
 }
 
 // 媒体查询 1200px以下
+@media screen and (max-width: 1200px) {
+  .queryBtn {
+    display: flex;
+    width: 100%;
+  }
+}
 </style>

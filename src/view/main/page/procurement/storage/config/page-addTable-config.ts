@@ -18,6 +18,10 @@ export default function () {
           },
         ],
         readonly: true,
+        col: {
+          xl: 8,
+          lg: 24,
+        },
       },
       {
         type: "select", //选择
@@ -31,6 +35,10 @@ export default function () {
             trigger: "change",
           },
         ],
+        col: {
+          xl: 8,
+          lg: 12,
+        },
       },
       {
         type: "date", //日期选择
@@ -48,11 +56,18 @@ export default function () {
             trigger: "change",
           },
         ],
+        col: {
+          xl: 8,
+          lg: 12,
+        },
       },
       {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          xl: 24,
+        },
       },
     ],
   });

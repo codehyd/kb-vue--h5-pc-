@@ -9,7 +9,13 @@
             v-for="(item, index) in tableConfig.status"
             :key="item.field"
           >
+            <!-- <el-divider
+              v-if="showDivide(item, index)"
+              direction="vertical"
+            ></el-divider> -->
             <el-tag
+              class="elTag"
+              v-if="clientInfo[item.field]"
               :type="
                 clientInfo[item.field] == item.successText
                   ? item.successType
@@ -18,10 +24,6 @@
             >
               {{ clientInfo[item.field] }}
             </el-tag>
-            <el-divider
-              v-if="(tableConfig?.status?.length ?? 0) - 1 != index"
-              direction="vertical"
-            ></el-divider>
           </template>
         </div>
       </header>
@@ -148,6 +150,24 @@ const showWeChat = computed(() => {
   return check ? true : false;
 });
 
+const showDivide = (item: any, index: number) => {
+  const flag = !clientInfo.value[item.field] == false;
+
+  const lng = (props.tableConfig?.status?.length ?? 0) - 1;
+  return !flag && index < lng;
+
+  return false;
+
+  // if (
+  //   (props.tableConfig?.status?.length ?? 0) - 1 != index &&
+  //   !clientInfo.value[item.field] == false
+  // ) {
+  //   return true;
+  // } else {
+  //   return false;
+  // }
+};
+
 defineExpose({
   isShowPanel,
 });
@@ -166,5 +186,9 @@ defineExpose({
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+
+.elTag {
+  margin-left: 10px;
 }
 </style>

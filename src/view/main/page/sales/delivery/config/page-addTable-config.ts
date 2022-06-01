@@ -1,7 +1,7 @@
 import { IForm } from "@/base-ui/base-form";
-import { IPageDesciptionType } from "@/components/page-description";
+// import { IPageDesciptionType } from "@/components/page-description";
 import { useStore } from "@/store";
-import { getDay } from "@/utils/timer";
+// import { getDay } from "@/utils/timer";
 
 export default function () {
   const store = useStore();
@@ -98,9 +98,17 @@ export default function () {
         label: "合同号",
       },
       {
+        type: "number",
+        field: "fwholebillreduceamount",
+        label: "整单优惠",
+      },
+      {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          span: 24,
+        },
       },
     ],
   });

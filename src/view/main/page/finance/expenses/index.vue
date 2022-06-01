@@ -106,6 +106,7 @@ const handleNewClick = () => {
 
 const handleNewPanelQueryClick = async () => {
   const formData = (await pageSearchRef.value?.getFormData()) ?? {};
+  if (Object.keys(formData).length === 0) return;
 
   const content = base64.objToEncode({ ...formData });
 

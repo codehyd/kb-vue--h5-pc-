@@ -17,6 +17,10 @@ export default function () {
             message: "供应商不能为空",
           },
         ],
+        col: {
+          // xl: 12,
+          lg: 8,
+        },
         readonly: true,
       },
       {
@@ -32,6 +36,10 @@ export default function () {
             trigger: "change",
           },
         ],
+        col: {
+          lg: 8,
+          md: 12,
+        },
       },
 
       {
@@ -50,11 +58,18 @@ export default function () {
             trigger: "change",
           },
         ],
+        col: {
+          lg: 8,
+          md: 12,
+        },
       },
       {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          xl: 24,
+        },
       },
     ],
   });

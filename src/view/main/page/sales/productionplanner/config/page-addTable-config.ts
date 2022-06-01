@@ -51,12 +51,16 @@ export default function () {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          lg: 16,
+          xl: 24,
+        },
       },
     ],
   });
 
   watchEffect(() => {
-    bildFormConfig.formItems[0] = dropDownList.value?.arrchejian ?? [];
+    bildFormConfig.formItems[0].options = dropDownList.value?.arrchejian ?? [];
   });
 
   return {

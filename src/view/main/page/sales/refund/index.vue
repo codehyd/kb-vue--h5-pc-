@@ -23,7 +23,7 @@
         :formConfig="bildFormConfig"
         :tableConfig="editPageTableConfig"
         @goBack="currentFlag = 'page'"
-        title="销售送货单开单编辑"
+        title="销售退货单开单编辑"
         ref="pageEditTable"
       ></page-edit-table>
     </template>

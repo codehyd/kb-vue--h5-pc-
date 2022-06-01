@@ -67,8 +67,33 @@ const selectSoft = ref("");
 
 // 第二步: 微信扫码
 const wxLoginSrc = ref("");
-const appid = "wxa38fd5a19f010be2";
-let wxRequestUrl = "https://t.dianlan8.com/#/login?appid=";
+
+// 获取当前的域名
+const getDomain = () => {
+  const host = window.location.host;
+  // console.log(host);
+  let appid = "";
+  let dns = "";
+  if (host == "localhost:5000" || host == "t.dianlan8.com") {
+    appid = "wxa38fd5a19f010be2";
+    dns = "https://t.dianlan8.com/#/login?appid=";
+  } else {
+    appid = "wxd1f24ae1f8f02218";
+    dns = "https://v.dianlan8.com/#/login?appid=";
+  }
+  // const domain = host.split(".")[1];
+  return { appid, dns };
+};
+
+// console.log(getDomain());
+
+const Tappid = "wxa38fd5a19f010be2"; // 测试 wxa38fd5a19f010be2
+const Sappid = "wxd1f24ae1f8f02218"; // 线上：wxd1f24ae1f8f02218
+
+let wxTrequestUrl = "https://t.dianlan8.com/#/login?appid="; // 测试
+
+let wxSrequestUrl = "https://v.dianlan8.com/#/login?appid="; // 线上
+
 let state = "";
 
 // 监听软件系统变化 切换第二步 并且设置微信登录链接
@@ -80,8 +105,10 @@ watchEffect(() => {
 
 function openScan() {
   active.value = 1;
-  wxLoginSrc.value = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&scope=snsapi_login&redirect_uri=${encodeURIComponent(
-    wxRequestUrl + appid + "&sns=" + selectSoft.value
+  wxLoginSrc.value = `https://open.weixin.qq.com/connect/qrconnect?appid=${
+    getDomain().appid
+  }&scope=snsapi_login&redirect_uri=${encodeURIComponent(
+    getDomain().dns + `${getDomain().appid}` + "&sns=" + selectSoft.value
   )}&state=${state}&login_type=jssdk&style=black&self_redirect=default&href=`;
 }
 

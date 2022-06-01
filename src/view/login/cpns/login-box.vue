@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import KbIcon from "@/base-ui/icon";
+// import KbIcon from "@/base-ui/icon";
 import { useStore } from "@/store";
 import message from "@/utils/message";
 import { ElForm } from "element-plus";

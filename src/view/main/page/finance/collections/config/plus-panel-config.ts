@@ -50,6 +50,18 @@ export default function () {
         ],
       },
       {
+        type: "number",
+        field: "famount",
+        label: "收款金额",
+        // 金额不等于空和不等于0的时候才能提交
+        rules: [
+          {
+            required: true,
+            message: "收款金额不能为空",
+          },
+        ],
+      },
+      {
         type: "select", //选择
         field: "foutstockno",
         label: "送货单号",
@@ -67,17 +79,11 @@ export default function () {
         label: "银行账号",
         // options: dropDownList.value?.arryinhangzhanghao ?? [],
       },
+
       {
         type: "number",
-        field: "famount",
-        label: "收款金额",
-        // 金额不等于空和不等于0的时候才能提交
-        rules: [
-          {
-            required: true,
-            message: "收款金额不能为空",
-          },
-        ],
+        field: "fmianshouamount",
+        label: "免收金额",
       },
       {
         type: "textarea",

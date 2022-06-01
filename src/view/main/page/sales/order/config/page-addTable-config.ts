@@ -81,12 +81,21 @@ export default function () {
         type: "input",
         field: "fcontractno",
         label: "合同号",
+        col: {
+          sm: 24,
+          md: 24,
+          lg: 8,
+          xl: 6,
+        },
       },
 
       {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          xl: 18,
+        },
       },
     ],
   });

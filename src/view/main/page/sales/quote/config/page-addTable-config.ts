@@ -1,6 +1,7 @@
 import { IForm } from "@/base-ui/base-form";
 import { IPageDesciptionType } from "@/components/page-description";
 import { useStore } from "@/store";
+import useResize from "@/hooks/ressize";
 
 export default function () {
   const store = useStore();
@@ -76,6 +77,9 @@ export default function () {
         type: "input",
         field: "fmemo",
         label: "备注",
+        col: {
+          span: 24,
+        },
       },
     ],
   });
@@ -83,6 +87,19 @@ export default function () {
   watchEffect(() => {
     bildFormConfig.formItems[5].options = dropDownList.value?.arryewuyuan ?? [];
   });
+
+  const { changeMountResize } = useResize();
+
+  changeMountResize(() => {
+    const { innerWidth } = window;
+    if (innerWidth >= 1200 && innerWidth <= 1920) {
+      bildFormConfig.formItems[bildFormConfig.formItems.length - 2].col = {
+        span: 16,
+      };
+    } else {
+      bildFormConfig.formItems[bildFormConfig.formItems.length - 2].col = "";
+    }
+  }, true);
 
   return {
     bildFormConfig,

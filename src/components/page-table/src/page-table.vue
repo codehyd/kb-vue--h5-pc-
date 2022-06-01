@@ -30,7 +30,9 @@
             :column="column"
             :row="row"
             v-model="row[column.field]"
-            @update:modelValue="handleUpdateModelValue"
+            @update:modelValue="
+              handleUpdateModelValue($event, column.field, row)
+            "
             :index="rowIndex"
           ></edit-table-column>
         </template>

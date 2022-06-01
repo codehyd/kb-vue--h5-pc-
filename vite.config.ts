@@ -54,6 +54,7 @@ export default defineConfig({
 
   // 配置代理 (跨域)
   server: {
+    port: 5000,
     proxy: {
       "^/api": {
         target: "https://kbapi.dianlan8.com:7804",

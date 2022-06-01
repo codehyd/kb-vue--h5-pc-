@@ -69,7 +69,7 @@ export const setupOptions: ISetupType[] = [
       },
       {
         id: "isAutoWidth",
-        label: "表格是否根据宽度设置",
+        label: "表格是否自适应根据宽度设置",
         value: true,
         type: "switch",
         help: "是否根据表格的设置宽度设置表格 如果设置为true 则表格宽度会根据宽度自适应",

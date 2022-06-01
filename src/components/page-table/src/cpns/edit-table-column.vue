@@ -6,8 +6,7 @@
   <!-- 普通文本 -->
   <template v-else-if="formType() == 'input'">
     <el-input
-      v-model.trim="modelValue"
-      @update:modelValue="handleValueChange($event, row, column.field)"
+      v-model.trim="value"
       @change="handlerEnterInput($event, row, column, column.field)"
       :disabled="isDisabled(column)"
     ></el-input>
@@ -18,19 +17,13 @@
       class="numberInput"
       :controls="false"
       controls-position="right"
-      @update:modelValue="handleValueChange($event, row, column.field)"
-      v-model.number="modelValue"
+      v-model.number="value"
       size="small"
     />
   </template>
   <!-- 选择文本固定  | 单位  -->
   <template v-else-if="formType() == 'funit'">
-    <el-select
-      v-model="modelValue"
-      size="small"
-      :disabled="isDisabled(column)"
-      @update:modelValue="handleValueChange($event, row, column.field)"
-    >
+    <el-select v-model="value" size="small" :disabled="isDisabled(column)">
       <el-option
         v-for="(item, index) in funitList"
         :key="item + ' ' + index"
@@ -45,11 +38,7 @@
     v-else-if="formType() == 'moreDropDown'"
     :disabled="isDisabled(column)"
   >
-    <el-select
-      @update:modelValue="handleValueChange($event, row, column.field)"
-      v-model="modelValue"
-      size="small"
-    >
+    <el-select v-model="value" size="small">
       <el-option
         v-for="(item, index) in handlerMoreList(row, column)"
         :key="item"
@@ -62,8 +51,7 @@
   <!-- 日期 -->
   <template v-else-if="formType() == 'date'" :disabled="isDisabled(column)">
     <el-date-picker
-      @update:modelValue="handleValueChange($event, row, column.field)"
-      v-model="modelValue"
+      v-model="value"
       type="date"
       format="YYYY/MM/DD"
       value-format="YYYY-MM-DD"
@@ -97,6 +85,14 @@ const isRedo = computed(() => {
   const config = store.state.setup.config["pc-table"]?.setup ?? [];
   const redo = config.find((item: any) => item.id == "billingRedo");
   return redo?.value ?? true;
+});
+
+const value = computed({
+  get: () => props.modelValue,
+  set: (val) => {
+    // console.log(val);
+    emit("update:modelValue", val);
+  },
 });
 
 const { changeGoodPrice } = useGetUserPrice();

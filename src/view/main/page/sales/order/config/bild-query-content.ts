@@ -70,7 +70,7 @@ export const tableConfig: IBildQueryTable = {
   ],
 };
 
-export const detailTableConfig: IBildQueryDetailTable = {
+export const detailTableConfig: IBildQueryDetailTable = reactive({
   clientConfig: [
     {
       field: "fkhname",
@@ -100,10 +100,6 @@ export const detailTableConfig: IBildQueryDetailTable = {
     },
 
     {
-      field: "fcontractno",
-      label: "合同号",
-    },
-    {
       field: "fyewuyuan",
       label: "业务员",
     },
@@ -112,8 +108,20 @@ export const detailTableConfig: IBildQueryDetailTable = {
       label: "审核员",
     },
     {
+      field: "fcontractno",
+      label: "合同号",
+      col: {
+        sm: 24,
+        xl: 6,
+        lg: 8,
+      },
+    },
+    {
       field: "fmemo",
       label: "备注",
+      col: {
+        xl: 18,
+      },
     },
   ],
   status: [
@@ -123,6 +131,13 @@ export const detailTableConfig: IBildQueryDetailTable = {
       successType: "success",
       failText: "未审核",
       failType: "danger",
+    },
+    {
+      field: "fshflag",
+      successText: "已打印",
+      successType: "",
+      failText: "未打印",
+      failType: "info",
     },
   ],
   active: [
@@ -139,4 +154,4 @@ export const detailTableConfig: IBildQueryDetailTable = {
       text: "再来一单",
     },
   ],
-};
+});

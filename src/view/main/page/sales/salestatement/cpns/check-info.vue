@@ -40,13 +40,13 @@
     </el-row>
 
     <div class="card">
-      <div class="options">
+      <!-- <div class="options">
         <el-button disabled @click="handleBtnFlagClick('share')">
           分享
         </el-button>
         <el-button @click="handleBtnFlagClick('printpng')">预览png</el-button>
         <el-button @click="handleBtnFlagClick('printpdf')">打印预览</el-button>
-      </div>
+      </div> -->
 
       <page-table
         @db-click="handleDbClick"

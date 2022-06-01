@@ -75,27 +75,53 @@ export const detailTableConfig: IBildQueryDetailTable = {
     {
       field: "fchejian",
       label: "车间",
+      col: {
+        lg: 6,
+        // sm: 12,
+      },
     },
     {
       field: "fdingjin",
-      label: "订金 ",
+      label: "订金",
+      col: {
+        lg: 6,
+        // sm: 12,
+      },
     },
 
     {
       field: "ffinishdate",
       label: "完成日期",
+      col: {
+        lg: 6,
+        // sm: 12,
+      },
     },
     {
       field: "fdate",
       label: "日期",
+      col: {
+        lg: 6,
+        // sm: 12,
+      },
     },
     {
       field: "fauditor",
       label: "审核员",
+      col: {
+        lg: 6,
+        sm: 12,
+      },
     },
     {
       field: "fmemo",
       label: "备注",
+      col: {
+        sm: 24,
+        md: 24,
+        lg: 18,
+        xl: 18,
+      },
     },
   ],
   status: [
